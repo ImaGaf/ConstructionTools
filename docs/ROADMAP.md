@@ -31,7 +31,7 @@ Lo haces tú (no Claude Code):
 - [x] Elegir nombre: **Site Sums** (19 nov)
 - [x] Dominio `getsitesums.com` comprado en Cloudflare (sitesums.com estaba tomado)
 - [x] Publicado en Cloudflare Workers (static assets) con el dominio y redirección www → raíz (19 nov)
-- [ ] Google Search Console: verificar dominio y enviar `sitemap-index.xml`
+- [x] Google Search Console: dominio verificado (vía Cloudflare) y `sitemap-index.xml` enviado (19 nov)
 - [ ] GA4 o Cloudflare Web Analytics: crear y copiar el ID
 - [x] Email real para la Privacy Policy y Contact (oswaldoj.tipan@gmail.com)
 
