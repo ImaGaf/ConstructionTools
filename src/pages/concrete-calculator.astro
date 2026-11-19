@@ -4,9 +4,11 @@ import Icon from '../components/Icon.astro';
 
 const toc: TocItem[] = [
   { id: 'formula', label: 'The formula' },
-  { id: 'footings-posts', label: 'Footings & post holes' },
-  { id: 'thickness', label: 'Thickness by job' },
-  { id: 'bags-or-ready-mix', label: 'Bags or ready-mix' },
+  { id: 'how-many-bags', label: 'How many bags?' },
+  { id: 'footings-posts', label: 'Footings, piers & posts' },
+  { id: 'thickness', label: 'Slab thickness by job' },
+  { id: 'bags-or-ready-mix', label: 'Bags, mini-mix or ready-mix' },
+  { id: 'concrete-cost', label: 'Working out the cost' },
   { id: 'before-you-pour', label: 'Before you pour' },
 ];
 
@@ -26,6 +28,14 @@ const faqs: Faq[] = [
   {
     q: 'Should I use bags or order ready-mix concrete?',
     a: 'Bags suit small jobs such as setting posts or a small pad. Once a job needs more than about half a cubic metre, mixing by hand gets slow and tiring, and a ready-mix truck is usually easier and gives a more consistent pour. Ask local suppliers about minimum order sizes and short-load fees.',
+  },
+  {
+    q: 'Can I mix concrete by hand?',
+    a: 'Yes, for small jobs. A wheelbarrow or mixing tray and a shovel are enough for a few bags at a time. Beyond about a dozen bags it becomes slow, tiring and hard to keep the pour even, so hire a small mixer or order a mini-mix or ready-mix load instead.',
+  },
+  {
+    q: 'How much does concrete cost per m³?',
+    a: 'It depends on your city, the strength (MPa), the load size and the supplier, and small loads usually carry an extra short-load fee. Ask two or three local suppliers for a delivered price per m³, then enter it in the calculator to see your total.',
   },
   {
     q: 'How thick should a concrete slab be?',
@@ -202,13 +212,41 @@ const faqs: Faq[] = [
     </p>
   </section>
 
+  <section id="how-many-bags">
+    <h2>How many bags of concrete do I need?</h2>
+    <p>
+      Divide the volume by what one bag makes. A 20 kg bag of general-purpose premix makes
+      roughly 0.0095 m³, so one cubic metre takes about 105 bags before waste. A 30 kg bag makes
+      roughly 0.014 m³, or about 72 bags per cubic metre. Yields vary between brands, so check the
+      label on the bag you're buying.
+    </p>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Volume</th><th scope="col">20 kg bags</th><th scope="col">30 kg bags</th></tr></thead>
+        <tbody>
+          <tr><td>0.1 m³</td><td>11</td><td>8</td></tr>
+          <tr><td>0.25 m³</td><td>27</td><td>18</td></tr>
+          <tr><td>0.5 m³</td><td>53</td><td>36</td></tr>
+          <tr><td>1 m³</td><td>106</td><td>72</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Before waste. Add 5–10% on top, as the calculator does.</p>
+    <p>
+      For fence and pergola posts, many people use a fast-setting post mix instead of standard
+      premix. Some of these are designed to be poured dry into the hole and then wetted, so the
+      number of bags per hole can differ: follow the instructions on the bag.
+    </p>
+  </section>
+
   <section id="footings-posts">
-    <h2>Footings and post holes</h2>
+    <h2>Footings, piers and post holes</h2>
     <p>
       A strip footing is a long, narrow slab, so the same formula applies: total length × width ×
       depth. For round post holes, the calculator works out the volume of each cylinder
       (π × radius² × depth), takes away the space the post itself fills, and multiplies by the
-      number of holes.
+      number of holes. For round concrete piers or pier footings with no post set in them, enter
+      a post size of 0.
     </p>
     <p>
       Dug holes and trenches usually end up wider than planned, which is why 10% extra is a
@@ -217,7 +255,7 @@ const faqs: Faq[] = [
   </section>
 
   <section id="thickness">
-    <h2>Typical thickness by job</h2>
+    <h2>How thick should a concrete slab be?</h2>
     <div class="table-card">
       <table>
         <thead><tr><th scope="col">Job</th><th scope="col">Common thickness</th></tr></thead>
@@ -236,13 +274,35 @@ const faqs: Faq[] = [
   </section>
 
   <section id="bags-or-ready-mix">
-    <h2>Bags or ready-mix?</h2>
+    <h2>Bags, mini-mix or ready-mix?</h2>
     <p>The calculator's Bags–Truck bar shows where your job falls. As a rule of thumb:</p>
     <div class="compare">
       <div class="c1"><h3>Under 0.3 m³</h3>Premix bags, mixed by hand or in a small mixer. Posts and small pads.</div>
-      <div class="c2"><h3>0.3–0.6 m³</h3>Either. Compare bag cost and effort with a ready-mix short load.</div>
+      <div class="c2"><h3>0.3–0.6 m³</h3>Either. Compare bag cost and effort with a mini-mix or a ready-mix short load.</div>
       <div class="c3"><h3>Over 0.6 m³</h3>Ready-mix delivered by truck. Driveways and larger slabs.</div>
     </div>
+    <p style="margin-top: 16px;">
+      <strong>Mini-mix</strong> services use smaller trucks for small loads and tight access, which
+      makes them a common choice for jobs too big for bags but too small for a full ready-mix
+      truck. When you ask for quotes, give the supplier your volume in m³ from the calculator and
+      ask whether a minimum load or short-load fee applies.
+    </p>
+  </section>
+
+  <section id="concrete-cost">
+    <h2>Working out the cost of your concrete</h2>
+    <p>
+      Concrete is priced per cubic metre delivered, and the price changes with your location,
+      the strength you need (measured in MPa), the size of the load and how far the truck travels.
+      Extras such as a concrete pump, colour or exposed-aggregate finishes, and short-load fees are
+      added on top.
+    </p>
+    <p>
+      To estimate the material cost, get a delivered price per m³ from a couple of local suppliers
+      and enter it in the <em>Ready-mix price per m³</em> field above. The calculator multiplies it
+      by the rounded order volume. Labour, formwork, reinforcement and finishing are separate, so
+      for a driveway or slab ask a concreter for a full quote.
+    </p>
   </section>
 
   <section id="before-you-pour">

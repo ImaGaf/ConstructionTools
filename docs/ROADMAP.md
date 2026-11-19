@@ -53,6 +53,9 @@ Prompt para Claude Code:
 - [ ] Kitchen renovation cost calculator (1.900/mes, KD 19, SERP débil)
 - [ ] Tile calculator (1.300/mes + "tile estimator calculator" 1.000/mes)
 - [ ] Hot water system replacement cost (720/mes, CPC $4,12: la mejor para leads)
+- [ ] Concrete steps calculator (1.000 + 480/mes, KD 5–21; solo matemática)
+- [ ] Concrete price per m³ / cost (~5.000/mes sumando variantes, KD 8–20)
+- [ ] Concrete driveway cost + exposed aggregate (1.600 + 2.400/mes, CPC $5–6)
 
 Antes de las páginas de costos: consigue fuentes reales de precios en Australia
 (guías de Canstar, hipages, ServiceSeeking, cotizaciones que conozcas por tu trabajo).
@@ -75,7 +78,6 @@ Investigación (Semrush gratis, 10 búsquedas al día):
 - [ ] Revisar las "Questions" de cada palabra clave: cada una es una FAQ o una guía
 
 Páginas candidatas (decidir con los datos):
-- [ ] Concrete driveway cost
 - [ ] Retaining wall cost / calculator
 - [ ] Decking calculator
 - [ ] Gravel, soil, sand y mulch calculator (puede ser una sola herramienta con pestañas)
