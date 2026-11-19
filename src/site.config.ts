@@ -4,7 +4,7 @@ export const SITE = {
   tagline: 'Free building & renovation calculators for Australians',
   description:
     'Free calculators for Australian building, renovation and plumbing jobs: concrete, tiles, renovation costs, hot water systems and more.',
-  contactEmail: 'hello@example.com.au',
+  contactEmail: 'oswaldoj.tipan@gmail.com',
   locale: 'en_AU',
 
   // Persona detrás del sitio (E-E-A-T). Completa antes de publicar.
@@ -12,6 +12,7 @@ export const SITE = {
     name: 'Oswaldo Tipán',
     initials: 'OT',
     role: 'Software engineering student with residential hydraulic design experience',
+    url: '/about/',
   },
 
   // Cuando AdSense te apruebe, pon aquí tu ID (ca-pub-XXXXXXXXXXXXXXXX).

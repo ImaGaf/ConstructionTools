@@ -63,8 +63,8 @@ Ezoic is ruled out (minimum raised to 250k monthly users in Feb 2026).
 
 ## Repo layout
 
-- `src/site.config.ts` — site name, author, contact email (used only in the privacy
-  policy), AdSense / GA4 / Cloudflare
+- `src/site.config.ts` — site name, author, contact email (used in the privacy
+  policy and contact page), AdSense / GA4 / Cloudflare
   analytics IDs, `CATEGORIES` (slug, name, intro text) and `TOOLS` (slug, title,
   blurb, category, icon, `ready`, `featured`, `related`). The home page, category
   pages, header menu, 404 page and "Related calculators" are all generated from these.
@@ -143,10 +143,12 @@ them, never hard-code new colours.
 - Calculator first, result always visible (sticky panel on desktop, bottom bar on
   mobile), content below in visual blocks rather than walls of text.
 
-## Pages not wanted for now
+## About and Contact
 
-Oswaldo removed the About and Contact pages (19 Nov 2026). Do not recreate them or
-link to them unless he asks. The author byline shows his name without a link.
+`/about/` (who builds the site and how the calculators work) and `/contact/` (email
+from `SITE.contactEmail`) are live again since 19 Nov 2026, at Oswaldo's request, and
+are linked from the header, footer and the author byline. Keep the About text factual:
+only state things Oswaldo has confirmed about himself.
 
 ## Cost pages
 

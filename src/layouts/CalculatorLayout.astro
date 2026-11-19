@@ -61,7 +61,7 @@ const schema = [
     inLanguage: 'en-AU',
     dateModified: updated,
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'AUD' },
-    author: { '@type': 'Person', name: SITE.author.name, jobTitle: SITE.author.role },
+    author: { '@type': 'Person', name: SITE.author.name, jobTitle: SITE.author.role, url: new URL(SITE.author.url, Astro.site).href },
     publisher: { '@type': 'Organization', name: SITE.name, url: homeUrl },
   },
   {
@@ -93,7 +93,7 @@ const schema = [
     <p class="lede">{lede}</p>
     <p class="byline">
       <span class="avatar" aria-hidden="true">{SITE.author.initials}</span>
-      <span>By <strong>{SITE.author.name}</strong> · Updated <time datetime={updated}>{updatedLabel}</time></span>
+      <span>By <a href={SITE.author.url}>{SITE.author.name}</a> · Updated <time datetime={updated}>{updatedLabel}</time></span>
     </p>
 
     <div class="calc-grid">

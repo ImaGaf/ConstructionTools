@@ -13,7 +13,7 @@ Publicar de forma constante pesa más que publicar mucho de golpe.
 - [x] Astro estático + sitemap + robots.txt
 - [x] Plantilla `CalculatorLayout` (migas de pan, autor, fecha, FAQ, relacionadas, schema)
 - [x] Calculadora de concreto (12.100 búsquedas/mes, KD 17)
-- [x] Páginas Privacy Policy, Terms, 404 (About y Contact quitadas a pedido el 19 nov; volver a evaluarlas antes de pedir AdSense)
+- [x] Páginas Privacy Policy, Terms, 404, About y Contact (repuestas el 19 nov con oswaldoj.tipan@gmail.com)
 - [x] Favicon, imagen para redes (OG), cabeceras de Cloudflare
 - [x] AdSense, GA4 y Cloudflare Analytics preparados (apagados)
 - [x] Resultados compartibles por enlace
@@ -34,7 +34,7 @@ Lo haces tú (no Claude Code):
       (preset Astro, build `npm run build`, output `dist`) y luego el dominio
 - [ ] Google Search Console: verificar dominio y enviar `sitemap-index.xml`
 - [ ] GA4 o Cloudflare Web Analytics: crear y copiar el ID
-- [ ] Email real para la Privacy Policy (puede ser Gmail o reenvío de Cloudflare Email Routing)
+- [x] Email real para la Privacy Policy y Contact (oswaldoj.tipan@gmail.com)
 
 Prompt para Claude Code:
 > Lee CLAUDE.md. El sitio se va a llamar [NOMBRE] y el dominio es [DOMINIO].
