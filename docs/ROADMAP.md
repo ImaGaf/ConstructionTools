@@ -1,4 +1,4 @@
-# Roadmap — BuildCalc AU
+# Roadmap — Site Sums
 
 Plan por fases. Cada fase tiene una meta, una lista de tareas y prompts listos para
 pegar en Claude Code. Marca con `[x]` lo que vayas terminando.
@@ -28,7 +28,8 @@ Publicar de forma constante pesa más que publicar mucho de golpe.
 **Meta:** sitio publicado en tu dominio y conectado a Google.
 
 Lo haces tú (no Claude Code):
-- [ ] Elegir nombre y comprar dominio `.com.au` o `.com`
+- [x] Elegir nombre: **Site Sums** (19 nov)
+- [ ] Comprar el dominio `sitesums.com` (si no está libre, avisar para cambiar `astro.config.mjs` y `robots.txt`)
       (`.com.au` pide ABN; si no tienes, usa `.com`)
 - [ ] Cloudflare Pages: conectar el repo de GitHub
       (preset Astro, build `npm run build`, output `dist`) y luego el dominio

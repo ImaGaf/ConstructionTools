@@ -1,4 +1,4 @@
-# CLAUDE.md — ConstructionTools (BuildCalc AU, provisional name)
+# CLAUDE.md — ConstructionTools (Site Sums, sitesums.com)
 
 Read this before doing any work in this repo. It holds the project goals and the
 decisions already made. The owner (Oswaldo) speaks Spanish: talk to him in Spanish,
@@ -131,7 +131,7 @@ Ezoic is ruled out (minimum raised to 250k monthly users in Feb 2026).
 ## Design rules ("Site plan")
 
 The approved design lives in the Claude Design canvas "BuildCalc AU — Diseño del
-sitio". Colours, type and components are tokens in `src/styles/global.css`; reuse
+sitio" (the site was later named Site Sums). Colours, type and components are tokens in `src/styles/global.css`; reuse
 them, never hard-code new colours.
 - Warm off-white ground (`--bg`), white cards, carbon ink (`--ink`).
 - One accent: safety orange `--accent` for buttons, links, selection and the CTA.

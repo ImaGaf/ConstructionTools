@@ -1,4 +1,4 @@
-# BuildCalc AU (nombre provisional)
+# Site Sums (sitesums.com)
 
 Sitio de calculadoras para construcción y renovación en Australia. Astro, HTML estático, Cloudflare Pages.
 

@@ -1,6 +1,6 @@
 // Configuración central del sitio. Edita aquí y se aplica en todas las páginas.
 export const SITE = {
-  name: 'BuildCalc AU', // nombre provisional, cámbialo cuando elijas marca
+  name: 'Site Sums',
   tagline: 'Free building & renovation calculators for Australians',
   description:
     'Free calculators for Australian building, renovation and plumbing jobs: concrete, tiles, renovation costs, hot water systems and more.',
