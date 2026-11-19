@@ -6,9 +6,12 @@ interface Props {
   title: string;
   description: string;
   schema?: object | object[];
+  ogImage?: string; // ruta en /public, por defecto /og-default.png
+  noindex?: boolean;
 }
-const { title, description, schema } = Astro.props;
+const { title, description, schema, ogImage = '/og-default.png', noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImageUrl = new URL(ogImage, Astro.site).href;
 const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
 const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
 ---
@@ -19,14 +22,26 @@ const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex, follow" /> : <link rel="canonical" href={canonical} />}
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#c2571a" />
+
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <link rel="sitemap" href="/sitemap-index.xml" />
     {schemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+
     {SITE.adsenseClient && (
       <script
         async
@@ -34,18 +49,37 @@ const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
         crossorigin="anonymous"
       ></script>
     )}
+    {SITE.ga4Id && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${SITE.ga4Id}`}></script>
+        <script is:inline define:vars={{ id: SITE.ga4Id }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', id);
+        </script>
+      </>
+    )}
+    {SITE.cloudflareAnalyticsToken && (
+      <script
+        defer
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={JSON.stringify({ token: SITE.cloudflareAnalyticsToken })}
+      ></script>
+    )}
   </head>
   <body>
+    <a class="skip" href="#content">Skip to content</a>
     <header class="site">
       <div class="wrap">
-        <a class="logo" href="/">Build<span>Calc</span> AU</a>
-        <nav class="site">
-          <a href="/">Calculators</a>
+        <a class="logo" href="/" aria-label={`${SITE.name} home`}>Build<span>Calc</span> AU</a>
+        <nav class="site" aria-label="Main">
+          <a href="/#calculators">Calculators</a>
           <a href="/about/">About</a>
         </nav>
       </div>
     </header>
-    <main>
+    <main id="content">
       <div class="wrap">
         <slot />
       </div>

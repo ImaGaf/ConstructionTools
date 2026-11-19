@@ -1,0 +1,102 @@
+---
+// Plantilla para todas las calculadoras. Se encarga de migas de pan, autor y
+// fecha, FAQ, calculadoras relacionadas y todo el schema (WebApplication,
+// FAQPage, BreadcrumbList). La página solo aporta la calculadora y el contenido.
+import Base from './Base.astro';
+import { SITE, TOOLS, getTool } from '../site.config';
+
+export interface Faq { q: string; a: string }
+interface Props {
+  slug: string;
+  title: string; // <title>, con la palabra clave principal
+  description: string; // meta description, < 155 caracteres
+  h1: string;
+  lede: string;
+  updated: string; // fecha ISO, ej. '2026-11-18'
+  faqs: Faq[];
+}
+const { slug, title, description, h1, lede, updated, faqs } = Astro.props;
+const tool = getTool(slug);
+const pageUrl = new URL(`/${slug}/`, Astro.site).href;
+const homeUrl = new URL('/', Astro.site).href;
+const related = (tool?.related ?? [])
+  .map((s) => TOOLS.find((t) => t.slug === s))
+  .filter((t) => t && t.ready);
+const updatedLabel = new Date(updated + 'T00:00:00').toLocaleDateString('en-AU', {
+  day: 'numeric', month: 'long', year: 'numeric',
+});
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: tool?.title ?? h1,
+    url: pageUrl,
+    description,
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    inLanguage: 'en-AU',
+    dateModified: updated,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'AUD' },
+    author: { '@type': 'Person', name: SITE.author.name, url: new URL(SITE.author.url, Astro.site).href },
+    publisher: { '@type': 'Organization', name: SITE.name, url: homeUrl },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: homeUrl },
+      { '@type': 'ListItem', position: 2, name: tool?.title ?? h1, item: pageUrl },
+    ],
+  },
+  faqs.length && {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+].filter(Boolean) as object[];
+---
+<Base title={title} description={description} schema={schema}>
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <a href="/">Home</a> <span aria-hidden="true">›</span> <span aria-current="page">{tool?.title ?? h1}</span>
+  </nav>
+  <h1>{h1}</h1>
+  <p class="lede">{lede}</p>
+  <p class="byline">
+    By <a href={SITE.author.url}>{SITE.author.name}</a> · Updated <time datetime={updated}>{updatedLabel}</time>
+  </p>
+
+  <slot />
+
+  {faqs.length > 0 && (
+    <section aria-labelledby="faq">
+      <h2 id="faq">Frequently asked questions</h2>
+      {faqs.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </section>
+  )}
+
+  {related.length > 0 && (
+    <section aria-labelledby="related">
+      <h2 id="related">Related calculators</h2>
+      <ul class="tool-list">
+        {related.map((t) => (
+          <li><a href={`/${t!.slug}/`}><div class="card"><strong>{t!.title}</strong><br /><span class="note">{t!.blurb}</span></div></a></li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <p class="note disclaimer">
+    Results are estimates to help you plan and compare quotes. They are not a substitute for
+    advice from a licensed tradesperson or engineer.
+  </p>
+</Base>

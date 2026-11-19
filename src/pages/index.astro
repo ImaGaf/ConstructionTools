@@ -1,19 +1,65 @@
 ---
 import Base from '../layouts/Base.astro';
 import { SITE, TOOLS } from '../site.config';
+
+const categories = [...new Set(TOOLS.map((t) => t.category))];
+const home = new URL('/', Astro.site).href;
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE.name,
+    url: home,
+    inLanguage: 'en-AU',
+    description: SITE.description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: SITE.name,
+    url: home,
+    logo: new URL('/apple-touch-icon.png', Astro.site).href,
+    email: SITE.contactEmail,
+  },
+];
 ---
-<Base title={`${SITE.name} – Free Building & Renovation Calculators`} description="Free, accurate calculators for Australian building, renovation and plumbing jobs: concrete, tiles, renovation costs, hot water systems and more.">
-  <h1>Building & renovation calculators for Australia</h1>
-  <p class="lede">Quick, free tools to work out materials and costs before you buy or get quotes. Metric units, Australian prices and standards.</p>
-  <ul class="tool-list">
-    {TOOLS.map((t) => (
-      <li>
-        {t.ready ? (
-          <a href={`/${t.slug}/`}><div class="card"><strong>{t.title}</strong><br /><span class="note">{t.blurb}</span></div></a>
-        ) : (
-          <div class="card"><strong>{t.title}</strong><span class="soon">Coming soon</span><br /><span class="note">{t.blurb}</span></div>
-        )}
-      </li>
+<Base title={`${SITE.name} – Free Building & Renovation Calculators`} description={SITE.description} schema={schema}>
+  <section class="hero">
+    <h1>Building & renovation calculators for Australia</h1>
+    <p class="lede">
+      Quick, free tools to work out materials and costs before you buy or get quotes. Metric
+      units, Australian dollars, and references to Australian standards.
+    </p>
+  </section>
+
+  <div id="calculators">
+    {categories.map((cat) => (
+      <section class="cat">
+        <h2>{cat}</h2>
+        <ul class="tool-list">
+          {TOOLS.filter((t) => t.category === cat).map((t) => (
+            <li>
+              {t.ready ? (
+                <a href={`/${t.slug}/`}><div class="card"><strong>{t.title}</strong><br /><span class="note">{t.blurb}</span></div></a>
+              ) : (
+                <div class="card"><strong>{t.title}</strong><span class="soon">Coming soon</span><br /><span class="note">{t.blurb}</span></div>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
     ))}
-  </ul>
+  </div>
+
+  <h2>How our calculators work</h2>
+  <p>
+    Every calculator shows the formula behind its result, so you can check the maths yourself.
+    Defaults are set to common Australian sizes and practices, and you can change every input
+    to match your job.
+  </p>
+  <p>
+    Results are a planning guide. Use them to order materials with confidence and to compare
+    quotes, and always confirm structural, plumbing, gas and electrical work with a licensed
+    tradesperson.
+  </p>
 </Base>

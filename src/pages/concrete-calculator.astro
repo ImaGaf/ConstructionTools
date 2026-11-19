@@ -1,20 +1,19 @@
 ---
-import Base from '../layouts/Base.astro';
+import CalculatorLayout, { type Faq } from '../layouts/CalculatorLayout.astro';
 import AdSlot from '../components/AdSlot.astro';
-import { SITE } from '../site.config';
 
-const title = 'Concrete Calculator (m³ & 20 kg Bags) – Slabs, Footings, Posts';
-const description =
-  'Free concrete calculator for Australia. Work out cubic metres and 20 kg or 30 kg premix bags for slabs, footings and post holes, with waste included.';
-
-const faqs = [
+const faqs: Faq[] = [
   {
     q: 'How do I calculate how much concrete I need?',
     a: 'Multiply length × width × depth, all in metres, to get cubic metres (m³). For a 4 m × 3 m slab that is 100 mm thick: 4 × 3 × 0.1 = 1.2 m³. Then add 5–10% for waste, uneven ground and spillage.',
   },
   {
     q: 'How many 20 kg bags of concrete are in a cubic metre?',
-    a: 'Roughly 100 to 110 bags, because a 20 kg bag of premix usually makes around 0.009–0.01 m³ once mixed. Yields vary by brand, so check the bag label and adjust the bag size setting above.',
+    a: 'Roughly 100 to 110 bags, because a 20 kg bag of premix usually makes around 0.009–0.01 m³ once mixed. Yields vary by brand, so check the bag label and choose the matching bag size in the calculator.',
+  },
+  {
+    q: 'How many bags of concrete do I need for a fence post?',
+    a: 'For a typical 90 mm post in a 300 mm wide, 600 mm deep hole, each hole needs about 0.04 m³, which is roughly 4 to 5 bags of 20 kg premix including some waste. Use the Post holes tab to work it out for your hole size and number of posts.',
   },
   {
     q: 'Should I use bags or order ready-mix concrete?',
@@ -29,55 +28,36 @@ const faqs = [
     a: 'Most people add 5–10%. Use the higher end if the ground is uneven, the formwork is irregular, or you are pouring footings into dug trenches, where the actual volume is often more than planned.',
   },
 ];
-
-const schema = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: 'Concrete Calculator',
-    applicationCategory: 'UtilitiesApplication',
-    operatingSystem: 'Any',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'AUD' },
-    publisher: { '@type': 'Organization', name: SITE.name },
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqs.map((f) => ({
-      '@type': 'Question',
-      name: f.q,
-      acceptedAnswer: { '@type': 'Answer', text: f.a },
-    })),
-  },
-];
 ---
-<Base title={title} description={description} schema={schema}>
-  <h1>Concrete Calculator</h1>
-  <p class="lede">
-    Work out how many cubic metres of concrete you need, or how many 20 kg bags, for a slab,
-    footing or post holes. Enter sizes in millimetres or metres and the waste is added for you.
-  </p>
-
-  <section class="card" id="calc">
+<CalculatorLayout
+  slug="concrete-calculator"
+  title="Concrete Calculator (m³ & Bags) – Slabs, Footings, Posts"
+  description="Free concrete calculator for Australia. Work out cubic metres and 20 kg or 30 kg premix bags for slabs, footings and post holes, with waste included."
+  h1="Concrete Calculator"
+  lede="Work out how many cubic metres of concrete you need, or how many premix bags, for a slab, footing or post holes. Waste is added for you, and you can share the result with a link."
+  updated="2026-11-18"
+  faqs={faqs}
+>
+  <section class="card" id="calc" aria-label="Concrete calculator">
     <div class="tabs" role="tablist" aria-label="Shape">
-      <button role="tab" aria-selected="true" data-shape="slab">Slab / pad</button>
-      <button role="tab" aria-selected="false" data-shape="footing">Strip footing</button>
-      <button role="tab" aria-selected="false" data-shape="post">Post holes</button>
+      <button type="button" role="tab" id="tab-slab" aria-controls="panel-slab" aria-selected="true" data-shape="slab">Slab / pad</button>
+      <button type="button" role="tab" id="tab-footing" aria-controls="panel-footing" aria-selected="false" tabindex="-1" data-shape="footing">Strip footing</button>
+      <button type="button" role="tab" id="tab-post" aria-controls="panel-post" aria-selected="false" tabindex="-1" data-shape="post">Post holes</button>
     </div>
 
-    <div class="grid" data-panel="slab">
+    <div class="grid" role="tabpanel" id="panel-slab" aria-labelledby="tab-slab" data-panel="slab">
       <div><label for="s-l">Length (m)</label><input id="s-l" type="number" inputmode="decimal" min="0" step="0.1" value="4" /></div>
       <div><label for="s-w">Width (m)</label><input id="s-w" type="number" inputmode="decimal" min="0" step="0.1" value="3" /></div>
       <div><label for="s-d">Thickness (mm)</label><input id="s-d" type="number" inputmode="decimal" min="0" step="5" value="100" /></div>
     </div>
 
-    <div class="grid" data-panel="footing" hidden>
+    <div class="grid" role="tabpanel" id="panel-footing" aria-labelledby="tab-footing" data-panel="footing" hidden>
       <div><label for="f-l">Total length (m)</label><input id="f-l" type="number" inputmode="decimal" min="0" step="0.1" value="10" /></div>
       <div><label for="f-w">Width (mm)</label><input id="f-w" type="number" inputmode="decimal" min="0" step="10" value="300" /></div>
       <div><label for="f-d">Depth (mm)</label><input id="f-d" type="number" inputmode="decimal" min="0" step="10" value="400" /></div>
     </div>
 
-    <div class="grid" data-panel="post" hidden>
+    <div class="grid" role="tabpanel" id="panel-post" aria-labelledby="tab-post" data-panel="post" hidden>
       <div><label for="p-n">Number of holes</label><input id="p-n" type="number" inputmode="numeric" min="0" step="1" value="6" /></div>
       <div><label for="p-dia">Hole diameter (mm)</label><input id="p-dia" type="number" inputmode="decimal" min="0" step="10" value="300" /></div>
       <div><label for="p-d">Hole depth (mm)</label><input id="p-d" type="number" inputmode="decimal" min="0" step="10" value="600" /></div>
@@ -102,8 +82,8 @@ const schema = [
         </select>
       </div>
       <div>
-        <label for="price">Ready-mix price per m³ (optional, $)</label>
-        <input id="price" type="number" inputmode="decimal" min="0" step="10" placeholder="e.g. your quote" />
+        <label for="price">Ready-mix $ per m³ (optional)</label>
+        <input id="price" type="number" inputmode="decimal" min="0" step="10" placeholder="Your quote" />
       </div>
     </div>
 
@@ -113,7 +93,13 @@ const schema = [
       <div class="result"><div class="k">Order ready-mix (rounded)</div><div class="v" id="r-order">–</div></div>
       <div class="result" id="r-cost-wrap" hidden><div class="k">Ready-mix estimate</div><div class="v" id="r-cost">–</div></div>
     </div>
+    <p class="working" id="r-working"></p>
     <p class="note" id="r-hint"></p>
+    <div class="actions">
+      <button type="button" class="btn-secondary" id="copy-link">Copy link to this result</button>
+      <span class="note" id="copy-status" role="status"></span>
+    </div>
+    <noscript><p class="note">Turn on JavaScript to use the calculator, or use the formulas below.</p></noscript>
   </section>
 
   <AdSlot />
@@ -129,6 +115,10 @@ const schema = [
     concrete always stays in the barrow or the chute. Running short halfway through a pour
     leaves a cold joint, which is far worse than having a little left over.
   </p>
+  <p>
+    For an L-shaped or irregular slab, split it into rectangles, work out each one, and add them
+    together.
+  </p>
 
   <h2>Footings and post holes</h2>
   <p>
@@ -141,7 +131,7 @@ const schema = [
 
   <h2>Typical thickness by job</h2>
   <table>
-    <thead><tr><th>Job</th><th>Common thickness</th></tr></thead>
+    <thead><tr><th scope="col">Job</th><th scope="col">Common thickness</th></tr></thead>
     <tbody>
       <tr><td>Garden path, light foot traffic</td><td>75–100 mm</td></tr>
       <tr><td>Shed or water tank pad</td><td>100 mm</td></tr>
@@ -154,72 +144,92 @@ const schema = [
     manufacturer, or an engineer may require something different.
   </p>
 
+  <h2>Bags or ready-mix?</h2>
+  <table>
+    <thead><tr><th scope="col">Job size</th><th scope="col">Usually best</th></tr></thead>
+    <tbody>
+      <tr><td>Under 0.3 m³ (posts, small pads)</td><td>Premix bags, mixed by hand or in a small mixer</td></tr>
+      <tr><td>0.3–0.6 m³</td><td>Either: compare bag cost and effort with a ready-mix short load</td></tr>
+      <tr><td>Over 0.6 m³ (driveways, larger slabs)</td><td>Ready-mix delivered by truck</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Tips before you pour</h2>
+  <ul>
+    <li>Measure twice, and measure the formwork you actually built, not the plan.</li>
+    <li>Check access: can a truck reach the site, or will you need a pump or barrows?</li>
+    <li>Avoid pouring in extreme heat or when rain is forecast, as both affect the finish and strength.</li>
+    <li>Keep the slab damp for the first few days so it cures properly.</li>
+  </ul>
+
   <div class="cta">
     <strong>Bigger job than a weekend pour?</strong>
     Driveways and large slabs need formwork, reinforcement and a crew on pour day. It is worth
     getting quotes from a licensed concreter before you order anything.
   </div>
 
-  <h2>Frequently asked questions</h2>
-  {faqs.map((f) => (
-    <details>
-      <summary>{f.q}</summary>
-      <p>{f.a}</p>
-    </details>
-  ))}
-
   <script>
-    const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
-    const num = (id: string) => Math.max(0, parseFloat($(id)?.value) || 0);
+    import { initTabs, readInputs, syncUrl, copyLink } from '../lib/calc';
+
+    const el = <T extends HTMLElement = HTMLInputElement>(id: string) => document.getElementById(id) as T;
+    const num = (id: string) => Math.max(0, parseFloat(el(id).value) || 0);
+    const fmt = (n: number, d = 2) => n.toLocaleString('en-AU', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+    const FIELDS = ['s-l', 's-w', 's-d', 'f-l', 'f-w', 'f-d', 'p-n', 'p-dia', 'p-d', 'p-post', 'waste', 'bag', 'price'];
     let shape = 'slab';
 
-    function volume(): number {
-      if (shape === 'slab') return num('s-l') * num('s-w') * (num('s-d') / 1000);
-      if (shape === 'footing') return num('f-l') * (num('f-w') / 1000) * (num('f-d') / 1000);
-      const r = num('p-dia') / 2000;
-      const depth = num('p-d') / 1000;
-      const post = num('p-post') / 1000;
+    function volume(): { m3: number; working: string } {
+      if (shape === 'slab') {
+        const l = num('s-l'), w = num('s-w'), d = num('s-d') / 1000;
+        return { m3: l * w * d, working: `${fmt(l, 1)} × ${fmt(w, 1)} × ${fmt(d, 3)} m` };
+      }
+      if (shape === 'footing') {
+        const l = num('f-l'), w = num('f-w') / 1000, d = num('f-d') / 1000;
+        return { m3: l * w * d, working: `${fmt(l, 1)} × ${fmt(w, 3)} × ${fmt(d, 3)} m` };
+      }
+      const n = Math.floor(num('p-n'));
+      const r = num('p-dia') / 2000, depth = num('p-d') / 1000, post = num('p-post') / 1000;
       const each = Math.max(0, Math.PI * r * r * depth - post * post * depth);
-      return each * Math.floor(num('p-n'));
+      return { m3: each * n, working: `${n} holes × ${fmt(each, 3)} m³ each (hole minus post)` };
     }
 
     function render() {
-      const waste = parseFloat(($('waste') as unknown as HTMLSelectElement).value);
-      const bagYield = parseFloat(($('bag') as unknown as HTMLSelectElement).value);
-      const m3 = volume() * (1 + waste);
+      const waste = parseFloat(el<HTMLSelectElement>('waste').value);
+      const bagYield = parseFloat(el<HTMLSelectElement>('bag').value);
+      const { m3: base, working } = volume();
+      const m3 = base * (1 + waste);
       const bags = m3 > 0 ? Math.ceil(m3 / bagYield) : 0;
       const order = Math.ceil(m3 * 5) / 5; // redondeo a 0,2 m³
 
-      $('r-m3').textContent = `${m3.toFixed(2)} m³`;
-      $('r-bags').textContent = bags.toLocaleString('en-AU');
-      $('r-order').textContent = `${order.toFixed(1)} m³`;
+      el('r-m3').textContent = `${fmt(m3)} m³`;
+      el('r-bags').textContent = bags.toLocaleString('en-AU');
+      el('r-order').textContent = `${fmt(order, 1)} m³`;
+      el('r-working').textContent = base > 0
+        ? `${working} = ${fmt(base)} m³, plus ${Math.round(waste * 100)}% waste = ${fmt(m3)} m³`
+        : '';
 
       const price = num('price');
-      const costWrap = document.getElementById('r-cost-wrap')!;
-      costWrap.hidden = price <= 0;
+      el('r-cost-wrap').hidden = price <= 0;
       if (price > 0) {
-        $('r-cost').textContent = (order * price).toLocaleString('en-AU', {
+        el('r-cost').textContent = (order * price).toLocaleString('en-AU', {
           style: 'currency', currency: 'AUD', maximumFractionDigits: 0,
         });
       }
 
-      const hint = document.getElementById('r-hint')!;
-      hint.textContent =
+      el('r-hint').textContent =
         m3 === 0 ? 'Enter your measurements to see the result.'
         : m3 < 0.3 ? 'Small job: premix bags are usually the easiest option.'
         : m3 < 0.6 ? 'In-between size: bags are possible but hard work. Compare with a ready-mix short load.'
         : 'At this size, ready-mix delivered by truck is usually the practical choice.';
+
+      syncUrl({ shape, ...readInputs(FIELDS) });
     }
 
-    document.querySelectorAll<HTMLButtonElement>('.tabs button').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        shape = btn.dataset.shape!;
-        document.querySelectorAll('.tabs button').forEach((b) => b.setAttribute('aria-selected', String(b === btn)));
-        document.querySelectorAll<HTMLElement>('[data-panel]').forEach((p) => (p.hidden = p.dataset.panel !== shape));
-        render();
-      });
-    });
-    document.getElementById('calc')!.addEventListener('input', render);
-    render();
+    const params = new URLSearchParams(location.search);
+    FIELDS.forEach((id) => { const v = params.get(id); if (v !== null) el(id).value = v; });
+
+    initTabs(el('calc'), params.get('shape') ?? 'slab', (s) => { shape = s; render(); });
+    el('calc').addEventListener('input', render);
+    el('copy-link').addEventListener('click', () => copyLink(el('copy-status')));
   </script>
-</Base>
+</CalculatorLayout>
