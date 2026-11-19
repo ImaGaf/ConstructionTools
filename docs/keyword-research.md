@@ -14,7 +14,7 @@ and compare keywords within the same tool.
 | bathroom renovation cost | 2,400 | 34 | 2.37 | Next to build. An advertiser already runs a "bathroom renovation calculator" ad. |
 | paint calculator | 2,400 | 31 | 0.18 | Skip for now: SERP owned by paint brands (Dulux, Taubmans, Bunnings), tiny CPC. |
 | kitchen renovation cost | 1,900 | 19 | 1.76 | Build. Reddit and Substack rank top 10 = weak SERP. |
-| tile calculator | 1,300 | 22 | 0.68 | Build. |
+| tile calculator | 1,300 | 22 | 0.68 | **Built** (`/tile-calculator/`), with tile estimator / tiles per m² / how to calculate m² variants. |
 | hot water system replacement cost | 720 | 17 | 4.12 | Build. Highest CPC, competition 0.85 = best for leads. |
 | rainwater tank size calculator | 70 | 9 | 0.47 | Skip: too little volume. |
 
@@ -82,7 +82,7 @@ backflow testing cost, as3500, heat pump vs solar hot water.
 ## Build order
 
 1. concrete calculator — done (updated with the concrete cluster, 18 Nov)
-2. tile calculator — pure maths, no price data needed
+2. tile calculator — done (18 Nov)
 3. concrete steps calculator — pure maths, no price data needed
 4. bathroom renovation cost calculator — needs price sources
 5. concrete price per m³ / cost calculator — needs price sources

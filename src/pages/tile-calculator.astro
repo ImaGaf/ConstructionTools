@@ -1,0 +1,351 @@
+---
+import CalculatorLayout, { type Faq, type TocItem } from '../layouts/CalculatorLayout.astro';
+import Icon from '../components/Icon.astro';
+
+const toc: TocItem[] = [
+  { id: 'formula', label: 'The formula' },
+  { id: 'measure-m2', label: 'Measuring the m²' },
+  { id: 'tiles-per-m2', label: 'Tiles per m² by size' },
+  { id: 'how-much-extra', label: 'How much extra to buy' },
+  { id: 'buying-tips', label: 'Before you buy' },
+];
+
+const faqs: Faq[] = [
+  {
+    q: 'How do I calculate how many tiles I need?',
+    a: 'Work out the area in square metres (length × width for a floor, width × height for a wall), divide it by the area of one tile including its grout joint, then add 10% for cuts and breakages. For a 3 m × 2.5 m floor with 600 × 600 mm tiles and 3 mm joints: 7.5 m² ÷ 0.364 m² = 20.6, plus 10% = 23 tiles.',
+  },
+  {
+    q: 'How do I calculate square metres for tiles?',
+    a: 'Measure the length and width of the floor in metres and multiply them. For walls, multiply the width by the height and subtract windows and doors. Split L-shaped rooms into rectangles, work out each one and add them together.',
+  },
+  {
+    q: 'How many 600 × 600 tiles are in a square metre?',
+    a: 'About 2.78 tiles, because each tile covers 0.36 m². In practice you buy by the box, and you need extra for cuts, so use the calculator to get a whole number of tiles and boxes.',
+  },
+  {
+    q: 'How much extra tile should I buy?',
+    a: 'Around 10% for a straight or brick-bond layout, and around 15% for diagonal or herringbone layouts, which need more cuts. Small, awkward rooms and large-format tiles can need more. Keep a few spare tiles for future repairs.',
+  },
+  {
+    q: 'How many tiles are in a box?',
+    a: 'It depends on the tile and the brand. Boxes are labelled with the number of tiles and the square metres they cover, so check the label and enter the tiles per box in the calculator to see how many boxes to buy.',
+  },
+  {
+    q: 'Does the grout gap change how many tiles I need?',
+    a: 'Slightly. Each grout joint adds a little coverage, so wider joints mean marginally fewer tiles. The effect is small for large tiles and bigger for small tiles and mosaics, which is why the calculator includes the joint width.',
+  },
+];
+---
+<CalculatorLayout
+  slug="tile-calculator"
+  title="Tile Calculator – How Many Tiles & Boxes Do I Need?"
+  description="Free tile calculator for Australia. Work out square metres, tiles and boxes for floors, walls and splashbacks, with grout joints and waste included."
+  h1="Tile Calculator"
+  lede="How many tiles and boxes you need for a floor, wall or splashback, with the grout joint and an allowance for cuts included."
+  updated="2026-11-18"
+  quickAnswer="multiply length × width to get the area in m², divide by the area of one tile (including the grout joint), then add 10% for cuts. A 3 m × 2.5 m floor needs about 23 tiles of 600 × 600 mm."
+  toc={toc}
+  faqs={faqs}
+  cta={{ title: 'Tiling a bathroom or wet area?', sub: 'Waterproofing must be done by a licensed professional', href: '#buying-tips' }}
+>
+  <!-- ───────── Entradas ───────── -->
+  <div slot="inputs">
+    <div class="step">
+      <div class="step-head"><span class="n">1</span><h2 id="surface-h">What are you tiling?</h2></div>
+      <fieldset class="choice-grid" aria-labelledby="surface-h">
+        <label class="choice">
+          <input type="radio" name="surface" value="floor" data-state checked />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 22 L32 10 L60 22 L32 34 Z"></path><path d="M18 16 L46 28 M46 16 L18 28"></path></svg>
+          <span class="t">Floor</span>
+          <span class="d">Bathrooms, kitchens, living areas, patios</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="surface" value="wall" data-state />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="12" y="4" width="40" height="32"></rect><path d="M12 15 H52 M12 26 H52 M25 4 V15 M39 15 V26 M25 26 V36"></path></svg>
+          <span class="t">Wall</span>
+          <span class="d">Showers, splashbacks, feature walls</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="surface" value="area" data-state />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="6" width="36" height="28" rx="2"></rect><path d="M22 24 V16 l4 6 4 -6 v8 M36 16 h4 v4 h-4 v4 h4" stroke-linecap="round"></path></svg>
+          <span class="t">I know the m²</span>
+          <span class="d">From plans or a quote</span>
+        </label>
+      </fieldset>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">2</span><h2>Area to tile</h2></div>
+      <div class="fields" data-panel="floor">
+        <div><label for="f-l">Length</label><div class="field"><input id="f-l" type="number" inputmode="decimal" min="0" step="0.1" value="3" data-state /><span class="unit">m</span></div></div>
+        <div><label for="f-w">Width</label><div class="field"><input id="f-w" type="number" inputmode="decimal" min="0" step="0.1" value="2.5" data-state /><span class="unit">m</span></div></div>
+      </div>
+      <div class="fields" data-panel="wall" hidden>
+        <div><label for="w-w">Wall width</label><div class="field"><input id="w-w" type="number" inputmode="decimal" min="0" step="0.1" value="2.4" data-state /><span class="unit">m</span></div></div>
+        <div><label for="w-h">Tiled height</label><div class="field"><input id="w-h" type="number" inputmode="decimal" min="0" step="0.1" value="2.1" data-state /><span class="unit">m</span></div></div>
+        <div><label for="w-o">Windows &amp; doors</label><div class="field"><input id="w-o" type="number" inputmode="decimal" min="0" step="0.1" value="0" data-state /><span class="unit">m²</span></div></div>
+      </div>
+      <div class="fields" data-panel="area" hidden>
+        <div><label for="a-m2">Area</label><div class="field"><input id="a-m2" type="number" inputmode="decimal" min="0" step="0.5" value="10" data-state /><span class="unit">m²</span></div></div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">3</span><h2>Tile and layout</h2></div>
+      <div class="opt-label" id="size-l">Tile size (mm)</div>
+      <div class="seg" role="radiogroup" aria-labelledby="size-l" style="margin-bottom: 14px;">
+        <label><input type="radio" name="size" value="300x300" data-state />300×300</label>
+        <label><input type="radio" name="size" value="300x600" data-state />300×600</label>
+        <label><input type="radio" name="size" value="600x600" data-state checked />600×600</label>
+        <label><input type="radio" name="size" value="600x1200" data-state />600×1200</label>
+        <label><input type="radio" name="size" value="custom" data-state />Custom</label>
+      </div>
+      <div class="fields" data-custom hidden style="margin-bottom: 14px;">
+        <div><label for="t-w">Tile width</label><div class="field"><input id="t-w" type="number" inputmode="decimal" min="1" step="1" value="75" data-state /><span class="unit">mm</span></div></div>
+        <div><label for="t-l">Tile length</label><div class="field"><input id="t-l" type="number" inputmode="decimal" min="1" step="1" value="300" data-state /><span class="unit">mm</span></div></div>
+      </div>
+      <div class="options">
+        <div>
+          <div class="opt-label" id="waste-l">Extra for cuts &amp; breakage</div>
+          <div class="seg" role="radiogroup" aria-labelledby="waste-l">
+            <label><input type="radio" name="waste" value="5" data-state />5%</label>
+            <label><input type="radio" name="waste" value="10" data-state checked />10%</label>
+            <label><input type="radio" name="waste" value="15" data-state />15%</label>
+            <label><input type="radio" name="waste" value="20" data-state />20%</label>
+          </div>
+        </div>
+        <div style="flex: 0 1 140px;">
+          <label class="opt-label" for="grout">Grout joint</label>
+          <div class="field"><input id="grout" type="number" inputmode="decimal" min="0" step="0.5" value="3" data-state /><span class="unit">mm</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">4</span><h2>Boxes and price <span class="muted" style="font-weight: 400; font-size: 15px;">(optional)</span></h2></div>
+      <div class="fields">
+        <div><label for="per-box">Tiles per box</label><div class="field"><input id="per-box" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g. 4" data-state /><span class="unit">tiles</span></div></div>
+        <div><label for="price">Price per m²</label><div class="field"><span class="unit" style="padding: 0 6px 0 0;">$</span><input id="price" type="number" inputmode="decimal" min="0" step="1" placeholder="e.g. 45" data-state /><span class="unit">/m²</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── Resultado ───────── -->
+  <div slot="result">
+    <div class="diagram">
+      <svg viewBox="0 0 380 170" role="img" aria-labelledby="dg-tile">
+        <title id="dg-tile">Plan of the area with your tile layout</title>
+        <rect id="dg-rect" x="40" y="15" width="300" height="125" fill="#e8eef5" stroke="#24456e" stroke-width="2"></rect>
+        <path id="dg-grid" d="" stroke="#9fb4cc" stroke-width="1" fill="none"></path>
+        <rect id="dg-tile1" x="40" y="15" width="0" height="0" fill="#fdeee4" stroke="#c2410c" stroke-width="1.5"></rect>
+        <text id="dg-a" x="190" y="160" fill="#9a3412" font-size="14" text-anchor="middle">3.0 m</text>
+        <text id="dg-b" x="30" y="80" fill="#24456e" font-size="13" text-anchor="end">2.5 m</text>
+      </svg>
+    </div>
+
+    <div class="result-body" aria-live="polite">
+      <div class="big"><div class="k">Tiles needed</div><div class="v" id="r-tiles">–</div></div>
+      <div class="stats">
+        <div class="stat stat-accent"><div class="k">Area to buy</div><div class="v" id="r-area">–</div></div>
+        <div class="stat stat-plan"><div class="k">Boxes</div><div class="v" id="r-boxes">–</div></div>
+        <div class="stat stat-plan" id="r-cost-wrap" hidden style="grid-column: span 2;"><div class="k">Tile cost at your price</div><div class="v" id="r-cost">–</div></div>
+      </div>
+      <p class="hint" id="r-hint"></p>
+      <p class="working" id="r-working"></p>
+
+      <div class="result-actions">
+        <button type="button" class="btn" id="copy-link"><Icon name="link" size={18} />Copy link to result</button>
+        <button type="button" class="btn icon-btn" id="print" aria-label="Print result"><Icon name="print" size={18} /></button>
+      </div>
+      <p class="copy-status" id="copy-status" role="status"></p>
+    </div>
+  </div>
+
+  <!-- ───────── Artículo ───────── -->
+  <section id="formula">
+    <h2>How to calculate how many tiles you need</h2>
+    <div class="step-cards">
+      <div><b>STEP 1</b>Measure the area in square metres: length × width.</div>
+      <div><b>STEP 2</b>Divide by the area one tile covers, including its grout joint.</div>
+      <div><b>STEP 3</b>Add 10–15% for cuts and breakages, then round up.</div>
+    </div>
+    <p>
+      A 600 × 600 mm tile covers 0.36 m². With a 3 mm grout joint, each tile effectively covers
+      0.603 × 0.603 = 0.364 m². A 3 m × 2.5 m bathroom floor is 7.5 m², so it needs
+      7.5 ÷ 0.364 = 20.6 tiles, and with 10% extra you would buy 23.
+    </p>
+    <p>
+      Always round up to whole tiles and then to whole boxes. Running out halfway through a job
+      is a real problem with tiles, because a later batch can differ slightly in shade.
+    </p>
+  </section>
+
+  <section id="measure-m2">
+    <h2>How to calculate square metres for tiles</h2>
+    <ul class="checklist">
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Floors:</strong> length × width, in metres. Measure wall to wall at floor level.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Walls:</strong> width × tiled height, minus windows and doors.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>L-shaped rooms:</strong> split into rectangles, work out each one, then add them together.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Splashbacks and niches:</strong> measure each panel separately; small areas create more cuts, so allow extra.</span></li>
+    </ul>
+  </section>
+
+  <section id="tiles-per-m2">
+    <h2>How many tiles per square metre?</h2>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Tile size</th><th scope="col">Area per tile</th><th scope="col">Tiles per m²</th></tr></thead>
+        <tbody>
+          <tr><td>75 × 300 mm (subway)</td><td>0.0225 m²</td><td>44.4</td></tr>
+          <tr><td>300 × 300 mm</td><td>0.09 m²</td><td>11.1</td></tr>
+          <tr><td>300 × 600 mm</td><td>0.18 m²</td><td>5.56</td></tr>
+          <tr><td>450 × 450 mm</td><td>0.2025 m²</td><td>4.94</td></tr>
+          <tr><td>600 × 600 mm</td><td>0.36 m²</td><td>2.78</td></tr>
+          <tr><td>600 × 1200 mm</td><td>0.72 m²</td><td>1.39</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Before grout joints and waste. The calculator includes both.</p>
+  </section>
+
+  <section id="how-much-extra">
+    <h2>How much extra tile should I buy?</h2>
+    <p>The layout pattern decides how many tiles get cut. Common allowances:</p>
+    <div class="compare">
+      <div class="c1"><h3>About 10%</h3>Straight lay or brick bond in a regular room.</div>
+      <div class="c2"><h3>About 15%</h3>Diagonal or herringbone layouts, or rooms with lots of corners.</div>
+      <div class="c3"><h3>15–20%</h3>Small or awkward areas, large-format tiles, or pattern matching.</div>
+    </div>
+    <p style="margin-top: 16px;">
+      Keep a few leftover tiles from the same batch. If a tile cracks in a few years, an exact match
+      can be hard to find.
+    </p>
+  </section>
+
+  <section id="buying-tips">
+    <h2>Before you buy</h2>
+    <ul class="checklist">
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Buy all the tiles at once and check the batch or shade code on every box matches.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Check the label for tiles per box and m² per box, and enter it above to get the number of boxes.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Large-format tiles need a very flat surface. Ask your tiler whether the floor needs levelling first.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Rectified tiles (with precise square edges) allow narrower grout joints than standard tiles.</span></li>
+    </ul>
+    <div class="callout" style="margin-top: 24px;">
+      <strong>Tiling a shower or bathroom?</strong>
+      Wet areas must be waterproofed before tiling, and in Australia this work is covered by
+      AS 3740 and state licensing rules. Use a licensed waterproofer or tiler for wet areas.
+    </div>
+  </section>
+</CalculatorLayout>
+
+<script>
+  import { bindCalculator, num, fmt, setText, type State } from '../lib/calc';
+
+  const SIZES: Record<string, [number, number]> = {
+    '300x300': [300, 300], '300x600': [300, 600], '600x600': [600, 600], '600x1200': [600, 1200],
+  };
+
+  function area(s: State): { m2: number; a: number; b: number; working: string; aLabel: string; bLabel: string } {
+    if (s.surface === 'wall') {
+      const w = num(s['w-w']), h = num(s['w-h']), o = num(s['w-o']);
+      const m2 = Math.max(0, w * h - o);
+      return {
+        m2, a: w, b: h, aLabel: `${fmt(w, 1)} m wide`, bLabel: `${fmt(h, 1)} m`,
+        working: `${fmt(w, 1)} × ${fmt(h, 1)} m${o > 0 ? ` − ${fmt(o, 1)} m²` : ''} = ${fmt(m2)} m²`,
+      };
+    }
+    if (s.surface === 'area') {
+      const m2 = num(s['a-m2']);
+      const side = Math.sqrt(m2);
+      return { m2, a: side, b: side, aLabel: `${fmt(m2, 1)} m²`, bLabel: '', working: `${fmt(m2)} m²` };
+    }
+    const l = num(s['f-l']), w = num(s['f-w']);
+    return {
+      m2: l * w, a: l, b: w, aLabel: `${fmt(l, 1)} m`, bLabel: `${fmt(w, 1)} m`,
+      working: `${fmt(l, 1)} × ${fmt(w, 1)} m = ${fmt(l * w)} m²`,
+    };
+  }
+
+  function drawDiagram(a: number, b: number, tw: number, tl: number, g: number, aLabel: string, bLabel: string) {
+    const maxW = 300, maxH = 125;
+    const rect = document.getElementById('dg-rect');
+    const grid = document.getElementById('dg-grid');
+    const t1 = document.getElementById('dg-tile1');
+    if (!rect || !grid || !t1) return;
+    if (a <= 0 || b <= 0) { grid.setAttribute('d', ''); return; }
+    const scale = Math.min(maxW / a, maxH / b);
+    const w = a * scale, h = b * scale;
+    const x = (380 - w) / 2, y = 15 + (maxH - h) / 2;
+    rect.setAttribute('x', String(x)); rect.setAttribute('y', String(y));
+    rect.setAttribute('width', String(w)); rect.setAttribute('height', String(h));
+
+    // Grilla de baldosas a escala (largo de la baldosa a lo largo del lado A)
+    const stepX = ((tl + g) / 1000) * scale;
+    const stepY = ((tw + g) / 1000) * scale;
+    let d = '';
+    if (stepX >= 3 && stepY >= 3) {
+      for (let px = x + stepX; px < x + w - 0.5; px += stepX) d += `M${px.toFixed(1)} ${y}V${(y + h).toFixed(1)}`;
+      for (let py = y + stepY; py < y + h - 0.5; py += stepY) d += `M${x} ${py.toFixed(1)}H${(x + w).toFixed(1)}`;
+    }
+    grid.setAttribute('d', d);
+    t1.setAttribute('x', String(x)); t1.setAttribute('y', String(y));
+    t1.setAttribute('width', String(Math.min(stepX, w))); t1.setAttribute('height', String(Math.min(stepY, h)));
+
+    const la = document.getElementById('dg-a');
+    const lb = document.getElementById('dg-b');
+    if (la) { la.textContent = aLabel; la.setAttribute('y', String(Math.min(y + h + 18, 166))); }
+    if (lb) { lb.textContent = bLabel; lb.setAttribute('x', String(x - 8)); }
+  }
+
+  function render(s: State) {
+    const surface = s.surface ?? 'floor';
+    document.querySelectorAll<HTMLElement>('[data-panel]').forEach((p) => (p.hidden = p.dataset.panel !== surface));
+    const custom = s.size === 'custom';
+    document.querySelectorAll<HTMLElement>('[data-custom]').forEach((p) => (p.hidden = !custom));
+
+    const [tw, tl] = custom ? [num(s['t-w']), num(s['t-l'])] : SIZES[s.size ?? '600x600'] ?? [600, 600];
+    const g = num(s.grout);
+    const waste = num(s.waste) / 100;
+    const { m2, a, b, working, aLabel, bLabel } = area({ ...s, surface });
+
+    const cover = ((tw + g) / 1000) * ((tl + g) / 1000); // m² por baldosa, con junta
+    const raw = cover > 0 ? m2 / cover : 0;
+    const tiles = raw > 0 ? Math.ceil(raw * (1 + waste)) : 0;
+    const buyM2 = m2 * (1 + waste);
+    const perBox = Math.floor(num(s['per-box']));
+    const boxes = perBox > 0 ? Math.ceil(tiles / perBox) : 0;
+
+    setText('r-tiles', tiles.toLocaleString('en-AU'));
+    setText('r-area', `${fmt(buyM2)} m²`);
+    setText('r-boxes', perBox > 0 ? boxes.toLocaleString('en-AU') : 'Add tiles/box');
+    const boxEl = document.getElementById('r-boxes');
+    if (boxEl) boxEl.style.fontSize = perBox > 0 ? '' : '16px';
+
+    const price = num(s.price);
+    const costWrap = document.getElementById('r-cost-wrap');
+    if (costWrap) costWrap.hidden = price <= 0;
+    if (price > 0) {
+      setText('r-cost', (buyM2 * price).toLocaleString('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: 0 }));
+    }
+
+    setText('r-working', m2 > 0 && cover > 0
+      ? `${working} · ${tw}×${tl} tile + ${g} mm joint covers ${fmt(cover, 3)} m² → ${fmt(raw, 1)} tiles + ${Math.round(waste * 100)}% = ${tiles} tiles`
+      : 'Enter your measurements to see the working.');
+
+    setText('r-hint',
+      m2 === 0 ? 'Enter the area to see how many tiles you need.'
+      : waste < 0.1 ? 'Only 5% extra is tight. Most tilers allow at least 10% for cuts.'
+      : 'Buy all your tiles at once and check the batch number on every box matches.');
+
+    drawDiagram(a, b, tw, tl, g, aLabel, bLabel);
+
+    const label = surface === 'wall' ? 'Wall' : surface === 'area' ? 'Area' : 'Floor';
+    setText('mbar-k', `${label} · ${tw}×${tl} mm · ${Math.round(waste * 100)}% extra`);
+    const v = document.getElementById('mbar-v');
+    if (v) v.innerHTML = `${tiles.toLocaleString('en-AU')} tiles <span>· ${fmt(buyM2, 1)} m²</span>`;
+  }
+
+  const root = document.getElementById('calc');
+  if (root) bindCalculator(root, render);
+</script>

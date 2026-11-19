@@ -96,7 +96,7 @@ export const TOOLS: Tool[] = [
     blurb: 'Tiles and boxes for floors and walls, with waste.',
     category: 'materials',
     icon: 'tile',
-    ready: false,
+    ready: true,
     related: ['bathroom-renovation-cost-calculator', 'concrete-calculator'],
   },
   {
