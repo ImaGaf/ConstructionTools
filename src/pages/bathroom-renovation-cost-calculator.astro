@@ -53,6 +53,7 @@ const QUOTE_ROWS: { key: string; label: string; extra?: string }[] = [
   { key: 'rail', label: 'Heated towel rail', extra: 'rail' },
   { key: 'permit', label: 'Council / certifier fees', extra: 'permit' },
 ];
+import DiagramDefs from '../components/DiagramDefs.astro';
 ---
 <CalculatorLayout
   slug="bathroom-renovation-cost-calculator"
@@ -150,15 +151,10 @@ const QUOTE_ROWS: { key: string; label: string; extra?: string }[] = [
   <!-- ───────── Resultado ───────── -->
   <div slot="result">
     <div class="diagram">
-      <svg viewBox="0 0 380 160" role="img" aria-labelledby="dg-bath">
-        <title id="dg-bath">Floor plan of the bathroom with its size and tiled area</title>
-        <rect id="dg-room" x="60" y="15" width="260" height="110" fill="#e8eef5" stroke="#24456e" stroke-width="2"></rect>
-        <rect id="dg-shower" x="60" y="15" width="60" height="60" fill="#c9d6e6" stroke="#24456e" stroke-width="1.5" stroke-dasharray="4 3"></rect>
-        <path id="dg-door" d="" stroke="#f6f5f1" stroke-width="5"></path>
-        <text id="dg-l" x="190" y="146" fill="#9a3412" font-size="13" text-anchor="middle">3.5 m</text>
-        <text id="dg-w" x="50" y="74" fill="#9a3412" font-size="13" text-anchor="end">2.5 m</text>
-        <text id="dg-area" x="200" y="70" fill="#24456e" font-size="14" text-anchor="middle">8.75 m² floor</text>
-        <text id="dg-tiled" x="200" y="90" fill="#24456e" font-size="12" text-anchor="middle">36 m² tiled</text>
+      <DiagramDefs />
+      <svg viewBox="0 0 380 170" role="img" aria-labelledby="dg-bath">
+        <title id="dg-bath">Floor plan of the bathroom drawn to your size, with shower, vanity and toilet</title>
+        <g id="g-bath"></g>
       </svg>
     </div>
 
@@ -295,6 +291,7 @@ const QUOTE_ROWS: { key: string; label: string; extra?: string }[] = [
 </CalculatorLayout>
 
 <script>
+  import { canvas, dim, el, label } from '../lib/diagrams';
   import { bindCalculator, num, fmt, setText, aud, type State } from '../lib/calc';
 
   type Tier = 'basic' | 'mid' | 'premium';
@@ -341,32 +338,56 @@ const QUOTE_ROWS: { key: string; label: string; extra?: string }[] = [
     return { floor, wall, total: floor + wall };
   }
 
-  function drawDiagram(L: number, W: number, floor: number, tiled: number) {
-    const room = document.getElementById('dg-room');
-    const shower = document.getElementById('dg-shower');
-    const door = document.getElementById('dg-door');
-    if (!room || !shower || !door || L <= 0 || W <= 0) return;
-    const scale = Math.min(260 / L, 110 / W);
-    const w = L * scale, h = W * scale;
-    const x = (380 - w) / 2 + 10, y = 15 + (110 - h) / 2;
-    room.setAttribute('x', String(x)); room.setAttribute('y', String(y));
-    room.setAttribute('width', String(w)); room.setAttribute('height', String(h));
-    const s = Math.min(0.9 * scale, w * 0.45, h * 0.8);
-    shower.setAttribute('x', String(x)); shower.setAttribute('y', String(y));
-    shower.setAttribute('width', String(s)); shower.setAttribute('height', String(s));
-    const dw = Math.min(0.8 * scale, w * 0.35);
-    door.setAttribute('d', `M${(x + w - dw - 8).toFixed(1)} ${(y + h).toFixed(1)} h${dw.toFixed(1)}`);
-    const l = document.getElementById('dg-l');
-    const wl = document.getElementById('dg-w');
-    if (l) { l.textContent = `${fmt(L, 1)} m`; l.setAttribute('x', String(x + w / 2)); l.setAttribute('y', String(Math.min(y + h + 18, 156))); }
-    if (wl) { wl.textContent = `${fmt(W, 1)} m`; wl.setAttribute('x', String(x - 8)); wl.setAttribute('y', String(y + h / 2 + 4)); }
-    const a = document.getElementById('dg-area');
-    const t = document.getElementById('dg-tiled');
-    if (a) { a.textContent = `${fmt(floor, 2)} m² floor`; a.setAttribute('x', String(x + w / 2 + s / 2)); a.setAttribute('y', String(y + h / 2)); }
-    if (t) {
-      t.textContent = `${fmt(tiled, 0)} m² tiled`;
-      t.setAttribute('x', String(x + w / 2 + s / 2)); t.setAttribute('y', String(y + h / 2 + 18));
+  function drawDiagram(L: number, W: number, floor: number, tiled: number, bath: boolean) {
+    const add = canvas('g-bath');
+    if (!add || L <= 0 || W <= 0) return;
+    const scale = Math.min(250 / L, 112 / W);
+    const w = L * scale, h = W * scale, wt = Math.max(5, 0.11 * scale); // muro de 110 mm
+    const x = 80 + (250 - w) / 2, y = 24 + (112 - h) / 2;
+    const m = (v: number) => v * scale; // metros a px
+    // Muros en corte y piso con baldosa
+    add(el('rect', { x: x - wt, y: y - wt, width: w + 2 * wt, height: h + 2 * wt, fill: 'url(#pat-wall)' }));
+    add(el('rect', { x, y, width: w, height: h, fill: '#eef2f6' }));
+    const tile = m(0.3), grid: string[] = [];
+    for (let gx = x + tile; gx < x + w - 0.5; gx += tile) grid.push(`M${gx.toFixed(1)} ${y}v${h.toFixed(1)}`);
+    for (let gy = y + tile; gy < y + h - 0.5; gy += tile) grid.push(`M${x} ${gy.toFixed(1)}h${w.toFixed(1)}`);
+    if (tile >= 4) add(el('path', { d: grid.join(' '), stroke: '#c9d3df', 'stroke-width': 0.6 }));
+    // Ducha (esquina superior izquierda) con mampara y rejilla de desagüe
+    const sh = Math.min(m(0.9), w * 0.42, h * 0.8);
+    add(el('rect', { x, y, width: sh, height: sh, fill: '#dfe7f0' }));
+    add(el('path', { d: `M${x + sh} ${y} V${y + sh} H${x + sh * 0.35}`, stroke: '#5d87b5', 'stroke-width': 2, fill: 'none' }));
+    add(el('rect', { x: x + sh / 2 - 6, y: y + sh * 0.35 - 1.5, width: 12, height: 3, fill: 'none', stroke: '#24456e', 'stroke-width': 0.8 }));
+    label(add, x + sh / 2, y + sh - 5, 'Shower', 'dg-note');
+    // Bañera exenta junto a la ducha, si se eligió y cabe
+    let nextX = x + sh + 6;
+    if (bath && w - sh > m(2.1)) {
+      const bw = m(1.5), bh = Math.min(m(0.75), h * 0.55);
+      add(el('rect', { x: nextX, y: y + 4, width: bw, height: bh, rx: bh / 2, fill: '#fff', class: 'dg-line', 'stroke-width': 1.2 }));
+      add(el('rect', { x: nextX + 5, y: y + 9, width: bw - 10, height: bh - 10, rx: (bh - 10) / 2, fill: 'none', stroke: '#9fb4cc', 'stroke-width': 0.8 }));
+      nextX += bw + 6;
     }
+    // Inodoro contra el muro superior
+    const tw = Math.min(m(0.38), 18), tl = Math.min(m(0.68), h * 0.45);
+    const tx = Math.min(Math.max(nextX, x + sh + 6), x + w - m(0.65) - tw - 8);
+    add(el('rect', { x: tx, y, width: tw, height: tl * 0.32, rx: 2, fill: '#fff', class: 'dg-line', 'stroke-width': 1.1 }));
+    add(el('ellipse', { cx: tx + tw / 2, cy: y + tl * 0.32 + tl * 0.34, rx: tw / 2, ry: tl * 0.34, fill: '#fff', class: 'dg-line', 'stroke-width': 1.1 }));
+    // Vanitorio contra el muro derecho con lavamanos
+    const dwEst = Math.min(m(0.82), w * 0.35);
+    const vd = Math.min(m(0.48), w * 0.25), vl = Math.max(m(0.5), Math.min(m(1.2), h - dwEst - 10));
+    const vx = x + w - vd, vy = y + 4;
+    add(el('rect', { x: vx, y: vy, width: vd, height: vl, fill: '#fff', class: 'dg-line', 'stroke-width': 1.1 }));
+    add(el('ellipse', { cx: vx + vd * 0.45, cy: vy + vl / 2, rx: vd * 0.3, ry: Math.min(vl * 0.3, vd * 0.42), fill: 'none', stroke: '#24456e', 'stroke-width': 1 }));
+    // Puerta en el muro inferior con su barrido
+    const dw = Math.min(m(0.82), w * 0.35);
+    const dx = x + w - dw - Math.min(m(0.15), 8);
+    add(el('rect', { x: dx, y: y + h - 0.5, width: dw, height: wt + 1, fill: '#f6f5f1' }));
+    add(el('path', { d: `M${dx} ${y + h} V${y + h - dw} A${dw} ${dw} 0 0 1 ${dx + dw} ${y + h}`, fill: 'none', stroke: '#24456e', 'stroke-width': 0.8, 'stroke-dasharray': '3 2' }));
+    add(el('path', { d: `M${dx} ${y + h} V${y + h - dw}`, stroke: '#24456e', 'stroke-width': 1.6 }));
+    // Cotas y notas
+    dim(add, x, y + h + wt, x + w, y + h + wt, `${fmt(L, 1)} m`, 10);
+    dim(add, x - wt, y + h, x - wt, y, `${fmt(W, 1)} m`, -10);
+    label(add, 12, 14, 'FLOOR PLAN', 'dg-label', 'start');
+    label(add, 368, 14, `${fmt(floor, 1)} m² floor · ${fmt(tiled, 0)} m² tiled`, 'dg-note', 'end');
   }
 
   function render(s: State) {
@@ -439,7 +460,7 @@ const QUOTE_ROWS: { key: string; label: string; extra?: string }[] = [
       ? `${tileOwn ? 'Tiles: your quote' : `Tiles: ${fmt(tiled, 1)} m² × ($${TILE_SUPPLY[i]} + $${TILE_LAY[i]}) = ${aud(est.tile)}`} · items ${aud(sub)}${builder ? ` + 13% builder ${aud(margin)}` : ''} + ${Math.round(cont * 100)}% contingency ${aud(contingency)} = ${aud(totalCost)}`
       : 'Enter the bathroom size to see the working.');
 
-    drawDiagram(L, W, floor, tiled);
+    drawDiagram(L, W, floor, tiled, s.bath === '1');
 
     setText('mbar-k', `${tier === 'mid' ? 'Mid-range' : tier === 'basic' ? 'Basic' : 'Premium'} · ${fmt(L, 1)} × ${fmt(W, 1)} m`);
     const v = document.getElementById('mbar-v');

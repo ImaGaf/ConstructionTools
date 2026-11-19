@@ -1,6 +1,7 @@
 ---
 import CalculatorLayout, { type Faq, type TocItem } from '../layouts/CalculatorLayout.astro';
 import Icon from '../components/Icon.astro';
+import DiagramDefs from '../components/DiagramDefs.astro';
 
 const toc: TocItem[] = [
   { id: 'formula', label: 'The formula' },
@@ -135,38 +136,18 @@ const faqs: Faq[] = [
   <!-- ───────── Resultado ───────── -->
   <div slot="result">
     <div class="diagram">
-      <div data-diagram="slab"><svg viewBox="0 0 380 150" role="img" aria-labelledby="dg-slab">
-        <title id="dg-slab">Slab diagram with your measurements</title>
-        <path d="M60 62 L210 26 L330 62 L180 98 Z" fill="#e8eef5" stroke="#24456e" stroke-width="2" stroke-linejoin="round"></path>
-        <path d="M60 62 L60 78 L180 114 L180 98 Z" fill="#c9d6e6" stroke="#24456e" stroke-width="2" stroke-linejoin="round"></path>
-        <path d="M180 98 L180 114 L330 78 L330 62 Z" fill="#d8e2ee" stroke="#24456e" stroke-width="2" stroke-linejoin="round"></path>
-        <path d="M54 90 L168 126" stroke="#c2410c" stroke-width="1.5" stroke-dasharray="4 4"></path>
-        <text id="sa" x="84" y="134" fill="#9a3412" font-size="14">4.0 m</text>
-        <path d="M192 126 L338 90" stroke="#c2410c" stroke-width="1.5" stroke-dasharray="4 4"></path>
-        <text id="sb" x="270" y="130" fill="#9a3412" font-size="14">3.0 m</text>
-        <text id="sc" x="4" y="76" fill="#24456e" font-size="13">100 mm</text>
+      <DiagramDefs />
+      <div data-diagram="slab"><svg viewBox="0 0 380 170" role="img" aria-labelledby="dg-slab">
+        <title id="dg-slab">Slab drawn to your length, width and thickness</title>
+        <g id="g-slab"></g>
       </svg></div>
-      <div data-diagram="footing" hidden><svg viewBox="0 0 380 150" role="img" aria-labelledby="dg-footing">
-        <title id="dg-footing">Strip footing diagram with your measurements</title>
-        <path d="M20 44 H360" stroke="#8c7b65" stroke-width="2"></path>
-        <path d="M70 44 V112 H310 V44" fill="#e8eef5" stroke="#24456e" stroke-width="2" stroke-linejoin="round"></path>
-        <path d="M70 128 H310" stroke="#c2410c" stroke-width="1.5" stroke-dasharray="4 4"></path>
-        <text id="fa" x="150" y="146" fill="#9a3412" font-size="14">10.0 m long</text>
-        <text id="fb" x="250" y="32" fill="#24456e" font-size="13">300 mm wide</text>
-        <path d="M326 44 V112" stroke="#c2410c" stroke-width="1.5" stroke-dasharray="4 4"></path>
-        <text id="fc" x="332" y="84" fill="#9a3412" font-size="13">400 mm</text>
+      <div data-diagram="footing" hidden><svg viewBox="0 0 380 170" role="img" aria-labelledby="dg-footing">
+        <title id="dg-footing">Cross-section of the strip footing with your width and depth</title>
+        <g id="g-footing"></g>
       </svg></div>
-      <div data-diagram="post" hidden><svg viewBox="0 0 380 150" role="img" aria-labelledby="dg-post">
-        <title id="dg-post">Post hole diagram with your measurements</title>
-        <path d="M20 40 H360" stroke="#8c7b65" stroke-width="2"></path>
-        <path d="M70 40 V120 H130 V40" fill="#e8eef5" stroke="#24456e" stroke-width="2" stroke-linejoin="round"></path>
-        <rect x="90" y="10" width="20" height="104" fill="#ffffff" stroke="#24456e" stroke-width="2"></rect>
-        <path d="M250 40 V120 H310 V40" fill="#e8eef5" stroke="#24456e" stroke-width="2" stroke-linejoin="round"></path>
-        <rect x="270" y="10" width="20" height="104" fill="#ffffff" stroke="#24456e" stroke-width="2"></rect>
-        <text id="pa" x="158" y="80" fill="#24456e" font-size="14">× 6 holes</text>
-        <path d="M70 134 H130" stroke="#c2410c" stroke-width="1.5" stroke-dasharray="4 4"></path>
-        <text id="pb" x="56" y="148" fill="#9a3412" font-size="13">⌀ 300 mm</text>
-        <text id="pc" x="316" y="86" fill="#9a3412" font-size="13">600 mm</text>
+      <div data-diagram="post" hidden><svg viewBox="0 0 380 170" role="img" aria-labelledby="dg-post">
+        <title id="dg-post">Cross-section of a post hole with your diameter and depth</title>
+        <g id="g-post"></g>
       </svg></div>
     </div>
 
@@ -327,30 +308,25 @@ const faqs: Faq[] = [
 
 <script>
   import { bindCalculator, num, fmt, setText, type State } from '../lib/calc';
+  import { drawSlab, drawFooting, drawPost } from '../lib/diagram-concrete';
 
   const BAG_YIELD: Record<string, number> = { '20': 0.0095, '30': 0.014 }; // m³ por bolsa, aprox.
 
   function volume(s: State): { m3: number; working: string } {
     if (s.shape === 'footing') {
       const l = num(s['f-l']), w = num(s['f-w']) / 1000, d = num(s['f-d']) / 1000;
-      setText('fa', `${fmt(l, 1)} m long`);
-      setText('fb', `${num(s['f-w'])} mm wide`);
-      setText('fc', `${num(s['f-d'])} mm`);
+      drawFooting('g-footing', l, num(s['f-w']), num(s['f-d']));
       return { m3: l * w * d, working: `${fmt(l, 1)} × ${fmt(w, 3)} × ${fmt(d, 3)} m` };
     }
     if (s.shape === 'post') {
       const n = Math.floor(num(s['p-n']));
       const r = num(s['p-dia']) / 2000, depth = num(s['p-d']) / 1000, post = num(s['p-post']) / 1000;
       const each = Math.max(0, Math.PI * r * r * depth - post * post * depth);
-      setText('pa', `× ${n} holes`);
-      setText('pb', `⌀ ${num(s['p-dia'])} mm`);
-      setText('pc', `${num(s['p-d'])} mm`);
+      drawPost('g-post', n, num(s['p-dia']), num(s['p-d']), num(s['p-post']));
       return { m3: each * n, working: `${n} holes × ${fmt(each, 3)} m³ (hole minus post)` };
     }
     const l = num(s['s-l']), w = num(s['s-w']), d = num(s['s-d']) / 1000;
-    setText('sa', `${fmt(l, 1)} m`);
-    setText('sb', `${fmt(w, 1)} m`);
-    setText('sc', `${num(s['s-d'])} mm`);
+    drawSlab('g-slab', l, w, num(s['s-d']));
     return { m3: l * w * d, working: `${fmt(l, 1)} × ${fmt(w, 1)} × ${fmt(d, 3)} m` };
   }
 

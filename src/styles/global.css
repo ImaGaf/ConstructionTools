@@ -494,3 +494,15 @@ a.tool-feature:hover { border-color: var(--accent-on-dark); color: #fff; }
 .alert.ok strong { color: var(--plan); }
 .breakdown .minus .bar i { background: var(--plan-mid); }
 .breakdown .minus .row strong { color: var(--plan); }
+
+/* Diagramas estilo plano técnico (patrones en DiagramDefs.astro) */
+.diagram { position: relative; }
+.dg-dim { stroke: var(--accent-ink); stroke-width: 1; fill: none; marker-start: url(#mk-tick); marker-end: url(#mk-tick); }
+.dg-ext { stroke: var(--accent-ink); stroke-width: 0.6; opacity: .55; fill: none; }
+.dg-dimtxt { fill: var(--accent-ink); font-size: 12px; }
+.dg-label { fill: var(--plan); font-size: 11px; font-weight: 600; letter-spacing: .02em; }
+.dg-note { fill: var(--muted); font-size: 10px; font-weight: 500; }
+.dg-line { stroke: var(--plan); stroke-width: 1.6; stroke-linejoin: round; }
+.dg-thin { stroke: var(--plan); stroke-width: 0.8; fill: none; }
+.dg-txtbg { paint-order: stroke; stroke: var(--surface-2); stroke-width: 4px; stroke-linejoin: round; }
+.preview-body text { font-family: var(--font-sans); font-weight: 600; }

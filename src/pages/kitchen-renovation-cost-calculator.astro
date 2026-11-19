@@ -51,6 +51,7 @@ const QUOTE_ROWS: { key: string; label: string; extra?: string }[] = [
   { key: 'wall', label: 'Wall removal', extra: 'wall' },
   { key: 'permit', label: 'Council / certifier fees', extra: 'permit' },
 ];
+import DiagramDefs from '../components/DiagramDefs.astro';
 ---
 <CalculatorLayout
   slug="kitchen-renovation-cost-calculator"
@@ -176,15 +177,10 @@ const QUOTE_ROWS: { key: string; label: string; extra?: string }[] = [
   <!-- ───────── Resultado ───────── -->
   <div slot="result">
     <div class="diagram">
+      <DiagramDefs />
       <svg viewBox="0 0 380 170" role="img" aria-labelledby="dg-kit">
-        <title id="dg-kit">Plan of the kitchen showing the benchtop run and floor area</title>
-        <rect id="dg-room" x="110" y="10" width="150" height="150" fill="#e8eef5" stroke="#24456e" stroke-width="2"></rect>
-        <path id="dg-run" d="" fill="#c9d6e6" stroke="#24456e" stroke-width="1.5"></path>
-        <rect id="dg-island" x="0" y="0" width="0" height="0" fill="#c9d6e6" stroke="#24456e" stroke-width="1.5"></rect>
-        <text id="dg-len" x="10" y="70" fill="#9a3412" font-size="13">6.0 m</text>
-        <text id="dg-len2" x="10" y="88" fill="#9a3412" font-size="12">benchtop</text>
-        <text id="dg-area" x="10" y="120" fill="#24456e" font-size="13">10 m²</text>
-        <text id="dg-area2" x="10" y="138" fill="#24456e" font-size="12">floor</text>
+        <title id="dg-kit">Floor plan of the kitchen with the benchtop run, sink, cooktop and island</title>
+        <g id="g-kit"></g>
       </svg>
     </div>
 
@@ -350,6 +346,7 @@ const QUOTE_ROWS: { key: string; label: string; extra?: string }[] = [
 </CalculatorLayout>
 
 <script>
+  import { canvas, dim, el, label } from '../lib/diagrams';
   import { bindCalculator, num, fmt, setText, aud, type State } from '../lib/calc';
 
   type Tier = 'budget' | 'mid' | 'premium';
@@ -397,34 +394,59 @@ const QUOTE_ROWS: { key: string; label: string; extra?: string }[] = [
   const TIER_NAME: Record<Tier, string> = { budget: 'Budget', mid: 'Mid-range', premium: 'Premium' };
 
   function drawDiagram(run: number, area: number) {
-    const room = document.getElementById('dg-room');
-    const path = document.getElementById('dg-run');
-    const island = document.getElementById('dg-island');
-    if (!room || !path || !island || area <= 0) return;
-    const side = Math.sqrt(area); // habitación cuadrada equivalente
-    const scale = 150 / Math.max(side, 1);
-    const x = 140, y = 10, s = side * scale, d = 0.6 * scale;
-    room.setAttribute('x', String(x)); room.setAttribute('y', String(y));
-    room.setAttribute('width', String(s)); room.setAttribute('height', String(s));
-    // Tramo 1 a lo largo de la pared superior, tramo 2 por la derecha, el resto como isla
-    const r1 = Math.min(run, side);
-    const r2 = Math.min(Math.max(run - r1, 0), Math.max(side - 0.6, 0));
-    const r3 = Math.min(Math.max(run - r1 - r2, 0), side * 0.55);
-    let p = `M${x} ${y} h${(r1 * scale).toFixed(1)} v${d.toFixed(1)} h${(-r1 * scale).toFixed(1)} z`;
-    if (r2 > 0) {
-      p += ` M${(x + s - d).toFixed(1)} ${(y + d).toFixed(1)} h${d.toFixed(1)} v${(r2 * scale).toFixed(1)} h${(-d).toFixed(1)} z`;
+    const add = canvas('g-kit');
+    if (!add || area <= 0 || run <= 0) return;
+    // Habitación rectangular equivalente (proporción 4:3)
+    const Lr = Math.sqrt(area * 4 / 3), Wr = area / Lr;
+    const scale = Math.min(220 / Lr, 104 / Wr);
+    const w = Lr * scale, h = Wr * scale, d = 0.6 * scale, wt = Math.max(5, 0.11 * scale);
+    const x = 96 + (220 - w) / 2, y = 26 + (104 - h) / 2;
+    const m = (v: number) => v * scale;
+    add(el('rect', { x: x - wt, y: y - wt, width: w + 2 * wt, height: h + 2 * wt, fill: 'url(#pat-wall)' }));
+    add(el('rect', { x, y, width: w, height: h, fill: '#f1ece4' }));
+    // Piso de madera: tablas a lo largo
+    const boards: string[] = [];
+    for (let by = y + m(0.18); by < y + h; by += m(0.18)) boards.push(`M${x} ${by.toFixed(1)}h${w.toFixed(1)}`);
+    if (m(0.18) >= 3) add(el('path', { d: boards.join(' '), stroke: '#ddd2c2', 'stroke-width': 0.6 }));
+    // Tramos de mesada: pared superior, pared derecha y el resto como isla
+    const r1 = Math.min(run, Lr);
+    let r2 = Math.min(Math.max(run - r1, 0), Math.max(Wr - 0.6, 0));
+    if (r2 < 0.3) r2 = 0; // restos muy cortos no se dibujan
+    const r3 = Math.min(Math.max(run - r1 - r2, 0), Lr * 0.55);
+    const top = { fill: 'url(#pat-concrete-top)', class: 'dg-line', 'stroke-width': 1.2 };
+    add(el('rect', { x, y, width: m(r1), height: d, ...top }));
+    if (r2 > 0) add(el('rect', { x: x + w - d, y: y + d, width: d, height: m(r2), ...top }));
+    // Fregadero doble en el tramo superior
+    const sk = Math.min(m(0.8), m(r1) * 0.3);
+    const skx = x + Math.min(m(r1) * 0.35, m(r1) - sk - 4);
+    if (m(r1) > 40) {
+      add(el('rect', { x: skx, y: y + d * 0.18, width: sk / 2 - 1.5, height: d * 0.62, rx: 2, fill: '#fff', stroke: '#24456e', 'stroke-width': 0.9 }));
+      add(el('rect', { x: skx + sk / 2 + 1.5, y: y + d * 0.18, width: sk / 2 - 1.5, height: d * 0.62, rx: 2, fill: '#fff', stroke: '#24456e', 'stroke-width': 0.9 }));
     }
-    path.setAttribute('d', p);
-    if (r3 >= 0.8) { // ignorar restos muy cortos
-      const iw = r3 * scale, ih = Math.min(0.9 * scale, s * 0.25);
-      island.setAttribute('x', String(x + (s - iw) / 2 - d / 2));
-      island.setAttribute('y', String(y + s * 0.55));
-      island.setAttribute('width', String(iw)); island.setAttribute('height', String(ih));
-    } else {
-      island.setAttribute('width', '0'); island.setAttribute('height', '0');
+    // Anafe de 4 hornillas: en el tramo derecho o al final del superior
+    const ck = Math.min(m(0.6), d * 0.95);
+    const [cx, cy] = r2 > 0.9 ? [x + w - d / 2, y + d + m(r2) / 2] : [x + m(r1) * 0.8, y + d / 2];
+    if ((r2 > 0.9 || m(r1) > 70)) {
+      add(el('rect', { x: cx - ck / 2, y: cy - ck / 2, width: ck, height: ck, rx: 2, fill: '#3a4048' }));
+      for (const [ox, oy] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) add(el('circle', { cx: cx + ox * ck / 4.4, cy: cy + oy * ck / 4.4, r: ck / 7, fill: 'none', stroke: '#c9cdd3', 'stroke-width': 0.8 }));
     }
-    setText('dg-len', `${fmt(run, 1)} m`);
-    setText('dg-area', `${fmt(area, 1)} m²`);
+    // Refrigerador en la esquina inferior izquierda
+    add(el('rect', { x, y: y + h - m(0.75), width: m(0.75), height: m(0.75) - 1, fill: '#fff', stroke: '#24456e', 'stroke-width': 1, 'stroke-dasharray': '3 2' }));
+    label(add, x + m(0.375), y + h - m(0.375) + 3, 'Fridge', 'dg-note');
+    // Isla
+    if (r3 >= 0.8) {
+      const iw = m(r3), ih = Math.min(m(0.9), h * 0.25);
+      add(el('rect', { x: x + (w - iw) / 2 - d / 2, y: y + h * 0.55, width: iw, height: ih, ...top }));
+      label(add, x + w / 2 - d / 2, y + h * 0.55 + ih / 2 + 4, 'Island', 'dg-note');
+    }
+    // Puerta (vano en el muro inferior)
+    const dw = Math.min(m(0.82), w * 0.25);
+    add(el('rect', { x: x + w - dw - d - 6, y: y + h - 0.5, width: dw, height: wt + 1, fill: '#f6f5f1' }));
+    // Cotas
+    dim(add, x, y + h + wt, x + w, y + h + wt, `${fmt(Lr, 1)} m`, 10);
+    dim(add, x - wt, y + h, x - wt, y, `${fmt(Wr, 1)} m`, -10);
+    label(add, 12, 14, 'FLOOR PLAN', 'dg-label', 'start');
+    label(add, 368, 14, `${fmt(run, 1)} m of benchtop · ${fmt(area, 1)} m² floor`, 'dg-note', 'end');
   }
 
   function render(s: State) {

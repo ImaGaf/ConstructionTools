@@ -85,6 +85,12 @@ Ezoic is ruled out (minimum raised to 250k monthly users in Feb 2026).
   synced back to the URL (shareable results) and passed to `render`. Also wires
   `#copy-link`, `#copy-status` and `#print`. Helpers: `num`, `fmt`, `setText`.
 - `src/components/Icon.astro` — inline stroke icons by name (add new ones there).
+- `src/components/DiagramDefs.astro` + `src/lib/diagrams.ts` — the "technical drawing"
+  diagram kit: shared hatch patterns (concrete, earth, gravel, grass, timber, wall poché,
+  cut tiles) and helpers `canvas`, `el`, `dim` (architect-style dimension lines with
+  45° ticks) and `label`. Every calculator diagram is drawn to scale from the user's
+  inputs into a `<g id="g-...">` (plans, sections or isometric). Include `<DiagramDefs />`
+  once inside `.diagram` and reuse the kit for new calculators.
 - `src/components/ToolCard.astro` — the calculator card used on home, categories, 404.
 - `src/components/AdSlot.astro` — manual ad slot; renders nothing until AdSense is on.
 - `src/styles/global.css` — single stylesheet with light/dark tokens.

@@ -33,6 +33,7 @@ const faqs: Faq[] = [
     a: 'No. In every Australian state, sanitary plumbing and drainage must be done by a licensed plumber or drainer, and the work is usually inspected or certified. Use this calculator to plan levels and check a design, not to do the work yourself.',
   },
 ];
+import DiagramDefs from '../components/DiagramDefs.astro';
 ---
 <CalculatorLayout
   slug="pipe-fall-calculator"
@@ -105,18 +106,10 @@ const faqs: Faq[] = [
   <!-- ───────── Resultado ───────── -->
   <div slot="result">
     <div class="diagram">
+      <DiagramDefs />
       <svg viewBox="0 0 380 170" role="img" aria-labelledby="dg-pipe">
-        <title id="dg-pipe">Side view of the pipe run showing its length, fall and grade (vertical scale exaggerated)</title>
-        <path d="M20 30 H360" stroke="#24456e" stroke-width="1.5" stroke-dasharray="6 4"></path>
-        <text x="20" y="22" fill="#24456e" font-size="11">Ground (not to scale)</text>
-        <line id="dg-line" x1="30" y1="60" x2="290" y2="100" stroke="#24456e" stroke-width="10" stroke-linecap="round"></line>
-        <line id="dg-level" x1="30" y1="60" x2="305" y2="60" stroke="#9a3412" stroke-width="1" stroke-dasharray="3 3"></line>
-        <path id="dg-dim" d="M305 60 V100" stroke="#9a3412" stroke-width="1.5"></path>
-        <text id="dg-fall" x="312" y="84" fill="#9a3412" font-size="13">165 mm</text>
-        <text id="dg-grade" x="160" y="120" fill="#24456e" font-size="13" text-anchor="middle">1.65% · 1 in 61</text>
-        <path d="M30 150 H290" stroke="#24456e" stroke-width="1"></path>
-        <path d="M30 145 v10 M290 145 v10" stroke="#24456e" stroke-width="1"></path>
-        <text id="dg-len" x="160" y="144" fill="#9a3412" font-size="13" text-anchor="middle">10 m</text>
+        <title id="dg-pipe">Long section of the drain in its trench, showing length, fall and grade (vertical scale exaggerated)</title>
+        <g id="g-pipe"></g>
       </svg>
     </div>
 
@@ -256,6 +249,7 @@ const faqs: Faq[] = [
 </CalculatorLayout>
 
 <script>
+  import { canvas, dim, el, label } from '../lib/diagrams';
   import { bindCalculator, num, fmt, setText, type State } from '../lib/calc';
 
   // Pendientes mínimas citadas de AS/NZS 3500.2 para desagües sanitarios (decimal)
@@ -271,23 +265,40 @@ const faqs: Faq[] = [
     return v / 100;
   }
 
-  function drawDiagram(L: number, fallMm: number, g: number) {
-    const line = document.getElementById('dg-line');
-    const dim = document.getElementById('dg-dim');
-    const level = document.getElementById('dg-level');
-    if (!line || !dim || !level) return;
-    // Escala vertical exagerada: la caída visual crece con la pendiente, entre 8 y 70 px
-    const drop = Math.max(8, Math.min(70, g * 2000));
-    const y1 = 55, y2 = y1 + drop;
-    line.setAttribute('y1', String(y1)); line.setAttribute('y2', String(y2));
-    level.setAttribute('y1', String(y1)); level.setAttribute('y2', String(y1));
-    dim.setAttribute('d', `M305 ${y1} V${y2}`);
-    const f = document.getElementById('dg-fall');
-    if (f) { f.textContent = `${fmt(fallMm, 0)} mm`; f.setAttribute('y', String((y1 + y2) / 2 + 5)); }
-    setText('dg-grade', g > 0 ? `${pctTxt(g)} · ${ratioTxt(g)}` : '–');
-    const gl = document.getElementById('dg-grade');
-    if (gl) gl.setAttribute('y', String(Math.min(y2 + 24, 136)));
-    setText('dg-len', `${fmt(L, 1)} m`);
+  function drawDiagram(L: number, fallMm: number, g: number, depth: number | null) {
+    const add = canvas('g-pipe');
+    if (!add || L <= 0 || g <= 0) return;
+    const gy = 38; // superficie del terreno
+    const x1 = 62, x2 = 298;
+    const top = gy + (depth !== null ? Math.max(16, Math.min(46, depth * 0.07)) : 26); // invertido en el extremo alto
+    const drop = Math.max(8, Math.min(60, g * 2000)); // escala vertical exagerada
+    const y1 = top, y2 = top + drop, pr = 5; // radio del tubo en px
+    const at = (x: number) => y1 + ((x - x1) / (x2 - x1)) * drop;
+    // Terreno, zanja y cama de arena
+    add(el('rect', { x: 8, y: gy, width: 364, height: 132, fill: 'url(#pat-earth)' }));
+    add(el('rect', { x: 8, y: gy - 5, width: 364, height: 5, fill: 'url(#pat-grass)' }));
+    add(el('path', { d: `M8 ${gy} H372`, stroke: '#6f8f5a', 'stroke-width': 1.5 }));
+    const tx1 = x1 - 14, tx2 = x2 + 14;
+    add(el('polygon', { points: `${tx1},${gy} ${tx2},${gy} ${tx2},${at(tx2) + pr + 8} ${tx1},${at(tx1) + pr + 8}`, fill: '#f3eee6' }));
+    add(el('polygon', { points: `${tx1},${at(tx1) - pr - 3} ${tx2},${at(tx2) - pr - 3} ${tx2},${at(tx2) + pr + 8} ${tx1},${at(tx1) + pr + 8}`, fill: 'url(#pat-gravel)' }));
+    add(el('path', { d: `M${tx1} ${gy} V${(at(tx1) + pr + 8).toFixed(1)} L${tx2} ${(at(tx2) + pr + 8).toFixed(1)} V${gy}`, stroke: '#a8977c', 'stroke-width': 1, 'stroke-dasharray': '4 3', fill: 'none' }));
+    // Registro (inspection opening) en el extremo alto
+    add(el('rect', { x: x1 - pr, y: gy - 4, width: pr * 2, height: y1 - gy + 4, fill: '#fff', class: 'dg-line', 'stroke-width': 1.2 }));
+    add(el('rect', { x: x1 - pr - 2, y: gy - 7, width: pr * 2 + 4, height: 4, fill: '#24456e' }));
+    label(add, x1 - pr - 6, gy - 12, 'Inspection opening', 'dg-note', 'start');
+    // Tubo: pared, interior e invertido
+    add(el('path', { d: `M${x1} ${y1} L${x2 + 34} ${(at(x2 + 34)).toFixed(1)}`, stroke: '#24456e', 'stroke-width': pr * 2 + 2, 'stroke-linecap': 'butt' }));
+    add(el('path', { d: `M${x1} ${y1} L${x2 + 34} ${(at(x2 + 34)).toFixed(1)}`, stroke: '#f6f5f1', 'stroke-width': pr * 2 - 2, 'stroke-linecap': 'butt' }));
+    add(el('path', { d: `M${x1 + 30} ${(at(x1 + 30)).toFixed(1)} L${x1 + 80} ${(at(x1 + 80)).toFixed(1)}`, stroke: '#5d87b5', 'stroke-width': 1.4, 'marker-end': 'url(#mk-arrow)' }));
+    label(add, 372, Math.min(at(x2 + 34) + 22, 162), 'To sewer', 'dg-note', 'end');
+    // Línea de nivel desde el invertido alto y cotas
+    add(el('path', { d: `M${x1} ${y1 + pr} H${x2 + 10}`, stroke: '#9a3412', 'stroke-width': 0.8, 'stroke-dasharray': '3 3' }));
+    dim(add, x2, y1 + pr, x2, y2 + pr, `${fmt(fallMm, 0)} mm`, -16);
+    dim(add, x1, Math.max(y2 + pr + 18, 140), x2, Math.max(y2 + pr + 18, 140), `${fmt(L, 1)} m`, 0, { textGap: 10 });
+    const mx = (x1 + x2) / 2, my = at(mx) - pr - 12;
+    const gl = label(add, mx, my, `${pctTxt(g)} · ${ratioTxt(g)}`, 'dg-label');
+    gl.setAttribute('transform', `rotate(${((Math.atan2(drop, x2 - x1) * 180) / Math.PI).toFixed(1)} ${mx} ${my.toFixed(1)})`);
+    label(add, 368, 14, 'LONG SECTION · vertical scale exaggerated', 'dg-note', 'end');
   }
 
   function render(s: State) {
@@ -341,7 +352,7 @@ const faqs: Faq[] = [
       }
     }
 
-    drawDiagram(L, fallMm, g);
+    drawDiagram(L, fallMm, g, depth);
 
     setText('mbar-k', `${dn === 'other' ? 'Pipe' : `DN${dn}`} · ${fmt(L, 1)} m at ${ok ? pctTxt(g) : '–'}`);
     setText('mbar-v', ok ? big : '–');

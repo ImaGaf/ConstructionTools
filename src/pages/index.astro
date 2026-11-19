@@ -25,6 +25,7 @@ const schema = [
     email: SITE.contactEmail,
   },
 ];
+import DiagramDefs from '../components/DiagramDefs.astro';
 ---
 <Base title={`${SITE.name} – Free Building & Renovation Calculators`} description={SITE.description} schema={schema}>
   <section class="hero">
@@ -54,15 +55,9 @@ const schema = [
         <a class="preview-card" href="/concrete-calculator/" aria-label="Open the concrete calculator">
           <div class="preview-head"><span>Concrete slab</span><span class="pill pill-plan">Example</span></div>
           <div class="preview-body">
-            <svg viewBox="0 0 396 170" width="100%" role="img" aria-label="Slab 4 metres by 3 metres, 100 millimetres thick">
-              <path d="M70 70 L226 30 L346 70 L190 110 Z" fill="#e8eef5" stroke="#24456e" stroke-width="2" stroke-linejoin="round"></path>
-              <path d="M70 70 L70 86 L190 126 L190 110 Z" fill="#c9d6e6" stroke="#24456e" stroke-width="2" stroke-linejoin="round"></path>
-              <path d="M190 110 L190 126 L346 86 L346 70 Z" fill="#d8e2ee" stroke="#24456e" stroke-width="2" stroke-linejoin="round"></path>
-              <path d="M62 98 L178 136" stroke="#c2410c" stroke-width="1.5" stroke-dasharray="4 4"></path>
-              <text x="96" y="140" fill="#9a3412" font-size="14" font-weight="600">4.0 m</text>
-              <path d="M202 136 L354 96" stroke="#c2410c" stroke-width="1.5" stroke-dasharray="4 4"></path>
-              <text x="286" y="138" fill="#9a3412" font-size="14" font-weight="600">3.0 m</text>
-              <text x="12" y="84" fill="#24456e" font-size="13" font-weight="600">100 mm</text>
+<DiagramDefs />
+            <svg viewBox="0 0 380 170" width="100%" role="img" aria-label="Slab 4 metres by 3 metres, 100 millimetres thick">
+              <g id="g-hero"></g>
             </svg>
           </div>
           <div class="preview-stats">
@@ -119,6 +114,8 @@ const schema = [
   </div>
 
   <script>
+    import { drawSlab } from '../lib/diagram-concrete';
+    drawSlab('g-hero', 4, 3, 100);
     const list = document.getElementById('tools');
     const items = Array.from(list?.querySelectorAll<HTMLLIElement>('li') ?? []);
     const empty = document.getElementById('tools-empty');

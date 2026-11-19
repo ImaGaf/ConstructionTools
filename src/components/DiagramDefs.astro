@@ -1,0 +1,73 @@
+---
+// Patrones y marcadores compartidos por los diagramas (estilo plano técnico).
+// Se incluye una vez por página dentro de .diagram; los SVG de la página los usan con url(#...).
+---
+<svg width="0" height="0" style="position: absolute;" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Hormigón: fondo claro con árido (puntos y triángulos) -->
+    <pattern id="pat-concrete" width="28" height="28" patternUnits="userSpaceOnUse">
+      <rect width="28" height="28" fill="#e3e8ee"></rect>
+      <circle cx="4" cy="5" r="1.1" fill="#8a9bb0"></circle>
+      <circle cx="18" cy="3" r="0.8" fill="#8a9bb0"></circle>
+      <circle cx="23" cy="17" r="1.2" fill="#8a9bb0"></circle>
+      <circle cx="9" cy="21" r="0.9" fill="#8a9bb0"></circle>
+      <circle cx="14" cy="13" r="0.7" fill="#8a9bb0"></circle>
+      <path d="M8 9 l3 -1 -1 3 z M20 24 l3 1 -2 2 z M24 7 l2 2 -3 0 z" fill="none" stroke="#7d8fa6" stroke-width="0.8"></path>
+    </pattern>
+    <!-- Superficie de hormigón vista desde arriba (más suave) -->
+    <pattern id="pat-concrete-top" width="22" height="22" patternUnits="userSpaceOnUse">
+      <rect width="22" height="22" fill="#eef2f6"></rect>
+      <circle cx="5" cy="6" r="0.7" fill="#a8b6c7"></circle>
+      <circle cx="16" cy="12" r="0.6" fill="#a8b6c7"></circle>
+      <circle cx="9" cy="18" r="0.8" fill="#a8b6c7"></circle>
+    </pattern>
+    <!-- Árido expuesto -->
+    <pattern id="pat-aggregate" width="16" height="16" patternUnits="userSpaceOnUse">
+      <rect width="16" height="16" fill="#e6e0d6"></rect>
+      <circle cx="3" cy="4" r="2" fill="#c9bba5"></circle>
+      <circle cx="11" cy="3" r="1.6" fill="#b5a68f"></circle>
+      <circle cx="8" cy="10" r="2.2" fill="#d4c7b2"></circle>
+      <circle cx="14" cy="12" r="1.5" fill="#a89a84"></circle>
+      <circle cx="2" cy="13" r="1.4" fill="#bfb19b"></circle>
+    </pattern>
+    <!-- Tierra natural (corte) -->
+    <pattern id="pat-earth" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="14" height="14" fill="#efe7da"></rect>
+      <path d="M0 0 V14" stroke="#b9a586" stroke-width="1.2"></path>
+      <path d="M7 3 V9" stroke="#c9b89c" stroke-width="0.8"></path>
+    </pattern>
+    <!-- Grava / arena compactada -->
+    <pattern id="pat-gravel" width="12" height="12" patternUnits="userSpaceOnUse">
+      <rect width="12" height="12" fill="#ece6dc"></rect>
+      <circle cx="3" cy="3" r="1.6" fill="none" stroke="#a8977c" stroke-width="0.8"></circle>
+      <circle cx="9" cy="8" r="1.8" fill="none" stroke="#a8977c" stroke-width="0.8"></circle>
+      <circle cx="4" cy="10" r="0.9" fill="#a8977c"></circle>
+    </pattern>
+    <!-- Césped / superficie del terreno -->
+    <pattern id="pat-grass" width="10" height="6" patternUnits="userSpaceOnUse">
+      <path d="M1 6 l1.5 -5 M4 6 l0.5 -4 M7 6 l-1 -5 M9 6 l0.8 -3" stroke="#6f8f5a" stroke-width="0.9" fill="none"></path>
+    </pattern>
+    <!-- Madera (veta) -->
+    <pattern id="pat-timber" width="10" height="40" patternUnits="userSpaceOnUse">
+      <rect width="10" height="40" fill="#e9d6b8"></rect>
+      <path d="M3 0 C4 10 2 20 3 40 M7 0 C6 14 8 26 7 40" stroke="#c4a27a" stroke-width="0.8" fill="none"></path>
+    </pattern>
+    <!-- Muro en planta (poché) -->
+    <pattern id="pat-wall" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="8" height="8" fill="#24456e"></rect>
+      <path d="M0 0 V8" stroke="#3a5e8a" stroke-width="1.5"></path>
+    </pattern>
+    <!-- Piezas cortadas (desperdicio) -->
+    <pattern id="pat-cut" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="6" height="6" fill="#fdeee4"></rect>
+      <path d="M0 0 V6" stroke="#e8a27a" stroke-width="1.2"></path>
+    </pattern>
+    <!-- Cotas: marca de arquitecto a 45° -->
+    <marker id="mk-tick" viewBox="-5 -5 10 10" markerWidth="10" markerHeight="10" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M-3.5 3.5 L3.5 -3.5" stroke="#9a3412" stroke-width="1.4"></path>
+    </marker>
+    <marker id="mk-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+      <path d="M0 1 L9 5 L0 9 z" fill="#24456e"></path>
+    </marker>
+  </defs>
+</svg>

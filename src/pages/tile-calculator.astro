@@ -36,6 +36,7 @@ const faqs: Faq[] = [
     a: 'Slightly. Each grout joint adds a little coverage, so wider joints mean marginally fewer tiles. The effect is small for large tiles and bigger for small tiles and mosaics, which is why the calculator includes the joint width.',
   },
 ];
+import DiagramDefs from '../components/DiagramDefs.astro';
 ---
 <CalculatorLayout
   slug="tile-calculator"
@@ -134,13 +135,10 @@ const faqs: Faq[] = [
   <!-- ───────── Resultado ───────── -->
   <div slot="result">
     <div class="diagram">
+      <DiagramDefs />
       <svg viewBox="0 0 380 170" role="img" aria-labelledby="dg-tile">
-        <title id="dg-tile">Plan of the area with your tile layout</title>
-        <rect id="dg-rect" x="40" y="15" width="300" height="125" fill="#e8eef5" stroke="#24456e" stroke-width="2"></rect>
-        <path id="dg-grid" d="" stroke="#9fb4cc" stroke-width="1" fill="none"></path>
-        <rect id="dg-tile1" x="40" y="15" width="0" height="0" fill="#fdeee4" stroke="#c2410c" stroke-width="1.5"></rect>
-        <text id="dg-a" x="190" y="160" fill="#9a3412" font-size="14" text-anchor="middle">3.0 m</text>
-        <text id="dg-b" x="30" y="80" fill="#24456e" font-size="13" text-anchor="end">2.5 m</text>
+        <title id="dg-tile">Your area drawn to scale with the tile layout and cut tiles</title>
+        <g id="g-tile"></g>
       </svg>
     </div>
 
@@ -241,6 +239,7 @@ const faqs: Faq[] = [
 </CalculatorLayout>
 
 <script>
+  import { canvas, dim, el, label } from '../lib/diagrams';
   import { bindCalculator, num, fmt, setText, type State } from '../lib/calc';
 
   const SIZES: Record<string, [number, number]> = {
@@ -268,35 +267,39 @@ const faqs: Faq[] = [
     };
   }
 
-  function drawDiagram(a: number, b: number, tw: number, tl: number, g: number, aLabel: string, bLabel: string) {
-    const maxW = 300, maxH = 125;
-    const rect = document.getElementById('dg-rect');
-    const grid = document.getElementById('dg-grid');
-    const t1 = document.getElementById('dg-tile1');
-    if (!rect || !grid || !t1) return;
-    if (a <= 0 || b <= 0) { grid.setAttribute('d', ''); return; }
+  function drawDiagram(a: number, b: number, tw: number, tl: number, g: number, aLabel: string, bLabel: string, surface: string) {
+    const add = canvas('g-tile');
+    if (!add || a <= 0 || b <= 0) return;
+    const maxW = 290, maxH = 112;
     const scale = Math.min(maxW / a, maxH / b);
     const w = a * scale, h = b * scale;
-    const x = (380 - w) / 2, y = 15 + (maxH - h) / 2;
-    rect.setAttribute('x', String(x)); rect.setAttribute('y', String(y));
-    rect.setAttribute('width', String(w)); rect.setAttribute('height', String(h));
-
-    // Grilla de baldosas a escala (largo de la baldosa a lo largo del lado A)
-    const stepX = ((tl + g) / 1000) * scale;
-    const stepY = ((tw + g) / 1000) * scale;
-    let d = '';
-    if (stepX >= 3 && stepY >= 3) {
-      for (let px = x + stepX; px < x + w - 0.5; px += stepX) d += `M${px.toFixed(1)} ${y}V${(y + h).toFixed(1)}`;
-      for (let py = y + stepY; py < y + h - 0.5; py += stepY) d += `M${x} ${py.toFixed(1)}H${(x + w).toFixed(1)}`;
+    const x = 52 + (maxW - w) / 2, y = 24 + (maxH - h) / 2;
+    const sx = ((tl + g) / 1000) * scale, sy = ((tw + g) / 1000) * scale;
+    const gp = Math.max(0.6, Math.min(2, (g / 1000) * scale)); // junta visible
+    // Fondo = color de la junta
+    add(el('rect', { x, y, width: w, height: h, fill: '#b9c6d4' }));
+    const cols = Math.ceil(w / sx), rows = Math.ceil(h / sy);
+    if (sx >= 4 && sy >= 4 && cols * rows <= 1500) {
+      const tones = ['#eef2f6', '#e7edf3', '#f3f6f9', '#e9eff5'];
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const tx = x + c * sx, ty = y + r * sy;
+          const tw2 = Math.min(sx - gp, x + w - tx), th2 = Math.min(sy - gp, y + h - ty);
+          if (tw2 <= 0.3 || th2 <= 0.3) continue;
+          const cut = tw2 < sx - gp - 0.5 || th2 < sy - gp - 0.5;
+          add(el('rect', { x: tx.toFixed(1), y: ty.toFixed(1), width: tw2.toFixed(1), height: th2.toFixed(1), fill: cut ? 'url(#pat-cut)' : tones[(r * 7 + c * 3) % 4] }));
+        }
+      }
+      // Una baldosa entera resaltada
+      add(el('rect', { x, y, width: Math.min(sx - gp, w), height: Math.min(sy - gp, h), fill: 'none', stroke: '#c2410c', 'stroke-width': 1.6 }));
+    } else {
+      add(el('rect', { x, y, width: w, height: h, fill: '#e7edf3' }));
     }
-    grid.setAttribute('d', d);
-    t1.setAttribute('x', String(x)); t1.setAttribute('y', String(y));
-    t1.setAttribute('width', String(Math.min(stepX, w))); t1.setAttribute('height', String(Math.min(stepY, h)));
-
-    const la = document.getElementById('dg-a');
-    const lb = document.getElementById('dg-b');
-    if (la) { la.textContent = aLabel; la.setAttribute('y', String(Math.min(y + h + 18, 166))); }
-    if (lb) { lb.textContent = bLabel; lb.setAttribute('x', String(x - 8)); }
+    add(el('rect', { x, y, width: w, height: h, fill: 'none', class: 'dg-line', 'stroke-width': 2 }));
+    dim(add, x, y + h, x + w, y + h, aLabel, 12);
+    dim(add, x, y + h, x, y, bLabel, -12);
+    label(add, 12, 14, surface === 'wall' ? 'WALL ELEVATION' : 'FLOOR PLAN', 'dg-label', 'start');
+    label(add, 368, 14, `${tl} × ${tw} mm tiles · cut tiles hatched`, 'dg-note', 'end');
   }
 
   function render(s: State) {
@@ -339,7 +342,7 @@ const faqs: Faq[] = [
       : waste < 0.1 ? 'Only 5% extra is tight. Most tilers allow at least 10% for cuts.'
       : 'Buy all your tiles at once and check the batch number on every box matches.');
 
-    drawDiagram(a, b, tw, tl, g, aLabel, bLabel);
+    drawDiagram(a, b, tw, tl, g, aLabel, bLabel, surface);
 
     const label = surface === 'wall' ? 'Wall' : surface === 'area' ? 'Area' : 'Floor';
     setText('mbar-k', `${label} · ${tw}×${tl} mm · ${Math.round(waste * 100)}% extra`);
