@@ -25,7 +25,7 @@ export const SITE = {
 
 export type IconName =
   | 'slab' | 'stairs' | 'tile' | 'bath' | 'kitchen' | 'hotwater' | 'gravel' | 'pipe'
-  | 'search' | 'arrow' | 'check' | 'info' | 'link' | 'print' | 'menu' | 'shield' | 'ruler' | 'grid';
+  | 'dollar' | 'search' | 'arrow' | 'check' | 'info' | 'link' | 'print' | 'menu' | 'shield' | 'ruler' | 'grid';
 
 export type Category = {
   slug: string;
@@ -78,7 +78,16 @@ export const TOOLS: Tool[] = [
     icon: 'slab',
     ready: true,
     featured: true,
-    related: ['concrete-steps-calculator', 'tile-calculator', 'gravel-calculator'],
+    related: ['concrete-price-per-m3', 'concrete-steps-calculator', 'tile-calculator'],
+  },
+  {
+    slug: 'concrete-price-per-m3',
+    title: 'Concrete Price per m³',
+    blurb: 'Delivered ready-mix cost by city and strength, with short-load and pump fees.',
+    category: 'materials',
+    icon: 'dollar',
+    ready: true,
+    related: ['concrete-calculator', 'concrete-steps-calculator'],
   },
   {
     slug: 'concrete-steps-calculator',

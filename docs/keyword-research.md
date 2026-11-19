@@ -60,7 +60,7 @@ and compare keywords within the same tool.
 **New page opportunities** (low KD, real CPC)
 | Page | Keywords (volume, KD, CPC) | Notes |
 |---|---|---|
-| Concrete price per m³ / cost calculator | concrete price per m3 1,600 KD 8 $4.44 · concrete slab cost 1,300 KD 20 · concrete prices 1,000 KD 15 · boral concrete price per m3 720 KD 8 · concrete cost per m2 590 KD 10 · ready mix concrete price 320 | ~5k/month combined. **Needs real AU price sources** (supplier price lists, published guides) cited on the page. |
+| Concrete price per m³ / cost calculator (**Built** `/concrete-price-per-m3/`, 19 Nov) | concrete price per m3 1,600 KD 8 $4.44 · concrete slab cost 1,300 KD 20 · concrete prices 1,000 KD 15 · boral concrete price per m3 720 KD 8 · concrete cost per m2 590 KD 10 · ready mix concrete price 320 | ~5k/month combined. **Needs real AU price sources** (supplier price lists, published guides) cited on the page. |
 | Concrete driveway cost | concrete driveway cost 1,600 KD 28 $5.53 · concrete driveway 3,600 KD 35 · exposed aggregate driveway 2,400 KD 21 $6.25 · aggregate driveway 720 · stamped concrete driveway 480 | Cost by finish (plain, coloured, exposed aggregate, stamped). Strong lead page. Needs price sources. |
 | Concrete steps calculator | concrete steps 1,000 KD 21 · concrete stairs 480 KD 5 · precast concrete steps 480 | **Built** (`/concrete-steps-calculator/`): steps from total rise, NCC riser/going/2R+G check, solid volume and bags. |
 | Polished concrete cost | polished concrete floors 5,400 KD 29 $6.32 · polished concrete cost 320 · polished concrete floors cost 320 | Cost guide. Needs price sources. |
@@ -85,7 +85,7 @@ backflow testing cost, as3500, heat pump vs solar hot water.
 2. tile calculator — done (18 Nov)
 3. concrete steps calculator — done (18 Nov)
 4. bathroom renovation cost calculator — done (19 Nov), sources in the page
-5. concrete price per m³ / cost calculator — needs price sources
+5. concrete price per m³ / cost calculator — done (19 Nov), sources in the page
 6. concrete driveway cost (with exposed aggregate) — needs price sources
 7. kitchen renovation cost calculator — needs price sources
 8. hot water system replacement cost — needs price sources

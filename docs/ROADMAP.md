@@ -53,7 +53,7 @@ Prompt para Claude Code:
 - [x] Tile calculator (1.300/mes + "tile estimator calculator" 1.000/mes)
 - [ ] Hot water system replacement cost (720/mes, CPC $4,12: la mejor para leads)
 - [x] Concrete steps calculator (1.000 + 480/mes, KD 5–21; solo matemática)
-- [ ] Concrete price per m³ / cost (~5.000/mes sumando variantes, KD 8–20)
+- [x] Concrete price per m³ / cost (~5.000/mes sumando variantes, KD 8–20)
 - [ ] Concrete driveway cost + exposed aggregate (1.600 + 2.400/mes, CPC $5–6)
 
 Antes de las páginas de costos: consigue fuentes reales de precios en Australia

@@ -1,0 +1,433 @@
+---
+import CalculatorLayout, { type Faq, type TocItem } from '../layouts/CalculatorLayout.astro';
+import Icon from '../components/Icon.astro';
+
+const toc: TocItem[] = [
+  { id: 'price-per-m3', label: 'Price per m³ by city' },
+  { id: 'by-strength', label: 'Price by strength (MPa)' },
+  { id: 'extra-fees', label: 'Short-load & other fees' },
+  { id: 'slab-cost-m2', label: 'Slab cost per m²' },
+  { id: 'save-money', label: 'Ways to save' },
+  { id: 'how-we-estimate', label: 'How we estimate' },
+];
+
+const faqs: Faq[] = [
+  {
+    q: 'How much is concrete per m³ in Australia?',
+    a: 'A standard 25 MPa ready-mix delivered to Australian capitals typically costs around $350 to $435 per m³ including GST, with lows near $275 and highs above $500 depending on the city and supplier. Yellow Pages puts standard mixes at $400–$450 per m³. Some guides quote $200–$300, but those are prices before delivery and fees. Always get a delivered quote.',
+  },
+  {
+    q: 'How much does a concrete slab cost per m²?',
+    a: 'A plain concrete slab laid by a concreter typically costs about $100 to $125 per m² in Australian capitals, with a range of roughly $70 to $170 per m². Exposed aggregate usually costs $145 to $185 per m², and coloured or stamped finishes sit in between. These prices include concrete, labour and finishing for a standard residential slab.',
+  },
+  {
+    q: 'What is a short-load fee?',
+    a: 'Ready-mix suppliers charge extra when you order less than a full minimum load, because the truck makes the same trip. Holcim, for example, charges $80–$90 plus GST for each cubic metre below 4 m³. So a 1.5 m³ order is charged for 2.5 m³ of short load on top of the concrete.',
+  },
+  {
+    q: 'How much does a concrete pump cost?',
+    a: 'Line and boom pumps are usually hired by the hour, at around $155 to $182 per hour plus GST according to iseekplant. Some guides put a small residential pump job at $300 to $800 in total. You need a pump when the truck cannot get close to the pour.',
+  },
+  {
+    q: 'What strength of concrete do I need?',
+    a: 'As a general guide, 20 MPa is used for paths and garden edging, 25 MPa for house slabs, driveways and footings, and 32 MPa for heavy-duty driveways and thicker slabs. If your slab or footing is engineer-designed, use the strength on the plans.',
+  },
+  {
+    q: 'Do Boral, Holcim and Hanson publish concrete prices?',
+    a: 'Not as a public price per m³. The major suppliers quote by job and location. Holcim publishes its service fees, such as short-load and after-hours charges, and Boral publishes its transport charge, but the concrete price itself comes from a quote.',
+  },
+];
+---
+<CalculatorLayout
+  slug="concrete-price-per-m3"
+  title="Concrete Price per m³ Calculator Australia (2026)"
+  description="What concrete costs per m³ delivered in Australia, by city and strength, with short-load fees, weekend surcharges and pump hire. Free calculator."
+  h1="Concrete Price per m³ Calculator"
+  lede="Estimate what your ready-mix concrete will cost delivered, by city and strength, including the short-load fee, weekend surcharges and pump hire that catch people out."
+  updated="2026-11-19"
+  quickAnswer="a standard 25 MPa ready-mix costs roughly $350–$435 per m³ delivered in Australian capitals (incl. GST), plus a short-load fee of about $80–$90 + GST for every m³ under a 4 m³ load. A laid plain slab typically costs $100–$125 per m²."
+  toc={toc}
+  faqs={faqs}
+  cta={{ title: 'Need the slab laid?', sub: 'Get quotes from licensed concreters', href: '#slab-cost-m2' }}
+>
+  <!-- ───────── Entradas ───────── -->
+  <div slot="inputs">
+    <div class="step">
+      <div class="step-head"><span class="n">1</span><h2 id="mode-h">How much concrete?</h2></div>
+      <fieldset class="choice-grid" aria-labelledby="mode-h" style="grid-template-columns: repeat(2, minmax(0, 1fr));">
+        <label class="choice">
+          <input type="radio" name="mode" value="slab" data-state checked />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 18 L32 6 L60 18 L32 30 Z"></path><path d="M4 18 V24 L32 36 V30"></path><path d="M60 18 V24 L32 36"></path></svg>
+          <span class="t">Slab size</span>
+          <span class="d">Length × width × thickness</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="mode" value="volume" data-state />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20 10 L44 10 L50 30 L14 30 Z"></path><path d="M24 20 h16" stroke-linecap="round"></path><circle cx="22" cy="34" r="3"></circle><circle cx="42" cy="34" r="3"></circle></svg>
+          <span class="t">I know the m³</span>
+          <span class="d">From a calculator or plans</span>
+        </label>
+      </fieldset>
+      <div class="fields" data-panel="slab" style="margin-top: 16px;">
+        <div><label for="s-l">Length</label><div class="field"><input id="s-l" type="number" inputmode="decimal" min="0" step="0.1" value="4" data-state /><span class="unit">m</span></div></div>
+        <div><label for="s-w">Width</label><div class="field"><input id="s-w" type="number" inputmode="decimal" min="0" step="0.1" value="3" data-state /><span class="unit">m</span></div></div>
+        <div><label for="s-d">Thickness</label><div class="field"><input id="s-d" type="number" inputmode="decimal" min="0" step="5" value="100" data-state /><span class="unit">mm</span></div></div>
+      </div>
+      <div class="fields" data-panel="volume" hidden style="margin-top: 16px;">
+        <div><label for="v-m3">Concrete needed</label><div class="field"><input id="v-m3" type="number" inputmode="decimal" min="0" step="0.1" value="2" data-state /><span class="unit">m³</span></div></div>
+      </div>
+      <div class="opt-label" id="waste-l" style="margin-top: 14px;">Extra for waste</div>
+      <div class="seg" role="radiogroup" aria-labelledby="waste-l">
+        <label><input type="radio" name="waste" value="0" data-state />None</label>
+        <label><input type="radio" name="waste" value="5" data-state />5%</label>
+        <label><input type="radio" name="waste" value="10" data-state checked />10%</label>
+        <label><input type="radio" name="waste" value="15" data-state />15%</label>
+      </div>
+      <p class="note" style="margin: 10px 0 0;">Odd shape, footings or post holes? Work out the m³ with the <a href="/concrete-calculator/">concrete calculator</a> first.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">2</span><h2>Location and strength</h2></div>
+      <div class="opt-label" id="city-l">City</div>
+      <div class="seg" role="radiogroup" aria-labelledby="city-l" style="margin-bottom: 14px;">
+        <label><input type="radio" name="city" value="syd" data-state checked />Sydney</label>
+        <label><input type="radio" name="city" value="mel" data-state />Melbourne</label>
+        <label><input type="radio" name="city" value="bne" data-state />Brisbane</label>
+        <label><input type="radio" name="city" value="per" data-state />Perth</label>
+        <label><input type="radio" name="city" value="adl" data-state />Adelaide</label>
+        <label><input type="radio" name="city" value="cbr" data-state />Canberra</label>
+        <label><input type="radio" name="city" value="oth" data-state />Other</label>
+      </div>
+      <div class="options">
+        <div>
+          <div class="opt-label" id="grade-l">Strength</div>
+          <div class="seg" role="radiogroup" aria-labelledby="grade-l">
+            <label><input type="radio" name="grade" value="20" data-state />20 MPa</label>
+            <label><input type="radio" name="grade" value="25" data-state checked />25 MPa</label>
+            <label><input type="radio" name="grade" value="32" data-state />32 MPa</label>
+            <label><input type="radio" name="grade" value="40" data-state />40 MPa</label>
+          </div>
+        </div>
+        <div class="grow">
+          <label class="opt-label" for="own">Your quoted price <span class="muted">(optional)</span></label>
+          <div class="field"><span class="unit" style="padding: 0 6px 0 0;">$</span><input id="own" type="number" inputmode="decimal" min="0" step="5" data-state /><span class="unit">/m³</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">3</span><h2>Delivery</h2></div>
+      <div class="opt-label" id="day-l">Delivery time</div>
+      <div class="seg" role="radiogroup" aria-labelledby="day-l" style="margin-bottom: 14px;">
+        <label><input type="radio" name="day" value="wk" data-state checked />Weekday</label>
+        <label><input type="radio" name="day" value="satam" data-state />Sat morning</label>
+        <label><input type="radio" name="day" value="satpm" data-state />Sat afternoon</label>
+        <label><input type="radio" name="day" value="sun" data-state />Sun / public hol.</label>
+      </div>
+      <div class="toggles">
+        <label class="toggle"><input type="checkbox" id="short" data-state checked /><span><span class="t">Short-load fee</span><span class="d">Charged on orders under 4 m³</span></span></label>
+        <label class="toggle"><input type="checkbox" id="pump" data-state /><span><span class="t">Concrete pump</span><span class="d">When the truck can't reach the pour</span></span></label>
+      </div>
+      <div class="fields" data-pump hidden style="margin-top: 12px; max-width: 220px;">
+        <div><label for="hours">Pump hire</label><div class="field"><input id="hours" type="number" inputmode="decimal" min="0" step="0.5" value="3" data-state /><span class="unit">hours</span></div></div>
+      </div>
+    </div>
+
+    <div class="step" data-panel="slab">
+      <div class="step-head"><span class="n">4</span><h2>Laid by a concreter <span class="muted" style="font-weight: 400; font-size: 15px;">(estimate)</span></h2></div>
+      <div class="opt-label" id="finish-l">Finish</div>
+      <div class="seg" role="radiogroup" aria-labelledby="finish-l">
+        <label><input type="radio" name="finish" value="plain" data-state checked />Plain</label>
+        <label><input type="radio" name="finish" value="agg" data-state />Exposed aggregate</label>
+      </div>
+      <p class="note" style="margin: 10px 0 0;">Per-m² prices include concrete, labour and finishing for a standard residential slab.</p>
+    </div>
+  </div>
+
+  <!-- ───────── Resultado ───────── -->
+  <div slot="result">
+    <div class="diagram">
+      <svg viewBox="0 0 380 150" role="img" aria-labelledby="dg-load">
+        <title id="dg-load">Your order compared with a 4 m³ minimum truck load</title>
+        <defs>
+          <pattern id="hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="8" height="8" fill="#fdeee4"></rect>
+            <line x1="0" y1="0" x2="0" y2="8" stroke="#f3b48c" stroke-width="3"></line>
+          </pattern>
+        </defs>
+        <g transform="translate(30 18)" fill="none" stroke="#24456e" stroke-width="2" stroke-linejoin="round">
+          <path d="M0 22 h44 v-14 h-44 z"></path>
+          <path d="M44 22 h20 v-10 l-6 -6 h-14"></path>
+          <circle cx="12" cy="26" r="4" fill="#ffffff"></circle>
+          <circle cx="54" cy="26" r="4" fill="#ffffff"></circle>
+        </g>
+        <text id="dg-title" x="104" y="40" fill="#24456e" font-size="13">Truck load</text>
+        <rect x="30" y="62" width="320" height="36" rx="8" fill="#ffffff" stroke="#24456e" stroke-width="2"></rect>
+        <rect id="dg-short" x="30" y="62" width="0" height="36" rx="8" fill="url(#hatch)"></rect>
+        <rect id="dg-fill" x="30" y="62" width="112" height="36" rx="8" fill="#c9d6e6" stroke="#24456e" stroke-width="2"></rect>
+        <text id="dg-order" x="40" y="85" fill="#16191d" font-size="13">1.4 m³ ordered</text>
+        <text id="dg-min" x="350" y="116" fill="#565d66" font-size="12" text-anchor="end">4 m³ minimum load</text>
+        <text id="dg-shortlabel" x="190" y="136" fill="#9a3412" font-size="13" text-anchor="middle">2.6 m³ charged as short load</text>
+      </svg>
+    </div>
+
+    <div class="result-body" aria-live="polite">
+      <div class="big"><div class="k">Concrete delivered</div><div class="v" id="r-total">–</div></div>
+      <p class="range-note" id="r-range"></p>
+      <div class="stats">
+        <div class="stat stat-plan"><div class="k">Order</div><div class="v" id="r-order" style="font-size: 24px;">–</div></div>
+        <div class="stat stat-accent"><div class="k">All-in per m³</div><div class="v" id="r-per" style="font-size: 24px;">–</div></div>
+        <div class="stat stat-plan" id="r-laid-wrap" style="grid-column: span 2;"><div class="k" id="r-laid-k">Laid by a concreter</div><div class="v" id="r-laid" style="font-size: 22px;">–</div></div>
+      </div>
+
+      <ul class="breakdown" id="r-breakdown" aria-label="Cost breakdown"></ul>
+      <p class="working" id="r-working"></p>
+
+      <div class="result-actions">
+        <button type="button" class="btn" id="copy-link"><Icon name="link" size={18} />Copy link to result</button>
+        <button type="button" class="btn icon-btn" id="print" aria-label="Print result"><Icon name="print" size={18} /></button>
+      </div>
+      <p class="copy-status" id="copy-status" role="status"></p>
+    </div>
+  </div>
+
+  <!-- ───────── Artículo ───────── -->
+  <section id="price-per-m3">
+    <h2>How much is concrete per m³ in Australia?</h2>
+    <p>Typical prices for a standard 25 MPa ready-mix, delivered (supply only, including GST):</p>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">City</th><th scope="col">Low</th><th scope="col">Typical</th><th scope="col">High</th></tr></thead>
+        <tbody>
+          <tr><td>Sydney</td><td>$345</td><td>$435</td><td>$550</td></tr>
+          <tr><td>Canberra</td><td>$330</td><td>$420</td><td>$530</td></tr>
+          <tr><td>Melbourne</td><td>$315</td><td>$400</td><td>$505</td></tr>
+          <tr><td>Perth</td><td>$315</td><td>$400</td><td>$505</td></tr>
+          <tr><td>Brisbane</td><td>$300</td><td>$380</td><td>$480</td></tr>
+          <tr><td>Adelaide</td><td>$275</td><td>$350</td><td>$440</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">
+      Source: whatsthedamage.com.au city guides, verified November 2026. Yellow Pages (April 2026)
+      puts standard mixes at $400–$450 per m³. Lower figures you may see online, around
+      $200–$300, are usually prices before delivery and fees.
+    </p>
+  </section>
+
+  <section id="by-strength">
+    <h2>Concrete price by strength (MPa)</h2>
+    <p>Stronger mixes cost a little more per m³. Yellow Pages gives these averages:</p>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Strength</th><th scope="col">Typical use</th><th scope="col">Average per m³</th></tr></thead>
+        <tbody>
+          <tr><td>20 MPa</td><td>Footpaths, garden edging, non-structural slabs</td><td>$400</td></tr>
+          <tr><td>25 MPa</td><td>House slabs, residential driveways, footings</td><td>$410</td></tr>
+          <tr><td>32 MPa</td><td>Heavy-duty driveways, thicker slabs</td><td>$430</td></tr>
+          <tr><td>40 MPa</td><td>Structural and industrial slabs</td><td>$450</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">The calculator applies these differences to your city's 25 MPa price. If your slab is engineer-designed, use the strength on the plans.</p>
+  </section>
+
+  <section id="extra-fees">
+    <h2>Short-load fees and other delivery charges</h2>
+    <p>
+      The price per m³ is only part of the bill. Holcim publishes its service fees, which show the
+      kind of extras every supplier charges (amounts exclude GST):
+    </p>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Charge</th><th scope="col">Holcim example</th></tr></thead>
+        <tbody>
+          <tr><td>Short load (under 4 m³)</td><td>$80–$90 per undelivered m³</td></tr>
+          <tr><td>Saturday morning</td><td>$10 per m³ (SEQ)</td></tr>
+          <tr><td>Saturday afternoon</td><td>$45 per m³ (SEQ)</td></tr>
+          <tr><td>Sunday and public holidays</td><td>$90 per m³ (SEQ)</td></tr>
+          <tr><td>Waiting time</td><td>$3–$3.50 per minute after 30–45 free minutes</td></tr>
+          <tr><td>Oxide or fibre handling</td><td>$10.50–$15 per m³</td></tr>
+          <tr><td>Extra cartage over 15 km</td><td>$3 per km per m³ (SEQ)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Pump hire is extra again: iseekplant lists line and boom pumps at around $155–$182 per hour
+      plus GST. Fees vary by supplier and region, so ask for them in writing with your quote.
+    </p>
+  </section>
+
+  <section id="slab-cost-m2">
+    <h2>How much does a concrete slab cost per m²?</h2>
+    <p>If a concreter supplies, places and finishes the slab, you'll be quoted per m². Typical prices including GST:</p>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">City</th><th scope="col">Plain slab</th><th scope="col">Exposed aggregate</th></tr></thead>
+        <tbody>
+          <tr><td>Sydney</td><td>$86–$170 (typ. $125)</td><td>$140–$230 (typ. $185)</td></tr>
+          <tr><td>Canberra</td><td>$82–$165 (typ. $120)</td><td>$130–$220 (typ. $175)</td></tr>
+          <tr><td>Melbourne</td><td>$79–$160 (typ. $115)</td><td>$125–$210 (typ. $170)</td></tr>
+          <tr><td>Perth</td><td>$79–$160 (typ. $115)</td><td>$125–$210 (typ. $170)</td></tr>
+          <tr><td>Brisbane</td><td>$75–$150 (typ. $110)</td><td>$120–$200 (typ. $160)</td></tr>
+          <tr><td>Adelaide</td><td>$69–$140 (typ. $100)</td><td>$110–$185 (typ. $145)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Nationally, coloured concrete runs around $95–$200 per m² and stamped or stencilled finishes
+      around $120–$200 per m². Removing old concrete first adds cost (about $34–$115 per m² in Sydney).
+    </p>
+    <div class="callout" style="margin-top: 20px;">
+      <strong>Driveways and house slabs need a licensed concreter</strong>
+      They need proper base preparation, reinforcement and control joints, and house slabs and
+      footings are engineer-designed to AS 2870. Get at least three itemised quotes.
+    </div>
+  </section>
+
+  <section id="save-money">
+    <h2>Ways to save on concrete</h2>
+    <ul class="checklist">
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Avoid short loads.</strong> If you have several small jobs, pour them on the same day to reach the 4 m³ minimum.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Pour on a weekday.</strong> Weekend and after-hours deliveries attract surcharges. Holcim, for example, doesn't charge them on weekday pours that start before 1pm and finish by 6pm.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Measure carefully.</strong> Over-ordering wastes money and returned concrete can be charged; under-ordering means a second short load.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Consider mini-mix or bags for small jobs.</strong> Under about half a cubic metre, compare a mini-mix delivery or premix bags with a ready-mix short load.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Be ready on time.</strong> Have formwork, reinforcement and helpers ready so you don't pay waiting time.</span></li>
+    </ul>
+  </section>
+
+  <section id="how-we-estimate">
+    <h2>How we estimate</h2>
+    <ul class="checklist">
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Concrete:</strong> your city's typical 25 MPa delivered price, adjusted for strength using Yellow Pages' averages (20 MPa about 2% less, 32 MPa about 5% more, 40 MPa about 10% more). "Other" uses national figures.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Order:</strong> your volume plus waste, rounded up to the next 0.2 m³.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Short load:</strong> $85 + GST for each m³ under a 4 m³ load (the middle of Holcim's $80–$90).</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Weekend surcharges:</strong> Holcim's South East Queensland rates plus GST, charged on at least 4 m³.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Pump:</strong> $175 per hour + GST, within iseekplant's $155–$182 range.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Laid slab:</strong> your area × your city's low, typical and high price per m² for the chosen finish.</span></li>
+    </ul>
+    <p class="note" style="margin-top: 16px;">
+      Sources (accessed November 2026):
+      <a href="https://whatsthedamage.com.au/concreting-cost/" rel="noopener">whatsthedamage.com.au concreting cost guides</a> (verified Nov 2026),
+      <a href="https://www.yellowpages.com.au/articles/concrete-contractors/how-much-is-concrete-per-cubic-metre" rel="noopener">Yellow Pages</a> (Apr 2026),
+      <a href="https://www.holcim.com.au/sites/australia/files/docs/readymix_seq_service_fees_march-2026.pdf" rel="noopener">Holcim SEQ service fees</a> (Mar 2026),
+      <a href="https://www.holcim.com.au/sites/australia/files/docs/service-fees-donmix-march-2026.docx.pdf" rel="noopener">Holcim Donmix service fees</a> (May 2026),
+      <a href="https://www.iseekplant.com.au/blog/concreting-cost-guide" rel="noopener">iseekplant</a>.
+      All calculator figures include GST. Estimates are a guide only; prices change, so confirm with local suppliers.
+    </p>
+  </section>
+</CalculatorLayout>
+
+<script>
+  import { bindCalculator, num, fmt, setText, aud, type State } from '../lib/calc';
+
+  type Range = [number, number, number]; // bajo, típico, alto (incl. GST)
+  // whatsthedamage.com.au, verificado nov 2026 — 25 MPa entregado por m³ y losa colocada por m²
+  const CITIES: Record<string, { name: string; m3: Range; plain: Range; agg: Range }> = {
+    syd: { name: 'Sydney', m3: [345, 435, 550], plain: [86, 125, 170], agg: [140, 185, 230] },
+    mel: { name: 'Melbourne', m3: [315, 400, 505], plain: [79, 115, 160], agg: [125, 170, 210] },
+    bne: { name: 'Brisbane', m3: [300, 380, 480], plain: [75, 110, 150], agg: [120, 160, 200] },
+    per: { name: 'Perth', m3: [315, 400, 505], plain: [79, 115, 160], agg: [125, 170, 210] },
+    adl: { name: 'Adelaide', m3: [275, 350, 440], plain: [69, 100, 140], agg: [110, 145, 185] },
+    cbr: { name: 'Canberra', m3: [330, 420, 530], plain: [82, 120, 165], agg: [130, 175, 220] },
+    oth: { name: 'Australia (national)', m3: [300, 380, 480], plain: [75, 110, 150], agg: [120, 160, 200] },
+  };
+  // Yellow Pages (abr 2026): 20 MPa $400, 25 MPa $410, 32 MPa $430, 40 MPa $450
+  const GRADE: Record<string, number> = { '20': 400 / 410, '25': 1, '32': 430 / 410, '40': 450 / 410 };
+  const GST = 1.1;
+  const MIN_LOAD = 4; // m³ (Holcim)
+  const SHORT_FEE = 85 * GST; // por m³ faltante (Holcim $80–$90 + GST)
+  const SURCHARGE: Record<string, number> = { wk: 0, satam: 10 * GST, satpm: 45 * GST, sun: 90 * GST }; // Holcim SEQ
+  const PUMP_HOUR = 175 * GST; // iseekplant $155–$182 + GST
+  const DAY_LABEL: Record<string, string> = { wk: 'weekday', satam: 'Saturday morning', satpm: 'Saturday afternoon', sun: 'Sunday / public holiday' };
+
+  function drawLoad(order: number, short: number) {
+    const full = Math.max(order, MIN_LOAD);
+    const W = 320;
+    const fillW = Math.max(4, (order / full) * W);
+    const fill = document.getElementById('dg-fill');
+    const sh = document.getElementById('dg-short');
+    if (fill) fill.setAttribute('width', fillW.toFixed(1));
+    if (sh) { sh.setAttribute('x', String(30)); sh.setAttribute('width', String(short > 0 ? W : 0)); }
+    const o = document.getElementById('dg-order');
+    if (o) { o.textContent = `${fmt(order, 1)} m³ ordered`; o.setAttribute('x', String(fillW > 120 ? 40 : 30 + fillW + 8)); }
+    setText('dg-min', order >= MIN_LOAD ? `${fmt(order, 1)} m³ — full load, no short-load fee` : '4 m³ minimum load');
+    setText('dg-shortlabel', short > 0 ? `${fmt(short, 1)} m³ charged as short load` : order < MIN_LOAD ? 'Short-load fee not included' : '');
+  }
+
+  function render(s: State) {
+    const mode = s.mode === 'volume' ? 'volume' : 'slab';
+    document.querySelectorAll<HTMLElement>('[data-panel]').forEach((p) => (p.hidden = p.dataset.panel !== mode));
+    document.querySelectorAll<HTMLElement>('[data-pump]').forEach((p) => (p.hidden = s.pump !== '1'));
+
+    const city = CITIES[s.city ?? 'syd'] ?? CITIES.syd;
+    const grade = s.grade ?? '25';
+    const waste = num(s.waste) / 100;
+    const area = num(s['s-l']) * num(s['s-w']);
+    const base = mode === 'slab' ? area * (num(s['s-d']) / 1000) : num(s['v-m3']);
+    const need = base * (1 + waste);
+    const order = Math.ceil(need * 5 - 1e-9) / 5;
+
+    const own = num(s.own);
+    const price = own > 0 ? own : city.m3[1] * (GRADE[grade] ?? 1);
+    const concrete = order * price;
+    const shortM3 = s.short === '1' && order > 0 ? Math.max(0, MIN_LOAD - order) : 0;
+    const shortFee = shortM3 * SHORT_FEE;
+    const day = s.day ?? 'wk';
+    const surcharge = order > 0 ? (SURCHARGE[day] ?? 0) * Math.max(order, MIN_LOAD) : 0;
+    const pump = s.pump === '1' ? num(s.hours) * PUMP_HOUR : 0;
+    const total = concrete + shortFee + surcharge + pump;
+
+    setText('r-total', order > 0 ? aud(total) : '–');
+    setText('r-range', own > 0
+      ? `Using your quoted price of ${aud(own)} per m³.`
+      : `25 MPa delivered in ${city.name} typically costs ${aud(city.m3[0])}–${aud(city.m3[2])} per m³ (incl. GST).`);
+    setText('r-order', `${fmt(order, 1)} m³`);
+    setText('r-per', order > 0 ? aud(total / order) : '–');
+
+    // Losa colocada (solo con medidas)
+    const laidWrap = document.getElementById('r-laid-wrap');
+    if (laidWrap) laidWrap.hidden = mode !== 'slab' || area <= 0;
+    const fin = s.finish === 'agg' ? 'agg' : 'plain';
+    const r = city[fin];
+    setText('r-laid-k', `Laid by a concreter (${fin === 'agg' ? 'exposed aggregate' : 'plain'}, ${fmt(area, 1)} m²)`);
+    setText('r-laid', `${aud(area * r[0])}–${aud(area * r[2])} · typ. ${aud(area * r[1])}`);
+
+    const lines = [
+      { k: `Concrete (${grade} MPa${own > 0 ? ', your price' : ''})`, v: concrete, own: own > 0 },
+      { k: 'Short-load fee', v: shortFee, own: false },
+      { k: `${DAY_LABEL[day]} surcharge`, v: surcharge, own: false },
+      { k: 'Pump hire', v: pump, own: false },
+    ].filter((l) => l.v > 0);
+    const max = Math.max(...lines.map((l) => l.v), 1);
+    const list = document.getElementById('r-breakdown');
+    if (list) {
+      list.replaceChildren(...lines.map((l) => {
+        const li = document.createElement('li');
+        if (l.own) li.className = 'own';
+        const row = document.createElement('div'); row.className = 'row';
+        const name = document.createElement('span'); name.textContent = l.k.charAt(0).toUpperCase() + l.k.slice(1);
+        const val = document.createElement('strong'); val.textContent = aud(l.v);
+        row.append(name, val);
+        const bar = document.createElement('div'); bar.className = 'bar';
+        const fill = document.createElement('i'); fill.style.width = `${(l.v / max) * 100}%`;
+        bar.append(fill);
+        li.append(row, bar);
+        return li;
+      }));
+    }
+
+    setText('r-working', order > 0
+      ? `${mode === 'slab' ? `${fmt(num(s['s-l']), 1)} × ${fmt(num(s['s-w']), 1)} × ${fmt(num(s['s-d']) / 1000, 3)} m = ` : ''}${fmt(base)} m³ + ${Math.round(waste * 100)}% → order ${fmt(order, 1)} m³ × ${aud(price)} = ${aud(concrete)}${shortFee ? ` + short load ${fmt(shortM3, 1)} × ${aud(SHORT_FEE)}` : ''}${surcharge ? ` + surcharge ${aud(surcharge)}` : ''}${pump ? ` + pump ${fmt(num(s.hours), 1)} h × ${aud(PUMP_HOUR)}` : ''} = ${aud(total)}`
+      : 'Enter your measurements to see the working.');
+
+    drawLoad(order, shortM3);
+
+    setText('mbar-k', `${city.name === 'Australia (national)' ? 'National' : city.name} · ${grade} MPa · ${fmt(order, 1)} m³`);
+    const v = document.getElementById('mbar-v');
+    if (v) v.innerHTML = `${aud(total)} <span>· ${aud(order > 0 ? total / order : 0)}/m³</span>`;
+  }
+
+  const root = document.getElementById('calc');
+  if (root) bindCalculator(root, render);
+</script>
