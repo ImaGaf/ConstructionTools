@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site.config';
+---
+<Base title="About" description={`About ${SITE.name} and how our calculators work.`}>
+  <h1>About {SITE.name}</h1>
+  <p>{SITE.name} builds free calculators for Australian homeowners, DIYers and tradies planning building, renovation and plumbing work.</p>
+  <p>Each tool shows the formula it uses, so you can check the maths yourself. Results are estimates to help you plan and compare quotes. They are not a substitute for advice from a licensed tradesperson or engineer.</p>
+  <h2>Who is behind it</h2>
+  <p><!-- TODO: escribe aquí quién eres y tu experiencia (modelado hidrosanitario, trabajo con empresas de oficios en Australia). Google valora mucho esto. --></p>
+  <p>Spotted an error or want a new calculator? <a href="/contact/">Get in touch</a>.</p>
+</Base>

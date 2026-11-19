@@ -1,0 +1,225 @@
+---
+import Base from '../layouts/Base.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { SITE } from '../site.config';
+
+const title = 'Concrete Calculator (m³ & 20 kg Bags) – Slabs, Footings, Posts';
+const description =
+  'Free concrete calculator for Australia. Work out cubic metres and 20 kg or 30 kg premix bags for slabs, footings and post holes, with waste included.';
+
+const faqs = [
+  {
+    q: 'How do I calculate how much concrete I need?',
+    a: 'Multiply length × width × depth, all in metres, to get cubic metres (m³). For a 4 m × 3 m slab that is 100 mm thick: 4 × 3 × 0.1 = 1.2 m³. Then add 5–10% for waste, uneven ground and spillage.',
+  },
+  {
+    q: 'How many 20 kg bags of concrete are in a cubic metre?',
+    a: 'Roughly 100 to 110 bags, because a 20 kg bag of premix usually makes around 0.009–0.01 m³ once mixed. Yields vary by brand, so check the bag label and adjust the bag size setting above.',
+  },
+  {
+    q: 'Should I use bags or order ready-mix concrete?',
+    a: 'Bags suit small jobs such as setting posts or a small pad. Once a job needs more than about half a cubic metre, mixing by hand gets slow and tiring, and a ready-mix truck is usually easier and gives a more consistent pour. Ask local suppliers about minimum order sizes and short-load fees.',
+  },
+  {
+    q: 'How thick should a concrete slab be?',
+    a: 'It depends on what the slab carries. Paths are often 75–100 mm, and driveways for cars are commonly 100–125 mm with reinforcement. Structural slabs for houses are designed by an engineer to AS 2870, so do not guess those.',
+  },
+  {
+    q: 'How much extra concrete should I order?',
+    a: 'Most people add 5–10%. Use the higher end if the ground is uneven, the formwork is irregular, or you are pouring footings into dug trenches, where the actual volume is often more than planned.',
+  },
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Concrete Calculator',
+    applicationCategory: 'UtilitiesApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'AUD' },
+    publisher: { '@type': 'Organization', name: SITE.name },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+---
+<Base title={title} description={description} schema={schema}>
+  <h1>Concrete Calculator</h1>
+  <p class="lede">
+    Work out how many cubic metres of concrete you need, or how many 20 kg bags, for a slab,
+    footing or post holes. Enter sizes in millimetres or metres and the waste is added for you.
+  </p>
+
+  <section class="card" id="calc">
+    <div class="tabs" role="tablist" aria-label="Shape">
+      <button role="tab" aria-selected="true" data-shape="slab">Slab / pad</button>
+      <button role="tab" aria-selected="false" data-shape="footing">Strip footing</button>
+      <button role="tab" aria-selected="false" data-shape="post">Post holes</button>
+    </div>
+
+    <div class="grid" data-panel="slab">
+      <div><label for="s-l">Length (m)</label><input id="s-l" type="number" inputmode="decimal" min="0" step="0.1" value="4" /></div>
+      <div><label for="s-w">Width (m)</label><input id="s-w" type="number" inputmode="decimal" min="0" step="0.1" value="3" /></div>
+      <div><label for="s-d">Thickness (mm)</label><input id="s-d" type="number" inputmode="decimal" min="0" step="5" value="100" /></div>
+    </div>
+
+    <div class="grid" data-panel="footing" hidden>
+      <div><label for="f-l">Total length (m)</label><input id="f-l" type="number" inputmode="decimal" min="0" step="0.1" value="10" /></div>
+      <div><label for="f-w">Width (mm)</label><input id="f-w" type="number" inputmode="decimal" min="0" step="10" value="300" /></div>
+      <div><label for="f-d">Depth (mm)</label><input id="f-d" type="number" inputmode="decimal" min="0" step="10" value="400" /></div>
+    </div>
+
+    <div class="grid" data-panel="post" hidden>
+      <div><label for="p-n">Number of holes</label><input id="p-n" type="number" inputmode="numeric" min="0" step="1" value="6" /></div>
+      <div><label for="p-dia">Hole diameter (mm)</label><input id="p-dia" type="number" inputmode="decimal" min="0" step="10" value="300" /></div>
+      <div><label for="p-d">Hole depth (mm)</label><input id="p-d" type="number" inputmode="decimal" min="0" step="10" value="600" /></div>
+      <div><label for="p-post">Post size (mm, square)</label><input id="p-post" type="number" inputmode="decimal" min="0" step="5" value="90" /></div>
+    </div>
+
+    <div class="grid" style="margin-top:14px">
+      <div>
+        <label for="waste">Extra for waste</label>
+        <select id="waste">
+          <option value="0">None</option>
+          <option value="0.05">5%</option>
+          <option value="0.1" selected>10%</option>
+          <option value="0.15">15%</option>
+        </select>
+      </div>
+      <div>
+        <label for="bag">Bag size</label>
+        <select id="bag">
+          <option value="0.0095" selected>20 kg bag</option>
+          <option value="0.014">30 kg bag</option>
+        </select>
+      </div>
+      <div>
+        <label for="price">Ready-mix price per m³ (optional, $)</label>
+        <input id="price" type="number" inputmode="decimal" min="0" step="10" placeholder="e.g. your quote" />
+      </div>
+    </div>
+
+    <div class="results" aria-live="polite">
+      <div class="result"><div class="k">Concrete needed</div><div class="v" id="r-m3">–</div></div>
+      <div class="result"><div class="k">Premix bags</div><div class="v" id="r-bags">–</div></div>
+      <div class="result"><div class="k">Order ready-mix (rounded)</div><div class="v" id="r-order">–</div></div>
+      <div class="result" id="r-cost-wrap" hidden><div class="k">Ready-mix estimate</div><div class="v" id="r-cost">–</div></div>
+    </div>
+    <p class="note" id="r-hint"></p>
+  </section>
+
+  <AdSlot />
+
+  <h2>How to calculate concrete for a slab</h2>
+  <p>
+    Concrete is sold by volume, in cubic metres. For a rectangular slab, convert every
+    measurement to metres and multiply them: <strong>length × width × thickness</strong>. A slab
+    100 mm thick is 0.1 m, so a 4 m × 3 m pad works out to 4 × 3 × 0.1 = 1.2 m³.
+  </p>
+  <p>
+    Add a margin on top. Ground is rarely perfectly level, formwork bows a little, and some
+    concrete always stays in the barrow or the chute. Running short halfway through a pour
+    leaves a cold joint, which is far worse than having a little left over.
+  </p>
+
+  <h2>Footings and post holes</h2>
+  <p>
+    A strip footing is a long, narrow slab, so the same formula applies: total length × width ×
+    depth. For round post holes, the calculator works out the volume of each cylinder
+    (π × radius² × depth), takes away the space the post itself fills, and multiplies by the
+    number of holes. Dug holes usually end up wider than planned, which is why 10% extra is a
+    sensible default.
+  </p>
+
+  <h2>Typical thickness by job</h2>
+  <table>
+    <thead><tr><th>Job</th><th>Common thickness</th></tr></thead>
+    <tbody>
+      <tr><td>Garden path, light foot traffic</td><td>75–100 mm</td></tr>
+      <tr><td>Shed or water tank pad</td><td>100 mm</td></tr>
+      <tr><td>Driveway for cars (reinforced)</td><td>100–125 mm</td></tr>
+      <tr><td>House slab or footings</td><td>Engineer-designed to AS 2870</td></tr>
+    </tbody>
+  </table>
+  <p class="note">
+    These are common starting points, not a design. Your council, the tank or shed
+    manufacturer, or an engineer may require something different.
+  </p>
+
+  <div class="cta">
+    <strong>Bigger job than a weekend pour?</strong>
+    Driveways and large slabs need formwork, reinforcement and a crew on pour day. It is worth
+    getting quotes from a licensed concreter before you order anything.
+  </div>
+
+  <h2>Frequently asked questions</h2>
+  {faqs.map((f) => (
+    <details>
+      <summary>{f.q}</summary>
+      <p>{f.a}</p>
+    </details>
+  ))}
+
+  <script>
+    const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
+    const num = (id: string) => Math.max(0, parseFloat($(id)?.value) || 0);
+    let shape = 'slab';
+
+    function volume(): number {
+      if (shape === 'slab') return num('s-l') * num('s-w') * (num('s-d') / 1000);
+      if (shape === 'footing') return num('f-l') * (num('f-w') / 1000) * (num('f-d') / 1000);
+      const r = num('p-dia') / 2000;
+      const depth = num('p-d') / 1000;
+      const post = num('p-post') / 1000;
+      const each = Math.max(0, Math.PI * r * r * depth - post * post * depth);
+      return each * Math.floor(num('p-n'));
+    }
+
+    function render() {
+      const waste = parseFloat(($('waste') as unknown as HTMLSelectElement).value);
+      const bagYield = parseFloat(($('bag') as unknown as HTMLSelectElement).value);
+      const m3 = volume() * (1 + waste);
+      const bags = m3 > 0 ? Math.ceil(m3 / bagYield) : 0;
+      const order = Math.ceil(m3 * 5) / 5; // redondeo a 0,2 m³
+
+      $('r-m3').textContent = `${m3.toFixed(2)} m³`;
+      $('r-bags').textContent = bags.toLocaleString('en-AU');
+      $('r-order').textContent = `${order.toFixed(1)} m³`;
+
+      const price = num('price');
+      const costWrap = document.getElementById('r-cost-wrap')!;
+      costWrap.hidden = price <= 0;
+      if (price > 0) {
+        $('r-cost').textContent = (order * price).toLocaleString('en-AU', {
+          style: 'currency', currency: 'AUD', maximumFractionDigits: 0,
+        });
+      }
+
+      const hint = document.getElementById('r-hint')!;
+      hint.textContent =
+        m3 === 0 ? 'Enter your measurements to see the result.'
+        : m3 < 0.3 ? 'Small job: premix bags are usually the easiest option.'
+        : m3 < 0.6 ? 'In-between size: bags are possible but hard work. Compare with a ready-mix short load.'
+        : 'At this size, ready-mix delivered by truck is usually the practical choice.';
+    }
+
+    document.querySelectorAll<HTMLButtonElement>('.tabs button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        shape = btn.dataset.shape!;
+        document.querySelectorAll('.tabs button').forEach((b) => b.setAttribute('aria-selected', String(b === btn)));
+        document.querySelectorAll<HTMLElement>('[data-panel]').forEach((p) => (p.hidden = p.dataset.panel !== shape));
+        render();
+      });
+    });
+    document.getElementById('calc')!.addEventListener('input', render);
+    render();
+  </script>
+</Base>

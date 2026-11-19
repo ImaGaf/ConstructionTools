@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, TOOLS } from '../site.config';
+---
+<Base title={`${SITE.name} – Free Building & Renovation Calculators`} description="Free, accurate calculators for Australian building, renovation and plumbing jobs: concrete, tiles, renovation costs, hot water systems and more.">
+  <h1>Building & renovation calculators for Australia</h1>
+  <p class="lede">Quick, free tools to work out materials and costs before you buy or get quotes. Metric units, Australian prices and standards.</p>
+  <ul class="tool-list">
+    {TOOLS.map((t) => (
+      <li>
+        {t.ready ? (
+          <a href={`/${t.slug}/`}><div class="card"><strong>{t.title}</strong><br /><span class="note">{t.blurb}</span></div></a>
+        ) : (
+          <div class="card"><strong>{t.title}</strong><span class="soon">Coming soon</span><br /><span class="note">{t.blurb}</span></div>
+        )}
+      </li>
+    ))}
+  </ul>
+</Base>

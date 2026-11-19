@@ -1,0 +1,113 @@
+:root {
+  --bg: #f7f6f2;
+  --surface: #ffffff;
+  --ink: #1c1f23;
+  --muted: #5b6168;
+  --line: #e2dfd6;
+  --brand: #c2571a;
+  --brand-ink: #ffffff;
+  --accent-bg: #fbeee5;
+  --radius: 12px;
+  --max: 760px;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15171a;
+    --surface: #1e2125;
+    --ink: #eceae4;
+    --muted: #a3a8ae;
+    --line: #2f3338;
+    --brand: #e8803f;
+    --brand-ink: #15171a;
+    --accent-bg: #2a211b;
+  }
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; line-height: 1.6; background: var(--bg); }
+a { color: var(--brand); }
+img { max-width: 100%; height: auto; }
+
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 16px; }
+
+header.site {
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+header.site .wrap {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 60px;
+}
+.logo { font-weight: 800; font-size: 1.15rem; text-decoration: none; color: var(--ink); letter-spacing: -0.02em; }
+.logo span { color: var(--brand); }
+nav.site a { color: var(--muted); text-decoration: none; margin-left: 18px; font-size: 0.95rem; }
+nav.site a:hover { color: var(--ink); }
+
+main { padding: 32px 0 56px; }
+h1 { font-size: clamp(1.7rem, 4vw, 2.3rem); line-height: 1.2; letter-spacing: -0.02em; margin: 0 0 12px; }
+h2 { font-size: 1.35rem; margin: 40px 0 10px; letter-spacing: -0.01em; }
+h3 { font-size: 1.05rem; margin: 24px 0 6px; }
+.lede { color: var(--muted); font-size: 1.08rem; margin: 0 0 24px; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+/* Calculadora */
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+.tabs button {
+  border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+  padding: 8px 14px; border-radius: 999px; cursor: pointer; font: inherit; font-size: 0.92rem;
+}
+.tabs button[aria-selected='true'] { background: var(--brand); color: var(--brand-ink); border-color: var(--brand); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+label { display: block; font-size: 0.88rem; color: var(--muted); margin-bottom: 4px; }
+input, select {
+  width: 100%; padding: 10px 12px; font: inherit; color: var(--ink);
+  background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+}
+input:focus, select:focus { outline: 2px solid var(--brand); outline-offset: 1px; }
+
+.results {
+  margin-top: 20px; padding: 18px; border-radius: 10px; background: var(--accent-bg);
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px;
+}
+.result .k { font-size: 0.82rem; color: var(--muted); }
+.result .v { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
+.note { font-size: 0.85rem; color: var(--muted); margin-top: 12px; }
+
+.cta {
+  margin-top: 28px; padding: 18px 20px; border-radius: var(--radius);
+  border: 1px dashed var(--brand); background: var(--surface);
+}
+.cta strong { display: block; margin-bottom: 4px; }
+
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.95rem; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+th { color: var(--muted); font-weight: 600; }
+
+details { border-bottom: 1px solid var(--line); padding: 12px 0; }
+summary { cursor: pointer; font-weight: 600; }
+
+.tool-list { display: grid; gap: 12px; padding: 0; list-style: none; }
+.tool-list a { text-decoration: none; color: inherit; display: block; }
+.tool-list .card:hover { border-color: var(--brand); }
+.soon { font-size: 0.75rem; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; margin-left: 6px; }
+
+.ad-slot { margin: 28px 0; min-height: 100px; }
+
+footer.site { border-top: 1px solid var(--line); padding: 24px 0; color: var(--muted); font-size: 0.88rem; }
+footer.site a { color: var(--muted); margin-right: 14px; }
+
+@media (max-width: 520px) {
+  nav.site a { margin-left: 12px; font-size: 0.88rem; }
+}

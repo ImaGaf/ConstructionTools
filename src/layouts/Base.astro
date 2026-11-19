@@ -1,0 +1,65 @@
+---
+import '../styles/global.css';
+import { SITE } from '../site.config';
+
+interface Props {
+  title: string;
+  description: string;
+  schema?: object | object[];
+}
+const { title, description, schema } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
+const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
+---
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={SITE.name} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {schemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+    {SITE.adsenseClient && (
+      <script
+        async
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${SITE.adsenseClient}`}
+        crossorigin="anonymous"
+      ></script>
+    )}
+  </head>
+  <body>
+    <header class="site">
+      <div class="wrap">
+        <a class="logo" href="/">Build<span>Calc</span> AU</a>
+        <nav class="site">
+          <a href="/">Calculators</a>
+          <a href="/about/">About</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <div class="wrap">
+        <slot />
+      </div>
+    </main>
+    <footer class="site">
+      <div class="wrap">
+        <p>
+          <a href="/about/">About</a>
+          <a href="/contact/">Contact</a>
+          <a href="/privacy-policy/">Privacy Policy</a>
+          <a href="/terms/">Terms</a>
+        </p>
+        <p>© {new Date().getFullYear()} {SITE.name}. Estimates are a guide only; always confirm with a licensed tradesperson.</p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site.config';
+const updated = '18 November 2026';
+---
+<Base title="Privacy Policy" description={`Privacy policy for ${SITE.name}.`}>
+  <h1>Privacy Policy</h1>
+  <p class="note">Last updated: {updated}</p>
+  <p>This policy explains what information {SITE.name} collects and how it is used.</p>
+  <h2>Calculator inputs</h2>
+  <p>The numbers you type into our calculators are processed in your browser and are not sent to or stored on our servers.</p>
+  <h2>Analytics</h2>
+  <p>We may use analytics tools, such as Google Analytics, to understand how visitors use the site. These tools use cookies to collect anonymous information like pages visited and approximate location.</p>
+  <h2>Advertising</h2>
+  <p>We may show ads served by third parties, including Google. Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to this site and/or other sites on the internet.</p>
+  <p>You can opt out of personalised advertising by visiting <a href="https://www.google.com/settings/ads" rel="nofollow">Google Ads Settings</a>, or opt out of some third-party vendors' use of cookies at <a href="https://www.aboutads.info/choices/" rel="nofollow">aboutads.info</a>.</p>
+  <h2>Contact forms and quote requests</h2>
+  <p>If you send us a message or request a quote, we use the details you provide only to respond to that request, and to pass it to a tradesperson if you asked us to.</p>
+  <h2>Your rights</h2>
+  <p>Under the Australian Privacy Principles you can ask what personal information we hold about you and request it be corrected or deleted. Contact <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>.</p>
+</Base>
