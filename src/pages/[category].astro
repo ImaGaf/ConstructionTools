@@ -4,6 +4,7 @@
 // noindex para no publicar páginas "vacías" en Google.
 import Base from '../layouts/Base.astro';
 import ToolCard from '../components/ToolCard.astro';
+import Photo from '../components/Photo.astro';
 import { CATEGORIES, toolsIn, type Category } from '../site.config';
 
 export function getStaticPaths() {
@@ -47,14 +48,19 @@ const schema = [
 ];
 ---
 <Base title={`${cat.title}`} description={description} schema={schema} section={cat.slug} noindex={ready.length === 0}>
+  <section class="ph photo-band">
+    <Photo name={`cat-${cat.slug}`} eager credit />
+    <div class="shade"></div>
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span aria-hidden="true">/</span><span aria-current="page">{cat.name}</span>
+      </nav>
+      <h1>{cat.name} <em>calculators</em></h1>
+      <p class="lede">{cat.intro}</p>
+    </div>
+  </section>
   <div class="wrap">
-    <nav class="crumbs" aria-label="Breadcrumb">
-      <a href="/">Home</a><span aria-hidden="true">/</span><span aria-current="page">{cat.name}</span>
-    </nav>
-    <h1>{cat.name} calculators</h1>
-    <p class="lede">{cat.intro}</p>
-
-    <ul class="tools-grid" style="margin: 32px 0 72px;">
+    <ul class="tools-grid" style="margin: 56px 0 90px;">
       {tools.map((t) => <li><ToolCard tool={t} /></li>)}
     </ul>
   </div>

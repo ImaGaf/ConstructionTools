@@ -10,6 +10,7 @@
 import Base from './Base.astro';
 import AdSlot from '../components/AdSlot.astro';
 import Icon from '../components/Icon.astro';
+import Photo from '../components/Photo.astro';
 import { SITE, TOOLS, getTool, getCategory } from '../site.config';
 
 export interface Faq { q: string; a: string }
@@ -81,21 +82,27 @@ const schema = [
 ].filter(Boolean) as object[];
 ---
 <Base title={title} description={description} schema={schema} section={category?.slug}>
+  <section class="ph photo-band">
+    <Photo name={slug} eager credit />
+    <div class="shade"></div>
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        {category && (<><span aria-hidden="true">/</span><a href={`/${category.slug}/`}>{category.name}</a></>)}
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{tool?.title ?? h1}</span>
+      </nav>
+
+      <h1>{h1}</h1>
+      <p class="lede">{lede}</p>
+      <p class="byline">
+        <span class="avatar" aria-hidden="true">{SITE.author.initials}</span>
+        <span>By <a href={SITE.author.url}>{SITE.author.name}</a> · Updated <time datetime={updated}>{updatedLabel}</time></span>
+      </p>
+    </div>
+  </section>
+
   <div class="wrap">
-    <nav class="crumbs" aria-label="Breadcrumb">
-      <a href="/">Home</a>
-      {category && (<><span aria-hidden="true">/</span><a href={`/${category.slug}/`}>{category.name}</a></>)}
-      <span aria-hidden="true">/</span>
-      <span aria-current="page">{tool?.title ?? h1}</span>
-    </nav>
-
-    <h1>{h1}</h1>
-    <p class="lede">{lede}</p>
-    <p class="byline">
-      <span class="avatar" aria-hidden="true">{SITE.author.initials}</span>
-      <span>By <a href={SITE.author.url}>{SITE.author.name}</a> · Updated <time datetime={updated}>{updatedLabel}</time></span>
-    </p>
-
     <div class="calc-grid">
       <section class="card calc-inputs" id="calc" aria-label="Calculator inputs">
         <slot name="inputs" />
@@ -105,6 +112,14 @@ const schema = [
       <aside class="calc-result" id="result" aria-label="Result">
         <div class="result-card">
           <slot name="result" />
+        </div>
+        <div class="export-bar">
+          <p class="k">Save this estimate</p>
+          <div class="row">
+            <button type="button" class="btn" id="export-pdf"><Icon name="file" size={18} />PDF</button>
+            <button type="button" class="btn" id="export-xlsx"><Icon name="sheet" size={18} />Excel</button>
+          </div>
+          <p class="status" id="export-status" role="status"></p>
         </div>
         {cta && (
           <a class="cta-card" href={cta.href}>
@@ -163,13 +178,27 @@ const schema = [
           </section>
         )}
 
-        <p class="disclaimer">
+        <p class="disclaimer" id="disclaimer">
           Results are estimates to help you plan and compare quotes. They are not a substitute for
           advice from a licensed tradesperson or engineer.
         </p>
       </article>
     </div>
   </div>
+
+  {cta && (
+    <section class="ph cta-band" aria-label={cta.title}>
+      <Photo name="cta-tiler" />
+      <div class="shade"></div>
+      <div class="inner">
+        <div>
+          <p class="eyebrow">{cta.title}</p>
+          <h2>{cta.sub}</h2>
+        </div>
+        <a class="btn btn-primary" href={cta.href}>Read the checklist</a>
+      </div>
+    </section>
+  )}
 
   <div class="mbar" id="mbar" aria-hidden="true">
     <div>
@@ -180,6 +209,9 @@ const schema = [
   </div>
 
   <script>
+    import { setupExport } from '../lib/export';
+    setupExport();
+
     // Barra móvil: visible solo cuando el panel de resultado no está en pantalla.
     const bar = document.getElementById('mbar');
     const result = document.getElementById('result');

@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { SITE } from '../site.config';
+import { SITE, PHOTOS } from '../site.config';
 
 const schema = {
   '@context': 'https://schema.org',
@@ -53,6 +53,12 @@ const schema = {
       </p>
     
       <p>Spotted an error or want a new calculator? <a href="/contact/">Get in touch</a>.</p>
+
+      <h2>Photo credits</h2>
+      <p>Photos are from <a href="https://unsplash.com/" rel="noopener">Unsplash</a>, used under the Unsplash License. Thanks to the photographers:</p>
+      <ul>
+        {[...new Set(Object.values(PHOTOS).map((p) => p.by))].map((by) => <li>{by}</li>)}
+      </ul>
     </div>
   </div>
 </Base>

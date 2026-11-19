@@ -2,10 +2,18 @@
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import ToolCard from '../components/ToolCard.astro';
+import Photo from '../components/Photo.astro';
 import { SITE, TOOLS, CATEGORIES } from '../site.config';
 
 const home = new URL('/', Astro.site).href;
 // Listas para buscar: primero las disponibles, luego las próximas.
+const featured = TOOLS.find((t) => t.featured && t.ready);
+const CAT_ICON: Record<string, 'slab' | 'dollar' | 'pipe'> = { materials: 'slab', 'renovation-costs': 'dollar', 'plumbing-hot-water': 'pipe' };
+const CAT_TEXT: Record<string, string> = {
+  materials: 'Concrete, tiles and steps: how much to order, with waste included.',
+  'renovation-costs': 'Bathrooms, kitchens and driveways, item by item, with sources.',
+  'plumbing-hot-water': 'Hot water replacement, rebates and drainage falls.',
+};
 const ordered = [...TOOLS].sort((a, b) => Number(b.ready) - Number(a.ready) || Number(!!b.featured) - Number(!!a.featured));
 const schema = [
   {
@@ -27,54 +35,91 @@ const schema = [
 ];
 import DiagramDefs from '../components/DiagramDefs.astro';
 ---
-<Base title={`${SITE.name} – Free Building & Renovation Calculators`} description={SITE.description} schema={schema}>
-  <section class="hero">
-    <div class="wrap">
-      <div class="hero-copy">
-        <span class="hero-badge"><Icon name="check" size={14} stroke={2.6} />Free · Metric · Made for Australia</span>
-        <h1>Plan the job.<br />Order the right amount.</h1>
-        <p class="lede">
-          Calculators for concrete, tiles, renovation costs and hot water, with the working shown so
-          you can check every number before you buy or get quotes.
-        </p>
-        <form class="search" role="search" action="/#calculators" id="search-form">
-          <label for="q" class="sr-only">Search calculators</label>
-          <span class="ic"><Icon name="search" size={20} /></span>
-          <input id="q" name="q" type="search" placeholder="What are you working on? e.g. concrete slab" autocomplete="off" />
-          <button class="btn btn-primary" type="submit">Find</button>
-        </form>
-        <div class="popular">
-          <span>Popular:</span>
-          <a class="chip" href="/concrete-calculator/?shape=slab">Concrete slab</a>
-          <a class="chip" href="/concrete-calculator/?shape=post">Post holes</a>
-          <a class="chip" href="/concrete-calculator/?shape=footing">Strip footing</a>
-        </div>
-      </div>
-
-      <div class="hero-visual">
-        <a class="preview-card" href="/concrete-calculator/" aria-label="Open the concrete calculator">
-          <div class="preview-head"><span>Concrete slab</span><span class="pill pill-plan">Example</span></div>
-          <div class="preview-body">
-<DiagramDefs />
-            <svg viewBox="0 0 380 170" width="100%" role="img" aria-label="Slab 4 metres by 3 metres, 100 millimetres thick">
-              <g id="g-hero"></g>
-            </svg>
-          </div>
-          <div class="preview-stats">
-            <div class="big" style="margin: 0; padding: 14px 16px;"><div class="k">Concrete needed</div><div class="v" style="font-size: 30px;">1.32 m³</div></div>
-            <div class="stat stat-accent"><div class="k">20 kg bags</div><div class="v" style="font-size: 30px;">139</div></div>
-          </div>
-        </a>
+<Base title={`${SITE.name} – Free Building & Renovation Calculators`} description={SITE.description} schema={schema} overHero>
+  <section class="ph hero">
+    <Photo name="home-hero" eager credit />
+    <div class="shade"></div>
+    <div class="wrap hero-copy">
+      <p class="eyebrow">Free · Metric · Made for Australia</p>
+      <h1>Plan the job.<br />Order the <em>right amount.</em></h1>
+      <p class="lede">
+        Calculators for concrete, tiles, renovation costs, hot water and drainage, with the working
+        shown so you can check every number before you buy or get quotes.
+      </p>
+      <form class="search" role="search" action="/#calculators" id="search-form">
+        <label for="q" class="sr-only">Search calculators</label>
+        <span class="ic"><Icon name="search" size={20} /></span>
+        <input id="q" name="q" type="search" placeholder="What are you working on? e.g. concrete slab" autocomplete="off" />
+        <button class="btn btn-primary" type="submit">Find</button>
+      </form>
+      <div class="popular">
+        <span>Popular:</span>
+        <a class="chip" href="/concrete-calculator/?shape=slab">Concrete slab</a>
+        <a class="chip" href="/bathroom-renovation-cost-calculator/">Bathroom cost</a>
+        <a class="chip" href="/pipe-fall-calculator/">Pipe fall</a>
       </div>
     </div>
   </section>
 
-  <section class="trust" aria-label="Why use these calculators">
+  <section class="cats" aria-label="Categories">
     <div class="wrap">
-      <span><Icon name="ruler" size={18} />Working shown on every result</span>
-      <span><Icon name="grid" size={18} />Metric units &amp; AUD</span>
-      <span><Icon name="shield" size={18} />References to Australian standards</span>
-      <span><Icon name="link" size={18} />Share any result with a link</span>
+      <div class="cats-grid">
+        {featured && (
+          <a class="ph cat-tile feat" href={`/${featured.slug}/`}>
+            <Photo name="cat-materials" card />
+            <div class="shade"></div>
+            <p class="eyebrow" style="margin-bottom: 0;">Most used</p>
+            <h3>{featured.title}</h3>
+            <p>{featured.blurb}</p>
+          </a>
+        )}
+        {CATEGORIES.map((c, i) => (
+          <a class={`cat-tile t${i + 1}`} href={`/${c.slug}/`}>
+            <Icon name={CAT_ICON[c.slug] ?? 'grid'} size={40} stroke={1.6} />
+            <h3>{c.name}</h3>
+            <p>{CAT_TEXT[c.slug] ?? c.intro.split('. ')[0] + '.'}</p>
+            <span class="arrow" aria-hidden="true"><Icon name="arrow" size={18} stroke={2.2} /></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="dark who" aria-labelledby="who-h">
+    <div class="wrap">
+      <div class="who-copy">
+        <p class="eyebrow">Who builds it</p>
+        <h2 id="who-h">Built on real <em>hydraulic design</em> experience</h2>
+        <p class="big-p">{SITE.name} is made by {SITE.author.name}, who models water supply and drainage for houses in Revit and works with Australian trade businesses.</p>
+        <p>Every calculator shows its formula and every cost page lists its sources and dates, so you can check the numbers yourself.</p>
+        <p style="margin-top: 30px;"><a class="btn btn-primary" href="/about/">About {SITE.name}</a></p>
+      </div>
+      <div class="who-visual">
+        <div class="frame" aria-hidden="true"></div>
+        <div class="ph"><Photo name="about-measure" /></div>
+        <figure>
+          <DiagramDefs />
+          <svg viewBox="0 0 380 170" width="100%" role="img" aria-label="Isometric drawing of a 4 by 3 metre slab, 100 millimetres thick">
+            <g id="g-hero"></g>
+          </svg>
+          <figcaption>4.0 × 3.0 × 0.10 m = 1.20 m³ + 10% = 1.32 m³</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="how dark" aria-labelledby="how-h">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">How it works</p>
+        <h2 id="how-h">From tape measure to <em>quote</em></h2>
+      </div>
+      <ol>
+        <li><span class="bignum" aria-hidden="true">01</span><Icon name="ruler" size={40} stroke={1.6} /><h3>Measure</h3><p>Metres and millimetres, the way they're written on your plans. Defaults use common Australian sizes.</p></li>
+        <li><span class="bignum" aria-hidden="true">02</span><Icon name="grid" size={40} stroke={1.6} /><h3>Calculate</h3><p>Results update as you type, drawn to scale with your numbers.</p></li>
+        <li><span class="bignum" aria-hidden="true">03</span><Icon name="check" size={40} stroke={1.6} /><h3>Check the working</h3><p>Every result shows the formula, and cost pages list their sources.</p></li>
+        <li><span class="bignum" aria-hidden="true">04</span><Icon name="file" size={40} stroke={1.6} /><h3>Save &amp; compare</h3><p>Download your estimate as PDF or Excel, or share the link with your tradie.</p></li>
+      </ol>
     </div>
   </section>
 
@@ -82,18 +127,18 @@ import DiagramDefs from '../components/DiagramDefs.astro';
     <section class="section" id="calculators" aria-labelledby="calc-h">
       <div class="section-head">
         <div>
-          <h2 id="calc-h">Calculators</h2>
-          <p>Pick a job. Every tool works on your phone at the hardware store.</p>
+          <p class="eyebrow">Calculators</p>
+          <h2 id="calc-h">Pick your job</h2>
         </div>
-        <div class="seg" role="group" aria-label="Filter by category">
+        <div class="seg filters" role="group" aria-label="Filter by category">
           <button type="button" aria-pressed="true" data-filter="all">All</button>
           {CATEGORIES.map((c) => <button type="button" aria-pressed="false" data-filter={c.slug}>{c.short}</button>)}
         </div>
       </div>
       <ul class="tools-grid" id="tools">
         {ordered.map((t) => (
-          <li data-cat={t.category} data-text={`${t.title} ${t.blurb}`.toLowerCase()} class={t.featured ? 'feature-li' : undefined}>
-            <ToolCard tool={t} feature={t.featured} />
+          <li data-cat={t.category} data-text={`${t.title} ${t.blurb}`.toLowerCase()}>
+            <ToolCard tool={t} />
           </li>
         ))}
       </ul>
@@ -101,17 +146,18 @@ import DiagramDefs from '../components/DiagramDefs.astro';
         No calculator matches that yet. <a href="/contact/">Tell us what you need</a>.
       </p>
     </section>
-
-    <section class="section" aria-labelledby="how-h">
-      <h2 id="how-h" style="font-size: clamp(1.7rem, 3.5vw, 2.25rem); letter-spacing: -0.03em; margin-bottom: 28px;">How it works</h2>
-      <div class="steps3">
-        <div class="card"><div class="num">01</div><h3>Enter your measurements</h3><p>Metres and millimetres, the way they're written on your plans. Sensible defaults get you started.</p></div>
-        <div class="card"><div class="num">02</div><h3>See the result and the maths</h3><p>Quantities update as you type, with the formula written out so you can check it.</p></div>
-        <div class="card"><div class="num">03</div><h3>Order or get quotes</h3><p>Take the numbers to your supplier, or share the link with your tradie.</p></div>
-      </div>
-    </section>
-
   </div>
+
+  <section class="ph band-photo" aria-labelledby="band-h">
+    <Photo name="home-band" />
+    <div class="shade"></div>
+    <div class="inner">
+      <p class="eyebrow">No black boxes</p>
+      <h2 id="band-h">Every result shows <em>its working</em></h2>
+      <p>Formulas on every calculator. Sources and dates on every cost page. Estimates you can take to a tradie and question.</p>
+      <a class="btn btn-primary" href="/concrete-calculator/">Try the concrete calculator</a>
+    </div>
+  </section>
 
   <script>
     import { drawSlab } from '../lib/diagram-concrete';
@@ -132,8 +178,6 @@ import DiagramDefs from '../components/DiagramDefs.astro';
         const okText = words.every((w) => li.dataset.text?.includes(w));
         li.hidden = !(okCat && okText);
         if (!li.hidden) shown++;
-        // la tarjeta destacada ocupa una sola columna cuando se filtra
-        if (li.classList.contains('feature-li')) li.classList.toggle('narrow', cat !== 'all' || !!q);
       });
       if (empty) empty.hidden = shown > 0;
     }

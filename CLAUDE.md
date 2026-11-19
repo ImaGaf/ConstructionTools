@@ -93,7 +93,9 @@ Ezoic is ruled out (minimum raised to 250k monthly users in Feb 2026).
   once inside `.diagram` and reuse the kit for new calculators.
 - `src/components/ToolCard.astro` — the calculator card used on home, categories, 404.
 - `src/components/AdSlot.astro` — manual ad slot; renders nothing until AdSense is on.
-- `src/styles/global.css` — single stylesheet with light/dark tokens.
+- `src/styles/global.css` — single stylesheet with the design tokens and components.
+- `src/lib/export.ts` — PDF (jsPDF) and Excel (write-excel-file) export, loaded only on click.
+- `src/components/Photo.astro` — responsive photo for `.ph` bands and cards.
 - `src/pages/concrete-calculator.astro` — **the reference template** for every new
   calculator. Copy its structure.
 - `public/` — favicon, `og-default.png` (social share image), robots, ads.txt, _headers.
@@ -135,20 +137,37 @@ Ezoic is ruled out (minimum raised to 250k monthly users in Feb 2026).
    or three inputs and look at the page in the browser on a phone-sized window.
 10. Update `docs/keyword-research.md` (status "Built") and tick it in `docs/ROADMAP.md`.
 
-## Design rules ("Site plan")
+## Design rules ("Obra" style, since 19 Nov 2026)
 
-The approved design lives in the Claude Design canvas "BuildCalc AU — Diseño del
-sitio" (the site was later named Site Sums). Colours, type and components are tokens in `src/styles/global.css`; reuse
-them, never hard-code new colours.
-- Warm off-white ground (`--bg`), white cards, carbon ink (`--ink`).
-- One accent: safety orange `--accent` for buttons, links, selection and the CTA.
-- Plan blue `--plan` for diagrams, icons and secondary result tiles.
-- Space Grotesk for headings and big numbers, Inter for text, JetBrains Mono for
-  the formula line.
-- Rounded cards (16–22 px), soft borders, no gradients, no emoji, no stock photos.
+Approved mockup: the Claude Design canvas "Site Sums — Rediseño". Colours, type and
+components are tokens and classes in `src/styles/global.css`; reuse them, never
+hard-code new colours.
+- Dark carbon zones (`--dark`, `--dark-2`, `--dark-3`) for the header, hero, bands,
+  result panel and footer; light "worksheet" zones (`--bg` paper, white cards) for
+  calculator inputs and article text, so reading stays easy.
+- One accent: safety orange. `--accent` (#f26b1d) for fills with carbon text and for
+  orange text on dark; `--accent-ink` (#c2410c) for links/text on light. Plan blue
+  `--plan` only inside diagrams.
+- Barlow Condensed (800/700, uppercase) for headings and big numbers, Barlow for
+  text, JetBrains Mono for the formula line. Highlight one phrase per heading with
+  `<em>` (it turns orange).
+- Square corners everywhere (`--radius*` = 2px). No gradients, no emoji.
+- Real photos (Unsplash License) in `public/images/<key>.webp` + `<key>-sm.webp`,
+  registered in `PHOTOS` (site.config.ts) with photographer and alt text, rendered
+  with `<Photo name=... />` inside a `.ph` container. Each calculator's title band
+  uses the photo named after its slug: add one when you add a calculator (crop
+  1600×1000 and 800×533, WebP q≈70, under ~250 KB). Credits are listed on /about/.
+- Parallax is CSS-only (`animation-timeline: view()`), off for
+  `prefers-reduced-motion`. Never animate the calculator itself.
 - Text contrast at least 4.5:1; touch targets at least 44 px.
-- Calculator first, result always visible (sticky panel on desktop, bottom bar on
-  mobile), content below in visual blocks rather than walls of text.
+- Calculator first, result always visible (sticky dark panel on desktop, bottom bar
+  on mobile), content below in visual blocks rather than walls of text.
+- Every calculator gets PDF and Excel export automatically (`src/lib/export.ts`,
+  wired in CalculatorLayout). It reads inputs (`data-state` controls with their
+  labels) and results (`.big`, `.stat`, `.checks`, `.breakdown`, `.range-note`,
+  `.alert`, `.hint`, `.working`) from the DOM, so new calculators must keep using
+  those classes and give every input a `<label for>` or a group label
+  (`aria-labelledby`, legend or `.opt-label`).
 
 ## About and Contact
 

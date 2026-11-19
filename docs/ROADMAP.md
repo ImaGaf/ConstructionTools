@@ -20,6 +20,8 @@ Publicar de forma constante pesa más que publicar mucho de golpe.
 - [x] Diseño "Site plan" aplicado (portada, calculadora, móvil, categorías)
 - [x] Páginas de categoría con noindex automático si están vacías
 - [x] Fuentes servidas desde el propio sitio
+- [x] Rediseño "Obra" (19 nov): oscuro + naranja, fotos reales con parallax, esquinas rectas
+- [x] Exportar cualquier cálculo a PDF (con el diagrama) y Excel
 
 ---
 

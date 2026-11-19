@@ -26,7 +26,7 @@ export const SITE = {
 
 export type IconName =
   | 'slab' | 'driveway' | 'stairs' | 'tile' | 'bath' | 'kitchen' | 'hotwater' | 'gravel' | 'pipe'
-  | 'dollar' | 'search' | 'arrow' | 'check' | 'info' | 'link' | 'print' | 'menu' | 'shield' | 'ruler' | 'grid';
+  | 'file' | 'sheet' | 'dollar' | 'search' | 'arrow' | 'check' | 'info' | 'link' | 'print' | 'menu' | 'shield' | 'ruler' | 'grid';
 
 export type Category = {
   slug: string;
@@ -167,6 +167,28 @@ export const TOOLS: Tool[] = [
     related: ['concrete-calculator'],
   },
 ];
+
+// Fotos (Unsplash License: uso comercial gratis, sin atribución obligatoria; igual damos crédito).
+// Archivo en /public/images/<clave>.webp (1600 px) y <clave>-sm.webp (800 px).
+export const PHOTOS: Record<string, { by: string; alt: string }> = {
+  'home-hero': { by: 'Troy Mortier', alt: 'Timber house frame and roof trusses on a new home build in Clyde North, Victoria' },
+  'home-band': { by: 'immo RENOVATION', alt: 'Kitchen under renovation with cabinets wrapped in plastic' },
+  'about-measure': { by: 'Jimmy Nilsson Masth', alt: 'Tradesperson measuring with a folding rule' },
+  'cta-tiler': { by: 'charlesdeluvio', alt: 'Tiler pressing a wall tile into place' },
+  'cat-materials': { by: 'Mugabi Owen', alt: 'Workers pouring concrete with a wheelbarrow' },
+  'cat-renovation-costs': { by: 'immo RENOVATION', alt: 'Kitchen under renovation' },
+  'cat-plumbing-hot-water': { by: 'Rose Galloway Green', alt: 'Blue water pipe and valves in an open trench' },
+  'concrete-calculator': { by: 'Hammilton Ojijo', alt: 'Construction workers pouring and levelling a concrete slab' },
+  'concrete-price-per-m3': { by: 'Turquo Cabbit', alt: 'Concrete agitator truck on a building site' },
+  'concrete-steps-calculator': { by: 'Tile Merchant Ireland', alt: 'Wide outdoor steps leading to a house' },
+  'tile-calculator': { by: 'charlesdeluvio', alt: 'Hand holding a white wall tile' },
+  'bathroom-renovation-cost-calculator': { by: 'Ela De Pure', alt: 'Finished bathroom with freestanding bath and neutral tiles' },
+  'kitchen-renovation-cost-calculator': { by: 'Smart Renovations', alt: 'Renovated white kitchen with black benchtop' },
+  'concrete-driveway-cost': { by: 'Salvo Media', alt: 'Modern house with a wide concrete driveway' },
+  'hot-water-system-replacement-cost': { by: 'Sergio Martins', alt: 'Hot water tank and heat pump unit on an exterior wall' },
+  'pipe-fall-calculator': { by: 'Rose Galloway Green', alt: 'Water pipe laid in an open trench' },
+};
+export const photo = (key: string) => (PHOTOS[key] ? { key, ...PHOTOS[key] } : undefined);
 
 export const getTool = (slug: string) => TOOLS.find((t) => t.slug === slug);
 export const getCategory = (slug: string) => CATEGORIES.find((c) => c.slug === slug);
