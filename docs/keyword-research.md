@@ -15,7 +15,7 @@ and compare keywords within the same tool.
 | paint calculator | 2,400 | 31 | 0.18 | Skip for now: SERP owned by paint brands (Dulux, Taubmans, Bunnings), tiny CPC. |
 | kitchen renovation cost | 1,900 | 19 | 1.76 | Build. Reddit and Substack rank top 10 = weak SERP. |
 | tile calculator | 1,300 | 22 | 0.68 | **Built** (`/tile-calculator/`), with tile estimator / tiles per m² / how to calculate m² variants. |
-| hot water system replacement cost | 720 | 17 | 4.12 | Build. Highest CPC, competition 0.85 = best for leads. |
+| hot water system replacement cost | 720 | 17 | 4.12 | **Built** (`/hot-water-system-replacement-cost/`, 19 Nov). Highest CPC, competition 0.85 = best for leads. |
 | rainwater tank size calculator | 70 | 9 | 0.47 | Skip: too little volume. |
 
 ## Useful variants found (target them inside the same page)
@@ -88,5 +88,5 @@ backflow testing cost, as3500, heat pump vs solar hot water.
 5. concrete price per m³ / cost calculator — done (19 Nov), sources in the page
 6. concrete driveway cost (with exposed aggregate) — done (19 Nov), sources in the page
 7. kitchen renovation cost calculator — needs price sources
-8. hot water system replacement cost — needs price sources
+8. hot water system replacement cost — done (19 Nov), sources in the page
 9. Then by the data from "still to check"

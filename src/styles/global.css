@@ -486,3 +486,9 @@ a.tool-feature:hover { border-color: var(--accent-on-dark); color: #fff; }
 .breakdown .bar i { display: block; height: 100%; background: var(--plan); border-radius: 4px; transition: width .25s; }
 .breakdown .own .bar i { background: var(--accent); }
 .range-note { font-size: 13px; color: var(--muted); margin: -4px 0 14px; }
+
+/* Avisos dentro del resultado */
+.alert { font-size: 14px; line-height: 1.5; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--accent-soft); color: var(--ink-2); margin: 0 0 14px; }
+.alert strong { color: var(--accent-ink); }
+.breakdown .minus .bar i { background: var(--plan-mid); }
+.breakdown .minus .row strong { color: var(--plan); }

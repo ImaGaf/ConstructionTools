@@ -137,10 +137,10 @@ export const TOOLS: Tool[] = [
   {
     slug: 'hot-water-system-replacement-cost',
     title: 'Hot Water Replacement Cost',
-    blurb: 'Compare electric, gas, heat pump and solar.',
+    blurb: 'Compare electric, gas, heat pump and solar, with rebates and running costs.',
     category: 'plumbing-hot-water',
     icon: 'hotwater',
-    ready: false,
+    ready: true,
     related: ['bathroom-renovation-cost-calculator'],
   },
   {

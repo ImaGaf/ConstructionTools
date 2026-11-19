@@ -1,0 +1,434 @@
+---
+import CalculatorLayout, { type Faq, type TocItem } from '../layouts/CalculatorLayout.astro';
+import Icon from '../components/Icon.astro';
+
+const toc: TocItem[] = [
+  { id: 'cost-by-type', label: 'Cost by system type' },
+  { id: 'installation', label: 'Installation & extras' },
+  { id: 'running-costs', label: 'Running costs' },
+  { id: 'rebates', label: 'Rebates by state' },
+  { id: 'which-system', label: 'Which system?' },
+  { id: 'how-we-estimate', label: 'How we estimate' },
+];
+
+const faqs: Faq[] = [
+  {
+    q: 'How much does it cost to replace a hot water system?',
+    a: 'Installed prices are typically around $800–$3,000 for electric storage (typically $1,800), $1,200–$3,500 for gas storage or continuous flow gas (typically $2,200), $3,000–$6,000 for a heat pump before rebates (typically $4,200) and $3,500–$7,000 for solar. Removing the old unit, a tempering valve and any work to change system type are extra.',
+  },
+  {
+    q: 'How much does a heat pump hot water system cost after rebates?',
+    a: 'Nationally, a heat pump typically costs about $2,500–$5,300 after the federal small-scale technology certificate (STC) discount, which is usually worth about $500–$700. In Victoria and NSW, eligible households can get further state discounts on top.',
+  },
+  {
+    q: 'Is a heat pump cheaper to run than an electric hot water system?',
+    a: 'Usually, yes. For a 3–4 person household at Brisbane prices, a heat pump costs around $200–$480 a year to run, compared with $500–$1,200 for electric storage. Solar with an electric booster is lower again at $120–$300. Your tariff, climate and hot water use change these numbers.',
+  },
+  {
+    q: 'How much does an urgent same-day hot water replacement cost?',
+    a: 'An urgent like-for-like replacement typically costs about $1,300–$4,000, with $2,300 typical. Same-day jobs usually mean taking whichever compatible system the plumber has in stock.',
+  },
+  {
+    q: 'Can I replace a gas hot water system with gas in Victoria?',
+    a: 'Not for much longer. Solar Victoria says that from 1 March 2027, existing homes must replace end-of-life gas hot water systems with an efficient electric alternative, such as a heat pump. If your gas system is near the end of its life, it is worth planning the switch now.',
+  },
+  {
+    q: 'Do I need a licensed plumber to replace a hot water system?',
+    a: 'Yes. Hot water installation must be done by a licensed plumber, gas connections by a licensed gas fitter, and electrical connections by a licensed electrician or a plumber with the right restricted electrical licence.',
+  },
+];
+---
+<CalculatorLayout
+  slug="hot-water-system-replacement-cost"
+  title="Hot Water System Replacement Cost Calculator (2026)"
+  description="Compare the cost to replace a hot water system in Australia: electric, gas, heat pump or solar, with rebates, extras and yearly running costs."
+  h1="Hot Water System Replacement Cost"
+  lede="Compare what it costs to replace your hot water system with electric, gas, heat pump or solar, after typical rebates, and what each costs to run over ten years."
+  updated="2026-11-19"
+  quickAnswer="replacing a hot water system typically costs about $1,800 for electric storage, $2,200 for gas, $4,200 for a heat pump before rebates (around $3,600 after the federal discount) and $5,000 for solar, installed. Heat pumps and solar cost more upfront but much less to run."
+  toc={toc}
+  faqs={faqs}
+  cta={{ title: 'Need it replaced?', sub: 'Get quotes from licensed plumbers', href: '#which-system' }}
+>
+  <!-- ───────── Entradas ───────── -->
+  <div slot="inputs">
+    <div class="step">
+      <div class="step-head"><span class="n">1</span><h2 id="sys-h">New system</h2></div>
+      <fieldset class="choice-grid" aria-labelledby="sys-h" style="grid-template-columns: repeat(auto-fit, minmax(108px, 1fr));">
+        <label class="choice">
+          <input type="radio" name="sys" value="elec" data-state />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="20" y="2" width="24" height="36" rx="6"></rect><path d="M34 12 l-5 9 h6 l-5 9" stroke-linecap="round"></path></svg>
+          <span class="t">Electric storage</span>
+          <span class="d">Tank with an element</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="sys" value="gas" data-state />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="20" y="2" width="24" height="36" rx="6"></rect><path d="M32 14 c-3 4 -5 6 -5 9 a5 5 0 0 0 10 0 c0 -3 -2 -5 -5 -9z"></path></svg>
+          <span class="t">Gas storage</span>
+          <span class="d">Tank with a gas burner</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="sys" value="cf" data-state />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="22" y="6" width="20" height="28" rx="3"></rect><path d="M28 14 h8 M28 20 h8 M28 26 h8" stroke-linecap="round"></path></svg>
+          <span class="t">Continuous flow gas</span>
+          <span class="d">Heats on demand, no tank</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="sys" value="hp" data-state checked />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="22" y="2" width="20" height="36" rx="6"></rect><circle cx="32" cy="10" r="5"></circle><path d="M29 10 h6 M32 7 v6"></path></svg>
+          <span class="t">Heat pump</span>
+          <span class="d">Pulls heat from the air</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="sys" value="solar" data-state />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M8 30 L22 14 H56 L42 30 Z"></path><path d="M15 22 H49 M29 14 L22 30 M40 14 L33 30"></path><circle cx="12" cy="8" r="3"></circle></svg>
+          <span class="t">Solar</span>
+          <span class="d">Roof collectors, boosted</span>
+        </label>
+      </fieldset>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">2</span><h2>Your situation</h2></div>
+      <div class="options" style="margin-bottom: 14px;">
+        <div>
+          <div class="opt-label" id="old-l">Replacing</div>
+          <div class="seg" role="radiogroup" aria-labelledby="old-l">
+            <label><input type="radio" name="old" value="elec" data-state checked />Electric</label>
+            <label><input type="radio" name="old" value="gas" data-state />Gas</label>
+            <label><input type="radio" name="old" value="none" data-state />Nothing (new)</label>
+          </div>
+        </div>
+        <div>
+          <div class="opt-label" id="ppl-l">Household</div>
+          <div class="seg" role="radiogroup" aria-labelledby="ppl-l">
+            <label><input type="radio" name="ppl" value="small" data-state />1–2</label>
+            <label><input type="radio" name="ppl" value="mid" data-state checked />3–4</label>
+            <label><input type="radio" name="ppl" value="large" data-state />5+</label>
+          </div>
+        </div>
+      </div>
+      <div class="opt-label" id="state-l">State or territory</div>
+      <div class="seg" role="radiogroup" aria-labelledby="state-l">
+        <label><input type="radio" name="state" value="nsw" data-state checked />NSW</label>
+        <label><input type="radio" name="state" value="vic" data-state />VIC</label>
+        <label><input type="radio" name="state" value="qld" data-state />QLD</label>
+        <label><input type="radio" name="state" value="act" data-state />ACT</label>
+        <label><input type="radio" name="state" value="oth" data-state />SA, WA, TAS, NT</label>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">3</span><h2>Extras and rebates</h2></div>
+      <div class="toggles">
+        <label class="toggle"><input type="checkbox" id="remove" data-state checked /><span><span class="t">Remove the old unit</span><span class="d">Disconnection and disposal</span></span></label>
+        <label class="toggle"><input type="checkbox" id="valve" data-state checked /><span><span class="t">Tempering valve</span><span class="d">Limits bathroom hot water temperature</span></span></label>
+        <label class="toggle"><input type="checkbox" id="urgent" data-state /><span><span class="t">Urgent, same day</span><span class="d">Like-for-like tank replacement</span></span></label>
+        <label class="toggle"><input type="checkbox" id="rebate" data-state checked /><span><span class="t">Include likely rebates</span><span class="d">If you meet the eligibility rules</span></span></label>
+      </div>
+      <div class="fields" style="max-width: 320px; margin-top: 14px;">
+        <div><label for="q-sys">Your quote for the system, installed <span class="muted">(optional)</span></label><div class="field"><span class="unit" style="padding: 0 6px 0 0;">$</span><input id="q-sys" type="number" inputmode="decimal" min="0" step="50" data-state /></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── Resultado ───────── -->
+  <div slot="result">
+    <div class="diagram">
+      <svg viewBox="0 0 380 175" role="img" aria-labelledby="dg-run">
+        <title id="dg-run">Typical yearly running cost of each hot water system, with your choice highlighted</title>
+        <text x="0" y="13" fill="#565d66" font-size="12">Typical running cost per year (3–4 people)</text>
+        <g id="dg-bars"></g>
+      </svg>
+    </div>
+
+    <div class="result-body" aria-live="polite">
+      <div class="big"><div class="k" id="r-total-k">Estimated cost after rebates</div><div class="v" id="r-total">–</div></div>
+      <p class="range-note" id="r-range"></p>
+      <p class="alert" id="r-alert" hidden></p>
+      <div class="stats">
+        <div class="stat stat-plan"><div class="k">Running cost / year</div><div class="v" id="r-run" style="font-size: 24px;">–</div></div>
+        <div class="stat stat-accent"><div class="k">10-year cost</div><div class="v" id="r-10y" style="font-size: 24px;">–</div></div>
+      </div>
+
+      <ul class="breakdown" id="r-breakdown" aria-label="Cost breakdown"></ul>
+      <p class="working" id="r-working"></p>
+
+      <div class="result-actions">
+        <button type="button" class="btn" id="copy-link"><Icon name="link" size={18} />Copy link to result</button>
+        <button type="button" class="btn icon-btn" id="print" aria-label="Print result"><Icon name="print" size={18} /></button>
+      </div>
+      <p class="copy-status" id="copy-status" role="status"></p>
+    </div>
+  </div>
+
+  <!-- ───────── Artículo ───────── -->
+  <section id="cost-by-type">
+    <h2>How much does a new hot water system cost?</h2>
+    <p>Typical supply-and-install prices in Australia, before rebates:</p>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">System</th><th scope="col">Low</th><th scope="col">Typical</th><th scope="col">High</th></tr></thead>
+        <tbody>
+          <tr><td>Electric storage</td><td>$800</td><td>$1,800</td><td>$3,000</td></tr>
+          <tr><td>Gas storage</td><td>$1,200</td><td>$2,200</td><td>$3,500</td></tr>
+          <tr><td>Continuous flow gas</td><td>$1,500</td><td>$2,200</td><td>$3,500</td></tr>
+          <tr><td>Heat pump</td><td>$3,000</td><td>$4,200</td><td>$6,000</td></tr>
+          <tr><td>Solar (electric boost)</td><td>$3,500</td><td>$5,000</td><td>$7,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">
+      Source: whatsthedamage.com.au (verified November 2026). For the unit alone, Yellow Pages (May 2026)
+      lists electric storage tanks at $525–$2,000, gas storage at $880–$1,525, continuous flow gas
+      at $785–$1,625 and heat pumps at $3,000–$4,000.
+    </p>
+  </section>
+
+  <section id="installation">
+    <h2>Installation costs and extras</h2>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Item</th><th scope="col">Typical cost</th></tr></thead>
+        <tbody>
+          <tr><td>Installation, like-for-like replacement</td><td>$300–$800 (Yellow Pages)</td></tr>
+          <tr><td>Installation, new or different system</td><td>$1,000–$3,000 (Yellow Pages)</td></tr>
+          <tr><td>Removal and disposal of the old unit</td><td>$75–$200</td></tr>
+          <tr><td>Tempering valve</td><td>$150–$400</td></tr>
+          <tr><td>Urgent same-day like-for-like replacement</td><td>$1,300–$4,000 in total</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Switching type, for example from gas to a heat pump, can need extra plumbing, a new power
+      circuit or capping the gas line. That work varies a lot from house to house, so ask for it as a
+      separate line in your quote.
+    </p>
+  </section>
+
+  <section id="running-costs">
+    <h2>Which hot water system is cheapest to run?</h2>
+    <p>Typical yearly running costs for a 3–4 person household, at Brisbane energy prices:</p>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">System</th><th scope="col">Per year</th></tr></thead>
+        <tbody>
+          <tr><td>Electric storage</td><td>$500–$1,200</td></tr>
+          <tr><td>Gas storage</td><td>$450–$1,250</td></tr>
+          <tr><td>Continuous flow gas</td><td>$400–$1,050</td></tr>
+          <tr><td>Heat pump</td><td>$200–$480</td></tr>
+          <tr><td>Solar (electric boost)</td><td>$120–$300</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      That is why the calculator shows a 10-year cost: a heat pump often costs about $2,000 more
+      upfront than a gas or electric tank, but can save several hundred dollars a year to run.
+      Off-peak tariffs, solar panels and your climate all shift the numbers.
+    </p>
+  </section>
+
+  <section id="rebates">
+    <h2>Hot water rebates by state (2026)</h2>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Where</th><th scope="col">What's available</th></tr></thead>
+        <tbody>
+          <tr><td>Australia-wide</td><td>STC discount on eligible heat pumps and solar water heaters, usually applied at the point of sale (about $500–$700 on a heat pump)</td></tr>
+          <tr><td>Victoria</td><td>Solar Homes rebate of 50% of the price after other discounts, up to $1,000 ($1,400 for locally made products). Owner-occupiers with combined taxable income under $150,000, property under $3 million, existing system at least 3 years old. VEU discounts also apply, up to about $560 when replacing gas.</td></tr>
+          <tr><td>NSW</td><td>Energy Savings Scheme discounts through participating installers, reported at up to $640 replacing electric with a heat pump, $330 replacing gas, or $900 for solar replacing electric. The NSW Government says larger discounts are available until June 2027.</td></tr>
+          <tr><td>ACT</td><td>50% up to $2,500 for eligible concession card holders, plus low-interest loans.</td></tr>
+          <tr><td>Queensland, Tasmania, WA, NT</td><td>Federal STCs only; Queensland's Climate Smart Energy Savers rebate has closed.</td></tr>
+          <tr><td>South Australia</td><td>Discounted upgrades offered by some energy retailers under REPS.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout" style="margin-top: 20px;">
+      <strong>Victoria: gas replacements change from 1 March 2027</strong>
+      Solar Victoria says existing homes must replace end-of-life gas hot water systems with an
+      efficient electric alternative, such as a heat pump, from 1 March 2027.
+    </div>
+    <p class="note" style="margin-top: 12px;">Rebates change often and have eligibility rules. Check the current amounts with your state program and installer before you buy.</p>
+  </section>
+
+  <section id="which-system">
+    <h2>Which hot water system should I choose?</h2>
+    <div class="compare">
+      <div class="c1"><h3>Electric or gas tank</h3>Cheapest upfront and quick to swap like-for-like, but the most expensive to run.</div>
+      <div class="c2"><h3>Heat pump</h3>Higher upfront cost, low running cost and rebates in most states. Needs an outdoor spot with airflow.</div>
+      <div class="c3"><h3>Solar</h3>Lowest running cost in sunny areas, but the highest upfront price and needs suitable roof space.</div>
+    </div>
+    <ul class="checklist" style="margin-top: 20px;">
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Size the system for your household: an undersized tank runs out, an oversized one wastes energy.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Ask whether the quote includes removal, a tempering valve and any electrical or gas work.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Installation must be done by a licensed plumber, with gas work by a licensed gas fitter and electrical work by a licensed electrician.</span></li>
+    </ul>
+  </section>
+
+  <section id="how-we-estimate">
+    <h2>How we estimate</h2>
+    <ul class="checklist">
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>System, installed:</strong> whatsthedamage.com.au's low, typical and high prices by type. Heat pumps use their 250–270 L range for 1–2 people and 300–315 L range for 5+. "Urgent" uses their same-day like-for-like range for electric and gas tanks.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Extras:</strong> removal $75–$200 and tempering valve $150–$400 (same source).</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Rebates:</strong> federal STC discount of $500–$700 on heat pumps; Victoria's Solar Homes rebate (50% after other discounts, capped at $1,000) and VEU up to $560 when replacing gas; NSW up to $640 (electric to heat pump), $330 (gas to heat pump) or $900 (electric to solar). The STC on solar varies by model and zone, so it isn't included. ACT concession rebates aren't included.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Running cost:</strong> the middle of each system's yearly range for 3–4 people at Brisbane prices, scaled ×0.6 for 1–2 people and ×1.4 for 5+ (our assumption). 10-year cost = net upfront cost + 10 × yearly running cost, without price changes.</span></li>
+    </ul>
+    <p class="note" style="margin-top: 16px;">
+      Sources (accessed November 2026):
+      <a href="https://whatsthedamage.com.au/hot-water-system-cost/" rel="noopener">whatsthedamage.com.au hot water system cost</a> (verified Nov 2026),
+      <a href="https://whatsthedamage.com.au/hot-water-rebate/" rel="noopener">whatsthedamage.com.au hot water rebates</a> (Oct–Nov 2026),
+      <a href="https://solar.vic.gov.au/hot-water-rebate" rel="noopener">Solar Victoria</a> (updated Nov 2026),
+      <a href="https://www.energy.nsw.gov.au/heat-pump-water-heater-upgrade-incentives" rel="noopener">NSW Government</a>,
+      <a href="https://www.yellowpages.com.au/articles/plumbers-gasfitters/hot-water-system-prices" rel="noopener">Yellow Pages</a> (May 2026).
+      Estimates are a guide only.
+    </p>
+  </section>
+</CalculatorLayout>
+
+<script>
+  import { bindCalculator, num, setText, aud, type State } from '../lib/calc';
+
+  type Range = [number, number, number]; // bajo, típico, alto
+  // whatsthedamage.com.au/hot-water-system-cost (verificado nov 2026), instalado
+  const SYSTEMS: Record<string, { name: string; price: Range; run: [number, number] }> = {
+    elec: { name: 'Electric storage', price: [800, 1800, 3000], run: [500, 1200] },
+    gas: { name: 'Gas storage', price: [1200, 2200, 3500], run: [450, 1250] },
+    cf: { name: 'Continuous flow gas', price: [1500, 2200, 3500], run: [400, 1050] },
+    hp: { name: 'Heat pump', price: [3000, 4200, 6000], run: [200, 480] },
+    solar: { name: 'Solar', price: [3500, 5000, 7000], run: [120, 300] },
+  };
+  const HP_SIZE: Record<string, Range> = { small: [3000, 3800, 6000], mid: [3000, 4200, 6000], large: [3400, 4500, 7000] };
+  const URGENT: Range = [1300, 2300, 4000];
+  const REMOVE: Range = [75, 130, 200];
+  const VALVE: Range = [150, 250, 400];
+  const RUN_SCALE: Record<string, number> = { small: 0.6, mid: 1, large: 1.4 }; // supuesto propio
+  const STC_HP: Range = [700, 600, 500]; // descuento federal (mayor descuento = costo bajo)
+  const ORDER = ['elec', 'gas', 'cf', 'hp', 'solar'];
+
+  function rebates(sys: string, old: string, state: string, priceTyp: number) {
+    const out: { k: string; v: Range }[] = [];
+    let after = priceTyp;
+    if (sys === 'hp') { out.push({ k: 'Federal STC discount', v: STC_HP }); after -= STC_HP[1]; }
+    if (state === 'nsw') {
+      if (sys === 'hp' && old === 'elec') out.push({ k: 'NSW ESS discount (up to)', v: [640, 640, 640] });
+      if (sys === 'hp' && old === 'gas') out.push({ k: 'NSW ESS discount (up to)', v: [330, 330, 330] });
+      if (sys === 'solar' && old === 'elec') out.push({ k: 'NSW ESS discount (up to)', v: [900, 900, 900] });
+    }
+    if (state === 'vic' && (sys === 'hp' || sys === 'solar') && old !== 'none') {
+      if (sys === 'hp' && old === 'gas') { out.push({ k: 'VEU discount (up to)', v: [560, 560, 560] }); after -= 560; }
+      const sh = Math.min(1000, Math.max(0, after) * 0.5);
+      out.push({ k: 'Solar Homes rebate (up to)', v: [sh, sh, sh] });
+    }
+    return out;
+  }
+
+  function drawBars(sel: string, scale: number) {
+    const g = document.getElementById('dg-bars');
+    if (!g) return;
+    const ns = 'http://www.w3.org/2000/svg';
+    const max = 1250 * 1.4;
+    const rows = ORDER.map((k, i) => {
+      const s = SYSTEMS[k];
+      const mid = ((s.run[0] + s.run[1]) / 2) * scale;
+      const y = 26 + i * 29;
+      const grp = document.createElementNS(ns, 'g');
+      const label = document.createElementNS(ns, 'text');
+      label.setAttribute('x', '0'); label.setAttribute('y', String(y + 14));
+      label.setAttribute('font-size', '12');
+      label.setAttribute('fill', k === sel ? '#16191d' : '#565d66');
+      label.setAttribute('font-weight', k === sel ? '700' : '500');
+      label.textContent = s.name;
+      const bar = document.createElementNS(ns, 'rect');
+      const w = Math.max(4, (mid / max) * 190);
+      bar.setAttribute('x', '135'); bar.setAttribute('y', String(y + 2));
+      bar.setAttribute('width', w.toFixed(1)); bar.setAttribute('height', '16'); bar.setAttribute('rx', '4');
+      bar.setAttribute('fill', k === sel ? '#c2410c' : '#c9d6e6');
+      const val = document.createElementNS(ns, 'text');
+      val.setAttribute('x', String(135 + w + 6)); val.setAttribute('y', String(y + 14));
+      val.setAttribute('font-size', '12'); val.setAttribute('fill', '#16191d');
+      val.textContent = aud(Math.round(mid / 10) * 10);
+      grp.append(label, bar, val);
+      return grp;
+    });
+    g.replaceChildren(...rows);
+  }
+
+  function render(s: State) {
+    const sys = SYSTEMS[s.sys] ? s.sys : 'hp';
+    const old = s.old ?? 'elec';
+    const ppl = s.ppl ?? 'mid';
+    const state = s.state ?? 'nsw';
+    const isTank = sys === 'elec' || sys === 'gas';
+    const urgent = s.urgent === '1' && isTank;
+    const own = num(s['q-sys']);
+
+    let base: Range = sys === 'hp' ? HP_SIZE[ppl] : SYSTEMS[sys].price;
+    if (urgent) base = URGENT;
+    if (own > 0) base = [own, own, own];
+    const rem: Range = s.remove === '1' && old !== 'none' ? REMOVE : [0, 0, 0];
+    const val: Range = s.valve === '1' ? VALVE : [0, 0, 0];
+    const reb = s.rebate === '1' ? rebates(sys, old, state, base[1]) : [];
+    const rebSum = [0, 1, 2].map((i) => reb.reduce((a, r) => a + r.v[i], 0));
+    const total = [0, 1, 2].map((i) => Math.max(0, base[i] + rem[i] + val[i] - rebSum[i]));
+
+    const scale = RUN_SCALE[ppl] ?? 1;
+    const run = ((SYSTEMS[sys].run[0] + SYSTEMS[sys].run[1]) / 2) * scale;
+    const tenY = total[1] + run * 10;
+
+    const r100 = (n: number) => Math.round(n / 50) * 50;
+    setText('r-total-k', reb.length ? 'Estimated cost after rebates' : 'Estimated cost, installed');
+    setText('r-total', aud(r100(total[1])));
+    setText('r-range', `Likely range ${aud(r100(total[0]))}–${aud(r100(total[2]))}${own > 0 ? ' (your quote + extras)' : ''}.`);
+    setText('r-run', aud(Math.round(run / 10) * 10));
+    setText('r-10y', aud(r100(tenY)));
+
+    // Avisos
+    const alerts: string[] = [];
+    if (state === 'vic' && old === 'gas' && (sys === 'gas' || sys === 'cf')) {
+      alerts.push('<strong>Victoria:</strong> from 1 March 2027, end-of-life gas hot water systems in existing homes must be replaced with an efficient electric system such as a heat pump.');
+    }
+    const sameType = old === 'none' || (old === 'elec' && sys === 'elec') || (old === 'gas' && (sys === 'gas' || sys === 'cf'));
+    if (!sameType) alerts.push('<strong>Changing type?</strong> Extra plumbing, electrical or gas work may be needed and isn\'t included. Ask for it as a separate line.');
+    if (s.urgent === '1' && !isTank) alerts.push('Same-day pricing applies to like-for-like electric and gas tanks, so it isn\'t used for this system.');
+    if (state === 'vic' && reb.some((r) => r.k.startsWith('Solar Homes'))) alerts.push('Solar Homes eligibility: owner-occupier, combined income under $150,000, property under $3 million, existing system at least 3 years old.');
+    const al = document.getElementById('r-alert');
+    if (al) { al.hidden = alerts.length === 0; al.innerHTML = alerts.join('<br />'); }
+
+    // Desglose
+    const lines = [
+      { k: `${SYSTEMS[sys].name}${urgent ? ' (urgent)' : ''}, installed${own > 0 ? ' (your quote)' : ''}`, v: base[1], cls: own > 0 ? 'own' : '' },
+      { k: 'Remove old unit', v: rem[1], cls: '' },
+      { k: 'Tempering valve', v: val[1], cls: '' },
+      ...reb.map((r) => ({ k: r.k, v: -r.v[1], cls: 'minus' })),
+    ].filter((l) => l.v !== 0);
+    const max = Math.max(...lines.map((l) => Math.abs(l.v)), 1);
+    const list = document.getElementById('r-breakdown');
+    if (list) {
+      list.replaceChildren(...lines.map((l) => {
+        const li = document.createElement('li');
+        if (l.cls) li.className = l.cls;
+        const row = document.createElement('div'); row.className = 'row';
+        const name = document.createElement('span'); name.textContent = l.k;
+        const v = document.createElement('strong'); v.textContent = (l.v < 0 ? '−' : '') + aud(Math.abs(l.v));
+        row.append(name, v);
+        const bar = document.createElement('div'); bar.className = 'bar';
+        const fill = document.createElement('i'); fill.style.width = `${(Math.abs(l.v) / max) * 100}%`;
+        bar.append(fill);
+        li.append(row, bar);
+        return li;
+      }));
+    }
+
+    setText('r-working',
+      `${aud(base[1])}${rem[1] ? ` + removal ${aud(rem[1])}` : ''}${val[1] ? ` + valve ${aud(val[1])}` : ''}${rebSum[1] ? ` − rebates ${aud(rebSum[1])}` : ''} = ${aud(total[1])} · 10 years: ${aud(total[1])} + 10 × ${aud(Math.round(run))} running = ${aud(tenY)}`);
+
+    drawBars(sys, scale);
+
+    setText('mbar-k', `${SYSTEMS[sys].name} · ${state.toUpperCase() === 'OTH' ? 'Other states' : state.toUpperCase()}${reb.length ? ' · after rebates' : ''}`);
+    const v = document.getElementById('mbar-v');
+    if (v) v.innerHTML = `${aud(r100(total[1]))} <span>· ${aud(Math.round(run / 10) * 10)}/yr to run</span>`;
+  }
+
+  const root = document.getElementById('calc');
+  if (root) bindCalculator(root, render);
+</script>

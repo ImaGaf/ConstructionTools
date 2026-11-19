@@ -156,6 +156,9 @@ Cost calculators (see `bathroom-renovation-cost-calculator.astro`) follow extra 
 - Show a total plus the published range for that level, never a single "exact" price.
 - Let users replace any line with their own quote (`q-<item>` fields).
 - Calibrate the model so typical inputs land inside the published ranges.
+- Rebates and regulations change often: verify them on the official government page
+  before publishing, record the 'last updated' date in "How we estimate", and
+  re-check them every few months (see `hot-water-system-replacement-cost.astro`).
 
 ## Content rules
 
