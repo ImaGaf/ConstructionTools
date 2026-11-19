@@ -32,7 +32,7 @@ Lo haces tú (no Claude Code):
 - [x] Dominio `getsitesums.com` comprado en Cloudflare (sitesums.com estaba tomado)
 - [x] Publicado en Cloudflare Workers (static assets) con el dominio y redirección www → raíz (19 nov)
 - [x] Google Search Console: dominio verificado (vía Cloudflare) y `sitemap-index.xml` enviado (19 nov)
-- [ ] GA4 o Cloudflare Web Analytics: crear y copiar el ID
+- [x] Cloudflare Web Analytics activo con inyección automática de Cloudflare (sin token en el código)
 - [x] Email real para la Privacy Policy y Contact (oswaldoj.tipan@gmail.com)
 
 Prompt para Claude Code:
