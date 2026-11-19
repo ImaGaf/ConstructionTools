@@ -141,7 +141,16 @@ export const TOOLS: Tool[] = [
     category: 'plumbing-hot-water',
     icon: 'hotwater',
     ready: true,
-    related: ['bathroom-renovation-cost-calculator'],
+    related: ['bathroom-renovation-cost-calculator', 'pipe-fall-calculator'],
+  },
+  {
+    slug: 'pipe-fall-calculator',
+    title: 'Pipe Fall Calculator',
+    blurb: 'Fall, grade or run length for drains, with minimum grades by pipe size.',
+    category: 'plumbing-hot-water',
+    icon: 'pipe',
+    ready: true,
+    related: ['hot-water-system-replacement-cost', 'bathroom-renovation-cost-calculator'],
   },
   {
     slug: 'gravel-calculator',

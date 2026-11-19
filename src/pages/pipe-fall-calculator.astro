@@ -1,0 +1,351 @@
+---
+import CalculatorLayout, { type Faq, type TocItem } from '../layouts/CalculatorLayout.astro';
+import Icon from '../components/Icon.astro';
+
+const toc: TocItem[] = [
+  { id: 'fall-and-grade', label: 'Fall and grade explained' },
+  { id: 'how-to-calculate', label: 'How to calculate fall' },
+  { id: 'conversions', label: 'Grade conversion table' },
+  { id: 'minimum-grades', label: 'Minimum grades' },
+  { id: 'setting-out', label: 'Setting out on site' },
+  { id: 'how-we-calculate', label: 'How we calculate' },
+];
+
+const faqs: Faq[] = [
+  {
+    q: 'What is the minimum fall for a 100 mm sewer pipe in Australia?',
+    a: 'The commonly cited minimum grade for a DN100 sanitary drain under AS/NZS 3500.2 is 1.65%, about 1 in 60. That is 16.5 mm of fall for every metre of pipe, so a 10 m run needs at least 165 mm of fall. Some conditions allow a different grade, so confirm with your plumber.',
+  },
+  {
+    q: 'How do I convert 1 in 60 to a percentage?',
+    a: 'Divide 100 by the second number: 100 ÷ 60 = 1.67%. To go the other way, divide 100 by the percentage: 100 ÷ 2.5 = 40, so 2.5% is 1 in 40. In millimetres, a percentage × 10 gives the fall per metre, so 2.5% is 25 mm per metre.',
+  },
+  {
+    q: 'What is the difference between fall and grade?',
+    a: 'Fall is the total height difference between the two ends of a pipe, usually in millimetres. Grade is the slope, the fall divided by the length, written as a percentage, a ratio such as 1 in 60, or millimetres per metre. The same grade gives more fall on a longer run.',
+  },
+  {
+    q: 'How much fall does a 150 mm drain need?',
+    a: 'The commonly cited minimum for a DN150 sanitary drain is 1%, or 1 in 100. That is 10 mm per metre, so a 20 m run needs at least 200 mm of fall.',
+  },
+  {
+    q: 'Can I lay my own sewer or drain pipes?',
+    a: 'No. In every Australian state, sanitary plumbing and drainage must be done by a licensed plumber or drainer, and the work is usually inspected or certified. Use this calculator to plan levels and check a design, not to do the work yourself.',
+  },
+];
+---
+<CalculatorLayout
+  slug="pipe-fall-calculator"
+  title="Pipe Fall Calculator: Drain Grade & Fall (Australia)"
+  description="Free pipe fall calculator for Australian drains. Work out fall, grade or run length, convert % to 1 in X, and compare with minimum grades by pipe size."
+  h1="Pipe Fall Calculator"
+  lede="Work out the fall, grade or maximum run length of a drain or sewer pipe. Enter grades as a percentage, 1 in X or mm per metre, and check them against common minimums by pipe size."
+  updated="2026-11-19"
+  quickAnswer="fall = length × grade. A 10 m DN100 drain at the commonly cited minimum of 1.65% (about 1 in 60) needs 165 mm of fall, a DN65 at 2.5% needs 250 mm and a DN150 at 1% needs 100 mm."
+  toc={toc}
+  faqs={faqs}
+  cta={{ title: 'Planning new drainage?', sub: 'Get a licensed plumber or drainer to design and lay it', href: '#setting-out' }}
+>
+  <!-- ───────── Entradas ───────── -->
+  <div slot="inputs">
+    <div class="step">
+      <div class="step-head"><span class="n">1</span><h2 id="mode-h">What do you want to find?</h2></div>
+      <fieldset class="choice-grid" aria-labelledby="mode-h">
+        <label class="choice">
+          <input type="radio" name="mode" value="fall" data-state checked />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M6 12 L52 26"></path><path d="M58 12 v14"></path><path d="M55 15 l3 -3 3 3 M55 23 l3 3 3 -3"></path></svg>
+          <span class="t">Fall</span>
+          <span class="d">From length and grade</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="mode" value="grade" data-state />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M6 10 L58 30"></path><path d="M18 30 h14 M32 30 v-6"></path><path d="M10 32 a10 10 0 0 0 4 -6" stroke-width="1.5"></path></svg>
+          <span class="t">Grade</span>
+          <span class="d">From length and fall</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="mode" value="length" data-state />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M6 12 L58 24"></path><path d="M6 32 h52"></path><path d="M10 29 l-4 3 4 3 M54 29 l4 3 -4 3"></path></svg>
+          <span class="t">Run length</span>
+          <span class="d">From fall and grade</span>
+        </label>
+      </fieldset>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">2</span><h2 id="dn-h">Pipe size</h2></div>
+      <div class="seg" role="radiogroup" aria-labelledby="dn-h">
+        <label><input type="radio" name="dn" value="65" data-state />DN65</label>
+        <label><input type="radio" name="dn" value="100" data-state checked />DN100</label>
+        <label><input type="radio" name="dn" value="150" data-state />DN150</label>
+        <label><input type="radio" name="dn" value="other" data-state />Other</label>
+      </div>
+      <p class="note" style="margin: 8px 0 0;">Used to compare your grade with the common minimum for that size.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">3</span><h2>Measurements</h2></div>
+      <div class="fields">
+        <div data-modes="fall grade"><label for="len">Pipe length</label><div class="field"><input id="len" type="number" inputmode="decimal" min="0" step="0.1" value="10" data-state /><span class="unit">m</span></div></div>
+        <div data-modes="grade length" hidden><label for="fall">Fall</label><div class="field"><input id="fall" type="number" inputmode="decimal" min="0" step="5" value="200" data-state /><span class="unit">mm</span></div></div>
+        <div data-modes="fall length"><label for="grade" id="grade-l">Grade</label><div class="field"><input id="grade" type="number" inputmode="decimal" min="0" step="0.05" value="1.65" data-state /><span class="unit" id="grade-unit">%</span></div></div>
+        <div><label for="depth">Depth at high end <span class="muted" style="font-weight: 400;">(optional)</span></label><div class="field"><input id="depth" type="number" inputmode="decimal" min="0" step="10" placeholder="e.g. 300" data-state /><span class="unit">mm</span></div></div>
+      </div>
+      <div data-modes="fall length">
+        <div class="opt-label" id="gunit-l" style="margin-top: 14px;">Grade entered as</div>
+        <div class="seg" role="radiogroup" aria-labelledby="gunit-l">
+          <label><input type="radio" name="gunit" value="pct" data-state checked />Percent</label>
+          <label><input type="radio" name="gunit" value="ratio" data-state />1 in X</label>
+          <label><input type="radio" name="gunit" value="mmm" data-state />mm per m</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── Resultado ───────── -->
+  <div slot="result">
+    <div class="diagram">
+      <svg viewBox="0 0 380 170" role="img" aria-labelledby="dg-pipe">
+        <title id="dg-pipe">Side view of the pipe run showing its length, fall and grade (vertical scale exaggerated)</title>
+        <path d="M20 30 H360" stroke="#24456e" stroke-width="1.5" stroke-dasharray="6 4"></path>
+        <text x="20" y="22" fill="#24456e" font-size="11">Ground (not to scale)</text>
+        <line id="dg-line" x1="30" y1="60" x2="290" y2="100" stroke="#24456e" stroke-width="10" stroke-linecap="round"></line>
+        <line id="dg-level" x1="30" y1="60" x2="305" y2="60" stroke="#9a3412" stroke-width="1" stroke-dasharray="3 3"></line>
+        <path id="dg-dim" d="M305 60 V100" stroke="#9a3412" stroke-width="1.5"></path>
+        <text id="dg-fall" x="312" y="84" fill="#9a3412" font-size="13">165 mm</text>
+        <text id="dg-grade" x="160" y="120" fill="#24456e" font-size="13" text-anchor="middle">1.65% · 1 in 61</text>
+        <path d="M30 150 H290" stroke="#24456e" stroke-width="1"></path>
+        <path d="M30 145 v10 M290 145 v10" stroke="#24456e" stroke-width="1"></path>
+        <text id="dg-len" x="160" y="144" fill="#9a3412" font-size="13" text-anchor="middle">10 m</text>
+      </svg>
+    </div>
+
+    <div class="result-body" aria-live="polite">
+      <div class="big"><div class="k" id="r-k">Fall</div><div class="v" id="r-big">–</div></div>
+      <p class="alert" id="r-alert" hidden></p>
+      <div class="stats">
+        <div class="stat stat-plan"><div class="k">Grade</div><div class="v" id="r-pct" style="font-size: 24px;">–</div></div>
+        <div class="stat stat-plan"><div class="k">Ratio</div><div class="v" id="r-ratio" style="font-size: 24px;">–</div></div>
+        <div class="stat"><div class="k">Fall per metre</div><div class="v" id="r-mmm" style="font-size: 24px;">–</div></div>
+        <div class="stat stat-accent"><div class="k">Depth at low end</div><div class="v" id="r-depth" style="font-size: 24px;">–</div></div>
+      </div>
+
+      <p class="working" id="r-working"></p>
+
+      <div class="result-actions">
+        <button type="button" class="btn" id="copy-link"><Icon name="link" size={18} />Copy link to result</button>
+        <button type="button" class="btn icon-btn" id="print" aria-label="Print result"><Icon name="print" size={18} /></button>
+      </div>
+      <p class="copy-status" id="copy-status" role="status"></p>
+    </div>
+  </div>
+
+  <!-- ───────── Artículo ───────── -->
+  <section id="fall-and-grade">
+    <h2>What is pipe fall and grade?</h2>
+    <p>
+      Drain and sewer pipes rely on gravity, so each pipe has to slope down towards the sewer
+      connection or point of discharge. Plumbers describe that slope in two related ways:
+    </p>
+    <div class="compare">
+      <div class="c1"><h3>Fall</h3>The total drop from one end of the pipe to the other, usually in millimetres. A 10 m pipe that is 165 mm lower at its far end has 165 mm of fall.</div>
+      <div class="c2"><h3>Grade</h3>The slope itself: fall divided by length. It is written as a percentage (1.65%), a ratio (1 in 60) or millimetres per metre (16.5 mm/m).</div>
+      <div class="c3"><h3>Invert</h3>The inside bottom of the pipe. Levels and falls are measured to the invert, not to the top of the pipe or the trench floor.</div>
+    </div>
+  </section>
+
+  <section id="how-to-calculate">
+    <h2>How to calculate the fall of a pipe</h2>
+    <div class="step-cards">
+      <div><b>STEP 1</b>Measure the run length in metres, along the line of the pipe.</div>
+      <div><b>STEP 2</b>Turn the grade into a decimal: 1.65% = 0.0165, or 1 in 60 = 1 ÷ 60.</div>
+      <div><b>STEP 3</b>Multiply: length × grade = fall in metres. × 1,000 for millimetres.</div>
+    </div>
+    <p>
+      For example, a 15 m DN100 drain at 1.65%: 15 × 0.0165 = 0.2475 m, so about 248 mm of fall.
+      To find the grade from a fall you already have, divide instead: 300 mm over 12 m is
+      0.3 ÷ 12 = 0.025, or 2.5%. And to see how far a pipe can run with the fall available,
+      divide the fall by the grade: 0.2 m ÷ 0.0165 = about 12.1 m.
+    </p>
+  </section>
+
+  <section id="conversions">
+    <h2>Grade conversion table: percent, 1 in X and mm per metre</h2>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Percent</th><th scope="col">Ratio</th><th scope="col">mm per metre</th><th scope="col">Fall over 10 m</th></tr></thead>
+        <tbody>
+          <tr><td>1%</td><td>1 in 100</td><td>10 mm</td><td>100 mm</td></tr>
+          <tr><td>1.25%</td><td>1 in 80</td><td>12.5 mm</td><td>125 mm</td></tr>
+          <tr><td>1.65%</td><td>about 1 in 60</td><td>16.5 mm</td><td>165 mm</td></tr>
+          <tr><td>2%</td><td>1 in 50</td><td>20 mm</td><td>200 mm</td></tr>
+          <tr><td>2.5%</td><td>1 in 40</td><td>25 mm</td><td>250 mm</td></tr>
+          <tr><td>5%</td><td>1 in 20</td><td>50 mm</td><td>500 mm</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">
+      Percent = 100 ÷ X for a grade of 1 in X. Exactly 1 in 60 is 1.67%; plumbers in Australia
+      usually round the DN100 minimum to 1.65%.
+    </p>
+  </section>
+
+  <section id="minimum-grades">
+    <h2>Minimum grade for drains and sewer pipes in Australia</h2>
+    <p>
+      Sanitary drainage in Australia is covered by the Plumbing Code of Australia and
+      AS/NZS 3500.2. These are the minimum grades most often quoted from it for sanitary drains:
+    </p>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Pipe size</th><th scope="col">Minimum grade</th><th scope="col">Fall per metre</th></tr></thead>
+        <tbody>
+          <tr><td>DN65</td><td>2.5% (1 in 40)</td><td>25 mm</td></tr>
+          <tr><td>DN100</td><td>1.65% (about 1 in 60)</td><td>16.5 mm</td></tr>
+          <tr><td>DN150</td><td>1% (1 in 100)</td><td>10 mm</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      The standard has exceptions and other rules that a minimum grade alone doesn't capture,
+      such as how branches join a drain, depth of cover, and different requirements for
+      stormwater (AS/NZS 3500.3). The current edition is AS/NZS 3500.2:2025. In Victoria, for
+      example, work started on or after 20 October 2025 must comply with it.
+    </p>
+    <div class="callout">
+      <strong>A guide, not a compliance check</strong>
+      This calculator compares your grade with commonly quoted minimums only. Your licensed
+      plumber or drainer is responsible for designing and certifying drainage that meets the
+      Plumbing Code of Australia and your local water authority's requirements.
+    </div>
+  </section>
+
+  <section id="setting-out">
+    <h2>How to set out the fall on site</h2>
+    <ul class="checklist">
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Start from the connection point.</strong> Find the depth of the sewer connection or inspection opening first and work uphill, so you know the fall you actually have.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Measure to the invert.</strong> Take levels to the inside bottom of the pipe, allowing for pipe wall thickness and bedding.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Use a laser or string line.</strong> Set the level at each end and check the grade along the trench, not just at the ends.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Avoid sags and humps.</strong> A dip in the middle of a run holds water and waste even when the overall fall is right.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Record the levels.</strong> Note invert levels and lengths for the as-built drainage plan your plumber submits.</span></li>
+    </ul>
+    <div class="callout" style="margin-top: 24px;">
+      <strong>Drainage work needs a licensed plumber or drainer</strong>
+      Sanitary plumbing and drainage must be done by a licensed professional in every Australian
+      state, and is usually inspected before it is covered.
+    </div>
+  </section>
+
+  <section id="how-we-calculate">
+    <h2>How we calculate</h2>
+    <ul class="checklist">
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Fall:</strong> length (m) × grade (decimal) × 1,000 = fall in mm.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Grade:</strong> fall (mm) ÷ 1,000 ÷ length (m), shown as a percent, 1 in X and mm per metre.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Run length:</strong> fall (mm) ÷ 1,000 ÷ grade (decimal).</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Depth at low end:</strong> depth at the high end plus the fall, assuming the ground is level.</span></li>
+    </ul>
+    <p class="note" style="margin-top: 16px;">
+      Minimum grades as published in AS/NZS 3500.2 and summarised by
+      <a href="https://ccc-engineering-website.pages.dev/design-memos/sanitary-plumbing-drainage-design/" rel="noopener">CCC Engineering</a> (Dec 2025).
+      Current edition checked on the
+      <a href="https://www.bpc.vic.gov.au/plumbers/delivering-safe-and-compliant-plumbing/updated-plumbing-and-drainage-standards-asnzs-3500-series/updated-plumbing-and-drainage-standards-part-2-sanitary-plumbing-and-drainage" rel="noopener">Building and Plumbing Commission (Victoria)</a>
+      in November 2026.
+    </p>
+  </section>
+</CalculatorLayout>
+
+<script>
+  import { bindCalculator, num, fmt, setText, type State } from '../lib/calc';
+
+  // Pendientes mínimas citadas de AS/NZS 3500.2 para desagües sanitarios (decimal)
+  const MIN_GRADE: Record<string, number> = { '65': 0.025, '100': 0.0165, '150': 0.01 };
+  const UNIT_LABEL: Record<string, string> = { pct: '%', ratio: '', mmm: 'mm/m' };
+
+  const pctTxt = (g: number) => `${fmt(g * 100, 2).replace(/\.?0+$/, '')}%`;
+  const ratioTxt = (g: number) => (g > 0 ? `1 in ${fmt(1 / g, 0)}` : '–');
+
+  function toGrade(v: number, unit: string) {
+    if (unit === 'ratio') return v > 0 ? 1 / v : 0;
+    if (unit === 'mmm') return v / 1000;
+    return v / 100;
+  }
+
+  function drawDiagram(L: number, fallMm: number, g: number) {
+    const line = document.getElementById('dg-line');
+    const dim = document.getElementById('dg-dim');
+    const level = document.getElementById('dg-level');
+    if (!line || !dim || !level) return;
+    // Escala vertical exagerada: la caída visual crece con la pendiente, entre 8 y 70 px
+    const drop = Math.max(8, Math.min(70, g * 2000));
+    const y1 = 55, y2 = y1 + drop;
+    line.setAttribute('y1', String(y1)); line.setAttribute('y2', String(y2));
+    level.setAttribute('y1', String(y1)); level.setAttribute('y2', String(y1));
+    dim.setAttribute('d', `M305 ${y1} V${y2}`);
+    const f = document.getElementById('dg-fall');
+    if (f) { f.textContent = `${fmt(fallMm, 0)} mm`; f.setAttribute('y', String((y1 + y2) / 2 + 5)); }
+    setText('dg-grade', g > 0 ? `${pctTxt(g)} · ${ratioTxt(g)}` : '–');
+    const gl = document.getElementById('dg-grade');
+    if (gl) gl.setAttribute('y', String(Math.min(y2 + 24, 136)));
+    setText('dg-len', `${fmt(L, 1)} m`);
+  }
+
+  function render(s: State) {
+    const mode = ['fall', 'grade', 'length'].includes(s.mode) ? s.mode : 'fall';
+    const unit = s.gunit ?? 'pct';
+    const dn = s.dn ?? '100';
+
+    document.querySelectorAll<HTMLElement>('[data-modes]').forEach((el) => {
+      el.hidden = !el.dataset.modes!.split(' ').includes(mode);
+    });
+    setText('grade-unit', UNIT_LABEL[unit]);
+    setText('grade-l', unit === 'ratio' ? 'Grade (1 in X)' : 'Grade');
+
+    let L = num(s.len), fallMm = num(s.fall), g = toGrade(num(s.grade), unit);
+    let working = '';
+    if (mode === 'fall') {
+      fallMm = L * g * 1000;
+      working = `Fall = ${fmt(L, 2)} m × ${fmt(g, 4)} = ${fmt(fallMm / 1000, 3)} m = ${fmt(fallMm, 0)} mm`;
+    } else if (mode === 'grade') {
+      g = L > 0 ? fallMm / 1000 / L : 0;
+      working = `Grade = ${fmt(fallMm, 0)} mm ÷ 1,000 ÷ ${fmt(L, 2)} m = ${fmt(g, 4)} = ${pctTxt(g)} = ${ratioTxt(g)}`;
+    } else {
+      L = g > 0 ? fallMm / 1000 / g : 0;
+      working = `Length = ${fmt(fallMm, 0)} mm ÷ 1,000 ÷ ${fmt(g, 4)} = ${fmt(L, 1)} m`;
+    }
+    const ok = L > 0 && g > 0;
+
+    const big = mode === 'fall' ? `${fmt(fallMm, 0)} mm` : mode === 'grade' ? pctTxt(g) : `${fmt(L, 1)} m`;
+    setText('r-k', mode === 'fall' ? `Fall over ${fmt(L, 1)} m` : mode === 'grade' ? 'Grade' : 'Maximum run length');
+    setText('r-big', ok ? big : '–');
+    setText('r-pct', ok ? pctTxt(g) : '–');
+    setText('r-ratio', ok ? ratioTxt(g) : '–');
+    setText('r-mmm', ok ? `${fmt(g * 1000, 1)} mm` : '–');
+    const depth = s.depth !== undefined && s.depth !== '' ? num(s.depth) : null;
+    setText('r-depth', ok && depth !== null ? `${fmt(depth + fallMm, 0)} mm` : '–');
+    setText('r-working', ok ? working : 'Enter your measurements to see the working.');
+
+    // Comparación con la pendiente mínima habitual
+    const al = document.getElementById('r-alert');
+    if (al) {
+      const min = MIN_GRADE[dn];
+      if (!ok || min === undefined) {
+        al.hidden = true;
+      } else {
+        al.hidden = false;
+        const meets = g >= min - 1e-9;
+        al.classList.toggle('ok', meets);
+        al.innerHTML = meets
+          ? `<strong>Meets the common minimum.</strong> ${pctTxt(g)} is at or above the ${pctTxt(min)} usually quoted for a DN${dn} drain.`
+          : `<strong>Below the common minimum.</strong> A DN${dn} drain is usually laid at ${pctTxt(min)} or steeper (${fmt(min * L * 1000, 0)} mm over ${fmt(L, 1)} m). Check with your plumber.`;
+      }
+    }
+
+    drawDiagram(L, fallMm, g);
+
+    setText('mbar-k', `${dn === 'other' ? 'Pipe' : `DN${dn}`} · ${fmt(L, 1)} m at ${ok ? pctTxt(g) : '–'}`);
+    setText('mbar-v', ok ? big : '–');
+  }
+
+  const root = document.getElementById('calc');
+  if (root) bindCalculator(root, render);
+</script>

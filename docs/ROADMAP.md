@@ -86,7 +86,7 @@ Páginas candidatas (decidir con los datos):
 - [ ] Plumber call-out fee (guía de costos)
 - [ ] Blocked drain cost
 - [ ] Heat pump hot water rebates by state (contenido que se actualiza: alto valor)
-- [ ] Pipe fall / gradient calculator (aquí entra tu experiencia hidrosanitaria)
+- [x] Pipe fall / gradient calculator (construida 19 nov; falta medir volumen en Semrush y que Oswaldo confirme las pendientes mínimas)
 - [ ] Hot water system size calculator
 
 Mejoras del sitio en esta fase:
