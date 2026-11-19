@@ -1,0 +1,392 @@
+---
+import CalculatorLayout, { type Faq, type TocItem } from '../layouts/CalculatorLayout.astro';
+import Icon from '../components/Icon.astro';
+
+const toc: TocItem[] = [
+  { id: 'cost-per-m2', label: 'Cost per m² by finish' },
+  { id: 'by-city', label: 'Driveway cost by city' },
+  { id: 'exposed-aggregate', label: 'Exposed aggregate driveways' },
+  { id: 'extra-costs', label: 'Extra costs' },
+  { id: 'thickness', label: 'Thickness & reinforcement' },
+  { id: 'how-we-estimate', label: 'How we estimate' },
+];
+
+const faqs: Faq[] = [
+  {
+    q: 'How much does a concrete driveway cost in Australia?',
+    a: 'A plain concrete driveway typically costs around $100–$125 per m² laid in Australian capitals, with a range of about $70–$170 per m². Yellow Pages puts the national average at $110–$130 per m². For a typical 40 m² driveway in Melbourne that is about $4,700 for plain concrete and $6,800 for exposed aggregate, before removal, excavation or council crossover costs.',
+  },
+  {
+    q: 'How much does an exposed aggregate driveway cost?',
+    a: 'Exposed aggregate typically costs about $120–$200 per m² nationally, with a typical price around $160 per m² and up to $230 per m² in Sydney. That is roughly 40–50% more than a plain finish, because the surface is washed back to expose the stones and is usually sealed.',
+  },
+  {
+    q: 'How much does a double driveway cost?',
+    a: 'Double driveways are usually 5–6 m wide. A 6 m × 10 m (60 m²) plain driveway comes to about $6,600 at the national typical rate in this calculator. The Quote Yard puts a 60 m² Sydney driveway at $5,400–$13,200 depending on the suburb and how heavy-duty it is.',
+  },
+  {
+    q: 'Do I need council approval for a driveway?',
+    a: 'The section that crosses the footpath and kerb (the vehicle crossover) usually needs council approval and must be built to the council\'s specification. NSW application fees range from about $250 to $850, and the City of Melbourne charges $369.60 for a residential vehicle crossing permit. Check with your council before you book a concreter.',
+  },
+  {
+    q: 'How often should a concrete driveway be sealed?',
+    a: 'Acrylic sealers are usually reapplied every 2–4 years, and polyurethane or silane sealers every 5–7 years. Exposed aggregate and coloured driveways are normally sealed when they are laid, and the first coat is often included in the quote.',
+  },
+  {
+    q: 'Is stamped concrete cheaper than exposed aggregate?',
+    a: 'They cost about the same. National figures put stamped or stencilled concrete at about $120–$200 per m² (typically $155) and exposed aggregate at $120–$200 per m² (typically $160). Simple stamped patterns can be cheaper; intricate multi-colour patterns cost more.',
+  },
+];
+---
+<CalculatorLayout
+  slug="concrete-driveway-cost"
+  title="Concrete Driveway Cost Calculator Australia (2026)"
+  description="Estimate a concrete driveway's cost by city and finish: plain, coloured, stamped or exposed aggregate, plus removal, crossover and slope. Free calculator."
+  h1="Concrete Driveway Cost Calculator"
+  lede="Estimate what a new concrete driveway will cost in your city, for plain, coloured, stamped or exposed aggregate finishes, including the extras quotes often leave out."
+  updated="2026-11-19"
+  quickAnswer="a plain concrete driveway typically costs $100–$125 per m² laid in Australian capitals, and exposed aggregate $145–$185 per m². A typical 40 m² driveway comes to roughly $4,000–$5,000 plain or $5,800–$7,400 exposed aggregate depending on the city, before removal and crossover costs."
+  toc={toc}
+  faqs={faqs}
+  cta={{ title: 'Ready to get quotes?', sub: 'Compare at least three licensed concreters', href: '#extra-costs' }}
+>
+  <!-- ───────── Entradas ───────── -->
+  <div slot="inputs">
+    <div class="step">
+      <div class="step-head"><span class="n">1</span><h2 id="finish-h">Finish</h2></div>
+      <fieldset class="choice-grid" aria-labelledby="finish-h" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
+        <label class="choice">
+          <input type="radio" name="finish" value="plain" data-state />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="10" y="6" width="44" height="28" rx="2"></rect><path d="M16 14 h32 M16 20 h32 M16 26 h32" stroke-width="1" opacity=".5"></path></svg>
+          <span class="t">Plain</span>
+          <span class="d">Broom or smooth finish</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="finish" value="col" data-state />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="10" y="6" width="44" height="28" rx="2" fill="currentColor" fill-opacity=".18"></rect></svg>
+          <span class="t">Coloured</span>
+          <span class="d">Oxide through the mix</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="finish" value="agg" data-state checked />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="10" y="6" width="44" height="28" rx="2"></rect><circle cx="18" cy="14" r="2"></circle><circle cx="28" cy="22" r="2.5"></circle><circle cx="40" cy="13" r="2"></circle><circle cx="46" cy="26" r="2.5"></circle><circle cx="20" cy="27" r="1.5"></circle><circle cx="34" cy="29" r="1.5"></circle></svg>
+          <span class="t">Exposed aggregate</span>
+          <span class="d">Stones washed to the surface</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="finish" value="stamp" data-state />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="10" y="6" width="44" height="28" rx="2"></rect><path d="M10 15 h44 M10 25 h44 M24 6 v9 M40 6 v9 M17 15 v10 M32 15 v10 M47 15 v10 M24 25 v9 M40 25 v9" stroke-width="1.5"></path></svg>
+          <span class="t">Stamped / stencilled</span>
+          <span class="d">Paver or stone pattern</span>
+        </label>
+      </fieldset>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">2</span><h2>Size and location</h2></div>
+      <div class="fields">
+        <div><label for="len">Length</label><div class="field"><input id="len" type="number" inputmode="decimal" min="0" step="0.5" value="10" data-state /><span class="unit">m</span></div></div>
+        <div><label for="wid">Width</label><div class="field"><input id="wid" type="number" inputmode="decimal" min="0" step="0.1" value="4" data-state /><span class="unit">m</span></div></div>
+      </div>
+      <p class="note" style="margin: 8px 0 14px;">Single driveways are usually at least 3 m wide; double driveways 5–6 m.</p>
+      <div class="opt-label" id="city-l">City</div>
+      <div class="seg" role="radiogroup" aria-labelledby="city-l">
+        <label><input type="radio" name="city" value="syd" data-state />Sydney</label>
+        <label><input type="radio" name="city" value="mel" data-state checked />Melbourne</label>
+        <label><input type="radio" name="city" value="bne" data-state />Brisbane</label>
+        <label><input type="radio" name="city" value="per" data-state />Perth</label>
+        <label><input type="radio" name="city" value="adl" data-state />Adelaide</label>
+        <label><input type="radio" name="city" value="cbr" data-state />Canberra</label>
+        <label><input type="radio" name="city" value="oth" data-state />Other</label>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">3</span><h2>Site and extras</h2></div>
+      <div class="opt-label" id="duty-l">Use</div>
+      <div class="seg" role="radiogroup" aria-labelledby="duty-l" style="margin-bottom: 14px;">
+        <label><input type="radio" name="duty" value="std" data-state checked />Cars (100 mm)</label>
+        <label><input type="radio" name="duty" value="heavy" data-state />Caravan, boat, 4WD (125–150 mm)</label>
+      </div>
+      <div class="toggles">
+        <label class="toggle"><input type="checkbox" id="remove" data-state /><span><span class="t">Remove old concrete</span><span class="d">Break up and dispose of the existing driveway</span></span></label>
+        <label class="toggle"><input type="checkbox" id="slope" data-state /><span><span class="t">Sloping block</span><span class="d">Extra formwork and labour on a slope</span></span></label>
+        <label class="toggle"><input type="checkbox" id="cross" data-state /><span><span class="t">New council crossover</span><span class="d">Kerb and footpath section, plus permit</span></span></label>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">4</span><h2>Your quote <span class="muted" style="font-weight: 400; font-size: 15px;">(optional)</span></h2></div>
+      <div class="fields" style="max-width: 320px;">
+        <div><label for="q-m2">Quoted price per m²</label><div class="field"><span class="unit" style="padding: 0 6px 0 0;">$</span><input id="q-m2" type="number" inputmode="decimal" min="0" step="5" data-state /><span class="unit">/m²</span></div></div>
+      </div>
+      <p class="note" style="margin: 8px 0 0;">Replaces our estimate for the driveway itself. Extras are still added.</p>
+    </div>
+  </div>
+
+  <!-- ───────── Resultado ───────── -->
+  <div slot="result">
+    <div class="diagram">
+      <svg viewBox="0 0 380 170" role="img" aria-labelledby="dg-drive">
+        <title id="dg-drive">Plan of the driveway from the garage to the street</title>
+        <defs>
+          <pattern id="p-agg" width="14" height="14" patternUnits="userSpaceOnUse">
+            <rect width="14" height="14" fill="#e8eef5"></rect>
+            <circle cx="3" cy="4" r="1.6" fill="#8ea6c2"></circle><circle cx="10" cy="9" r="2" fill="#a9bcd2"></circle><circle cx="5" cy="12" r="1.1" fill="#7b95b5"></circle>
+          </pattern>
+          <pattern id="p-stamp" width="24" height="16" patternUnits="userSpaceOnUse">
+            <rect width="24" height="16" fill="#e8eef5"></rect>
+            <path d="M0 8 h24 M12 0 v8 M0 8 v8 M24 8 v8" stroke="#9fb4cc" stroke-width="1" fill="none"></path>
+          </pattern>
+          <pattern id="p-cross" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="8" height="8" fill="#fdeee4"></rect><line x1="0" y1="0" x2="0" y2="8" stroke="#f3b48c" stroke-width="3"></line>
+          </pattern>
+        </defs>
+        <rect x="0" y="0" width="380" height="18" fill="#efece5"></rect>
+        <text x="190" y="13" fill="#565d66" font-size="11" text-anchor="middle">Garage</text>
+        <rect id="dg-drive-rect" x="150" y="18" width="80" height="112" fill="#e8eef5" stroke="#24456e" stroke-width="2"></rect>
+        <rect id="dg-cross" x="140" y="130" width="100" height="18" fill="url(#p-cross)" stroke="#c2410c" stroke-width="1.5" opacity="0"></rect>
+        <rect x="0" y="130" width="380" height="18" fill="none" stroke="#d6d2c8" stroke-width="1" stroke-dasharray="3 3"></rect>
+        <text x="8" y="143" fill="#565d66" font-size="10">Footpath</text>
+        <rect x="0" y="148" width="380" height="22" fill="#d6d2c8"></rect>
+        <text x="8" y="163" fill="#3a4048" font-size="11">Street</text>
+        <text id="dg-len" x="240" y="78" fill="#9a3412" font-size="13">10.0 m</text>
+        <text id="dg-area" x="140" y="74" fill="#16191d" font-size="15" text-anchor="end">40 m²</text>
+        <text id="dg-wid" x="140" y="92" fill="#9a3412" font-size="12" text-anchor="end">4.0 m wide</text>
+      </svg>
+    </div>
+
+    <div class="result-body" aria-live="polite">
+      <div class="big"><div class="k">Estimated cost (typical)</div><div class="v" id="r-total">–</div></div>
+      <p class="range-note" id="r-range"></p>
+      <div class="stats">
+        <div class="stat stat-plan"><div class="k">Likely range</div><div class="v" id="r-lohi" style="font-size: 20px;">–</div></div>
+        <div class="stat stat-accent"><div class="k">Driveway per m²</div><div class="v" id="r-m2" style="font-size: 24px;">–</div></div>
+      </div>
+
+      <ul class="breakdown" id="r-breakdown" aria-label="Cost breakdown"></ul>
+      <p class="working" id="r-working"></p>
+
+      <div class="result-actions">
+        <button type="button" class="btn" id="copy-link"><Icon name="link" size={18} />Copy link to result</button>
+        <button type="button" class="btn icon-btn" id="print" aria-label="Print result"><Icon name="print" size={18} /></button>
+      </div>
+      <p class="copy-status" id="copy-status" role="status"></p>
+    </div>
+  </div>
+
+  <!-- ───────── Artículo ───────── -->
+  <section id="cost-per-m2">
+    <h2>How much does a concrete driveway cost per m²?</h2>
+    <p>Laid prices for supply, placement and finishing, including GST:</p>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Finish</th><th scope="col">National (low–high)</th><th scope="col">Typical</th></tr></thead>
+        <tbody>
+          <tr><td>Plain</td><td>$75–$150</td><td>$110</td></tr>
+          <tr><td>Coloured</td><td>$95–$200</td><td>$140</td></tr>
+          <tr><td>Stamped / stencilled</td><td>$120–$200</td><td>$155</td></tr>
+          <tr><td>Exposed aggregate</td><td>$120–$200</td><td>$160</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">
+      Source: whatsthedamage.com.au (verified November 2026). Yellow Pages (May 2026) gives a
+      similar picture: plain $110–$130, coloured $120–$180 and exposed aggregate $120–$200 per m².
+    </p>
+  </section>
+
+  <section id="by-city">
+    <h2>Concrete driveway cost by city</h2>
+    <p>Typical price per m² and a 40 m² driveway (about 10 × 4 m) at that rate:</p>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">City</th><th scope="col">Plain per m²</th><th scope="col">Exposed agg. per m²</th><th scope="col">40 m² plain / exposed</th></tr></thead>
+        <tbody>
+          <tr><td>Sydney</td><td>$125</td><td>$185</td><td>$5,000 / $7,400</td></tr>
+          <tr><td>Canberra</td><td>$120</td><td>$175</td><td>$4,800 / $7,000</td></tr>
+          <tr><td>Melbourne</td><td>$115</td><td>$170</td><td>$4,600 / $6,800</td></tr>
+          <tr><td>Perth</td><td>$115</td><td>$170</td><td>$4,600 / $6,800</td></tr>
+          <tr><td>Brisbane</td><td>$110</td><td>$160</td><td>$4,400 / $6,400</td></tr>
+          <tr><td>Adelaide</td><td>$100</td><td>$145</td><td>$4,000 / $5,800</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Driveway only. Removal, excavation and council crossover are extra.</p>
+  </section>
+
+  <section id="exposed-aggregate">
+    <h2>Is an exposed aggregate driveway worth it?</h2>
+    <p>
+      Exposed aggregate is made by washing the top layer of cement paste off the concrete before it
+      fully sets, revealing the stones in the mix. It typically costs about 40–50% more than a plain
+      finish, but it is one of the most popular driveway finishes in Australia.
+    </p>
+    <div class="compare">
+      <div class="c1"><h3>Why people choose it</h3>A textured, non-slip surface that hides tyre marks, dirt and small stains well.</div>
+      <div class="c2"><h3>What to know</h3>It is usually sealed when laid and needs resealing every few years to keep its colour.</div>
+      <div class="c3"><h3>Choosing the mix</h3>Ask to see a sample board or a finished driveway: stone colour and size change the look a lot.</div>
+    </div>
+  </section>
+
+  <section id="extra-costs">
+    <h2>Extra costs to ask about</h2>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Item</th><th scope="col">Typical cost</th></tr></thead>
+        <tbody>
+          <tr><td>Removing old concrete (incl. disposal)</td><td>About $32–$105 per m² (Melbourne)</td></tr>
+          <tr><td>Sloping block</td><td>About $10 per m² extra</td></tr>
+          <tr><td>Council vehicle crossover (NSW)</td><td>$1,800–$5,500, quoted separately</td></tr>
+          <tr><td>Crossover application fee</td><td>$250–$850 (NSW); $369.60 (City of Melbourne)</td></tr>
+          <tr><td>Excavation and spoil removal</td><td>Varies with depth and access; ask for it itemised</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="checklist" style="margin-top: 20px;">
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Ask whether the quote includes excavation, base material, mesh, control joints and sealing.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Check the crossover with your council first: many specify the slab thickness, mesh and width.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Get at least three itemised quotes and enter them above to compare per m².</span></li>
+    </ul>
+  </section>
+
+  <section id="thickness">
+    <h2>How thick should a concrete driveway be?</h2>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Use</th><th scope="col">Slab</th><th scope="col">Typical mesh</th></tr></thead>
+        <tbody>
+          <tr><td>Cars, utes</td><td>100 mm</td><td>F62 or SL72</td></tr>
+          <tr><td>Caravan, boat, heavier vehicles</td><td>125 mm</td><td>SL82</td></tr>
+          <tr><td>Rural, tractors, trucks</td><td>150 mm</td><td>SL92 or two layers of F72</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">
+      Common practice from The Quote Yard (April 2026), with 25 MPa concrete standard and 32 MPa for
+      heavy-duty or coastal sites. Council crossovers often need 150 mm with SL82 mesh. Your
+      concreter or council may specify something different.
+    </p>
+  </section>
+
+  <section id="how-we-estimate">
+    <h2>How we estimate</h2>
+    <ul class="checklist">
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Driveway:</strong> your area × the low, typical and high price per m² for your city and finish. Sydney and Melbourne use whatsthedamage.com.au's city figures; plain and exposed aggregate use each city's own figures; coloured and stamped prices for other cities are national figures scaled by that city's plain price (this reproduces Sydney's published prices within a few dollars).</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Heavy duty:</strong> about 37% more per m², the gap between The Quote Yard's standard reinforced ($90–$150) and heavy-duty ($130–$200) NSW ranges.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Sloping block:</strong> $10 per m² (Yellow Pages).</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Removal:</strong> your area × the removal rate, scaled from the Melbourne and Sydney figures by city.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Crossover:</strong> The Quote Yard's NSW range of $1,800–$5,500 plus an application fee of $400–$700 (metro range). Your council may differ.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Not included: excavation and spoil removal, retaining walls, stormwater work and sealing beyond the first coat.</span></li>
+    </ul>
+    <p class="note" style="margin-top: 16px;">
+      Sources (accessed November 2026):
+      <a href="https://whatsthedamage.com.au/concreting-cost/" rel="noopener">whatsthedamage.com.au concreting guides</a> (verified Nov 2026),
+      <a href="https://www.yellowpages.com.au/articles/concrete-contractors/how-much-does-a-concrete-driveway-cost" rel="noopener">Yellow Pages</a> (May 2026),
+      <a href="https://www.thequoteyard.com.au/services/concrete-driveway-nsw" rel="noopener">The Quote Yard</a> (Apr 2026).
+      Prices include GST. Estimates are a guide only; get itemised quotes from licensed concreters.
+    </p>
+  </section>
+</CalculatorLayout>
+
+<script>
+  import { bindCalculator, num, fmt, setText, aud, type State } from '../lib/calc';
+
+  type Range = [number, number, number]; // bajo, típico, alto por m² (incl. GST)
+  type City = { name: string; plain: Range; col: Range; stamp: Range; agg: Range; rem: Range };
+  // whatsthedamage.com.au (verificado nov 2026). Sydney y Melbourne: cifras directas.
+  // Otras ciudades: plain y agg directos; col, stamp y rem = nacional × (plain típico ciudad ÷ 110).
+  const CITIES: Record<string, City> = {
+    syd: { name: 'Sydney', plain: [86, 125, 170], col: [110, 160, 230], stamp: [140, 180, 230], agg: [140, 185, 230], rem: [34, 69, 115] },
+    mel: { name: 'Melbourne', plain: [79, 115, 160], col: [100, 145, 210], stamp: [125, 165, 210], agg: [125, 170, 210], rem: [32, 63, 105] },
+    bne: { name: 'Brisbane', plain: [75, 110, 150], col: [95, 140, 200], stamp: [120, 155, 200], agg: [120, 160, 200], rem: [31, 60, 100] },
+    per: { name: 'Perth', plain: [79, 115, 160], col: [99, 146, 209], stamp: [125, 162, 209], agg: [125, 170, 210], rem: [32, 63, 105] },
+    adl: { name: 'Adelaide', plain: [69, 100, 140], col: [86, 127, 182], stamp: [109, 141, 182], agg: [110, 145, 185], rem: [28, 55, 91] },
+    cbr: { name: 'Canberra', plain: [82, 120, 165], col: [104, 153, 218], stamp: [131, 169, 218], agg: [130, 175, 220], rem: [34, 65, 109] },
+    oth: { name: 'Australia (national)', plain: [75, 110, 150], col: [95, 140, 200], stamp: [120, 155, 200], agg: [120, 160, 200], rem: [31, 60, 100] },
+  };
+  const FINISH: Record<string, string> = { plain: 'plain', col: 'coloured', stamp: 'stamped / stencilled', agg: 'exposed aggregate' };
+  const HEAVY = 165 / 120; // The Quote Yard NSW: heavy duty $130–200 vs reinforced standard $90–150 (puntos medios)
+  const SLOPE_M2 = 10; // Yellow Pages: ~$10/m² extra en terreno inclinado
+  const CROSSOVER: Range = [1800 + 400, 3650 + 550, 5500 + 700]; // The Quote Yard NSW + tasa municipal metro $400–700
+
+  function drawDiagram(L: number, W: number, cross: boolean, finish: string) {
+    const rect = document.getElementById('dg-drive-rect');
+    const cr = document.getElementById('dg-cross');
+    if (!rect || !cr || L <= 0 || W <= 0) return;
+    const maxH = 112, maxW = 300;
+    const scale = Math.min(maxH / L, maxW / W);
+    const w = W * scale, h = L * scale;
+    const x = 190 - w / 2, y = 130 - h;
+    rect.setAttribute('x', x.toFixed(1)); rect.setAttribute('y', y.toFixed(1));
+    rect.setAttribute('width', w.toFixed(1)); rect.setAttribute('height', h.toFixed(1));
+    rect.setAttribute('fill', finish === 'agg' ? 'url(#p-agg)' : finish === 'stamp' ? 'url(#p-stamp)' : finish === 'col' ? '#d9c3ad' : '#e8eef5');
+    cr.setAttribute('x', (x - 10).toFixed(1)); cr.setAttribute('width', (w + 20).toFixed(1));
+    cr.setAttribute('opacity', cross ? '1' : '0');
+    const tl = document.getElementById('dg-len');
+    const tw = document.getElementById('dg-wid');
+    const ta = document.getElementById('dg-area');
+    if (tl) { tl.textContent = `${fmt(L, 1)} m`; tl.setAttribute('x', String(x + w + 8)); tl.setAttribute('y', String(y + h / 2 + 4)); }
+    if (ta) { ta.textContent = `${fmt(L * W, 0)} m²`; ta.setAttribute('x', String(x - 10)); ta.setAttribute('y', String(y + h / 2 - 2)); }
+    if (tw) { tw.textContent = `${fmt(W, 1)} m wide`; tw.setAttribute('x', String(x - 10)); tw.setAttribute('y', String(y + h / 2 + 16)); }
+  }
+
+  function render(s: State) {
+    const city = CITIES[s.city ?? 'mel'] ?? CITIES.mel;
+    const finish = (['plain', 'col', 'stamp', 'agg'].includes(s.finish) ? s.finish : 'agg') as keyof City;
+    const L = num(s.len), W = num(s.wid);
+    const area = L * W;
+    const heavy = s.duty === 'heavy';
+    const slope = s.slope === '1';
+    const own = num(s['q-m2']);
+
+    const base = city[finish] as Range;
+    const perM2 = base.map((v) => (v * (heavy ? HEAVY : 1)) + (slope ? SLOPE_M2 : 0)) as Range;
+    const drive: Range = own > 0 ? [area * own, area * own, area * own] : (perM2.map((v) => v * area) as Range);
+    const rem: Range = s.remove === '1' ? (city.rem.map((v) => v * area) as Range) : [0, 0, 0];
+    const cross: Range = s.cross === '1' ? CROSSOVER : [0, 0, 0];
+    const total = [0, 1, 2].map((i) => drive[i] + rem[i] + cross[i]);
+
+    const round = (n: number) => Math.round(n / 50) * 50;
+    setText('r-total', area > 0 ? aud(round(total[1])) : '–');
+    setText('r-lohi', area > 0 ? `${aud(round(total[0]))}–${aud(round(total[2]))}` : '–');
+    setText('r-m2', own > 0 ? `${aud(own)} (yours)` : aud(perM2[1]));
+    setText('r-range', `${FINISH[finish].charAt(0).toUpperCase() + FINISH[finish].slice(1)} driveways in ${city.name} typically cost ${aud(base[0])}–${aud(base[2])} per m² (incl. GST).`);
+
+    const lines = [
+      { k: `Driveway (${FINISH[finish]}${heavy ? ', heavy duty' : ''}${slope ? ', sloping' : ''})`, v: drive[1], own: own > 0 },
+      { k: 'Old concrete removal', v: rem[1], own: false },
+      { k: 'Council crossover & permit', v: cross[1], own: false },
+    ].filter((l) => l.v > 0);
+    const max = Math.max(...lines.map((l) => l.v), 1);
+    const list = document.getElementById('r-breakdown');
+    if (list) {
+      list.replaceChildren(...lines.map((l) => {
+        const li = document.createElement('li');
+        if (l.own) li.className = 'own';
+        const row = document.createElement('div'); row.className = 'row';
+        const name = document.createElement('span'); name.textContent = l.k + (l.own ? ' (your quote)' : '');
+        const val = document.createElement('strong'); val.textContent = aud(l.v);
+        row.append(name, val);
+        const bar = document.createElement('div'); bar.className = 'bar';
+        const fill = document.createElement('i'); fill.style.width = `${(l.v / max) * 100}%`;
+        bar.append(fill);
+        li.append(row, bar);
+        return li;
+      }));
+    }
+
+    setText('r-working', area > 0
+      ? `${fmt(L, 1)} × ${fmt(W, 1)} m = ${fmt(area, 1)} m² × ${own > 0 ? `${aud(own)} (your quote)` : `${aud(base[1])}${heavy ? ' × 1.37 heavy duty' : ''}${slope ? ' + $10 slope' : ''}`} = ${aud(drive[1])}${rem[1] ? ` + removal ${fmt(area, 1)} × ${aud(city.rem[1])}` : ''}${cross[1] ? ` + crossover ${aud(cross[1])}` : ''}${rem[1] || cross[1] ? ` = ${aud(total[1])}` : ''}`
+      : 'Enter the driveway size to see the working.');
+
+    drawDiagram(L, W, s.cross === '1', finish);
+
+    setText('mbar-k', `${FINISH[finish].charAt(0).toUpperCase() + FINISH[finish].slice(1)} · ${fmt(area, 0)} m² · ${city.name === 'Australia (national)' ? 'National' : city.name}`);
+    const v = document.getElementById('mbar-v');
+    if (v) v.innerHTML = `${aud(round(total[1]))} <span>· ${aud(round(total[0]))}–${aud(round(total[2]))}</span>`;
+  }
+
+  const root = document.getElementById('calc');
+  if (root) bindCalculator(root, render);
+</script>

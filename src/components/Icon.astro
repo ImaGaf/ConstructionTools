@@ -8,6 +8,7 @@ const { name, size = 24, stroke = 2, label, class: cls } = Astro.props;
 
 const paths: Record<IconName, string> = {
   slab: '<path d="M2 11 L12 6 L22 11 L12 16 Z"/><path d="M2 11 V14 L12 19 V16"/><path d="M22 11 V14 L12 19"/>',
+  driveway: '<path d="M8 3 L4 21 M16 3 L20 21"/><path d="M12 5v2M12 11v2M12 17v2"/>',
   stairs: '<path d="M3 20h5v-4h4v-4h4V8h5"/><path d="M3 20h18V8"/>',
   tile: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18"/>',
   bath: '<path d="M4 12h16v3a4 4 0 01-4 4H8a4 4 0 01-4-4z"/><path d="M6 12V6a2 2 0 014 0"/><path d="M7 19l-1 2M17 19l1 2"/>',

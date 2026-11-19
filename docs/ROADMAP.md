@@ -54,7 +54,7 @@ Prompt para Claude Code:
 - [ ] Hot water system replacement cost (720/mes, CPC $4,12: la mejor para leads)
 - [x] Concrete steps calculator (1.000 + 480/mes, KD 5–21; solo matemática)
 - [x] Concrete price per m³ / cost (~5.000/mes sumando variantes, KD 8–20)
-- [ ] Concrete driveway cost + exposed aggregate (1.600 + 2.400/mes, CPC $5–6)
+- [x] Concrete driveway cost + exposed aggregate (1.600 + 2.400/mes, CPC $5–6)
 
 Antes de las páginas de costos: consigue fuentes reales de precios en Australia
 (guías de Canstar, hipages, ServiceSeeking, cotizaciones que conozcas por tu trabajo).

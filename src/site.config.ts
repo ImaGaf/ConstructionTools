@@ -24,7 +24,7 @@ export const SITE = {
 };
 
 export type IconName =
-  | 'slab' | 'stairs' | 'tile' | 'bath' | 'kitchen' | 'hotwater' | 'gravel' | 'pipe'
+  | 'slab' | 'driveway' | 'stairs' | 'tile' | 'bath' | 'kitchen' | 'hotwater' | 'gravel' | 'pipe'
   | 'dollar' | 'search' | 'arrow' | 'check' | 'info' | 'link' | 'print' | 'menu' | 'shield' | 'ruler' | 'grid';
 
 export type Category = {
@@ -106,6 +106,15 @@ export const TOOLS: Tool[] = [
     icon: 'bath',
     ready: true,
     related: ['kitchen-renovation-cost-calculator', 'tile-calculator'],
+  },
+  {
+    slug: 'concrete-driveway-cost',
+    title: 'Concrete Driveway Cost',
+    blurb: 'Plain, coloured, stamped or exposed aggregate, by city, with removal and crossover.',
+    category: 'renovation-costs',
+    icon: 'driveway',
+    ready: true,
+    related: ['concrete-price-per-m3', 'concrete-calculator'],
   },
   {
     slug: 'tile-calculator',
