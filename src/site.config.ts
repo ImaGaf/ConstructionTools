@@ -128,10 +128,10 @@ export const TOOLS: Tool[] = [
   {
     slug: 'kitchen-renovation-cost-calculator',
     title: 'Kitchen Renovation Cost',
-    blurb: 'Estimate by kitchen size and finish level.',
+    blurb: 'Budget by finish level, benchtop and size, with your own quotes.',
     category: 'renovation-costs',
     icon: 'kitchen',
-    ready: false,
+    ready: true,
     related: ['bathroom-renovation-cost-calculator', 'tile-calculator'],
   },
   {

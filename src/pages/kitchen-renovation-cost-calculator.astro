@@ -1,0 +1,515 @@
+---
+import CalculatorLayout, { type Faq, type TocItem } from '../layouts/CalculatorLayout.astro';
+import Icon from '../components/Icon.astro';
+
+const toc: TocItem[] = [
+  { id: 'cost-by-level', label: 'Cost by finish level' },
+  { id: 'cost-breakdown', label: 'Cost breakdown' },
+  { id: 'benchtops', label: 'Benchtop costs' },
+  { id: 'what-drives-cost', label: 'What drives the cost' },
+  { id: 'save-money', label: 'Ways to save' },
+  { id: 'before-you-start', label: 'Before you start' },
+  { id: 'how-we-estimate', label: 'How we estimate' },
+];
+
+const faqs: Faq[] = [
+  {
+    q: 'How much does a kitchen renovation cost in Australia?',
+    a: 'Most full kitchen renovations in Australia cost about $12,000 to $25,000 at a budget level, $25,000 to $45,000 for mid-range and $45,000 to $80,000 for premium, before a contingency. A cosmetic refresh that keeps the cabinets and layout can come in under $20,000. Cabinetry, benchtops and appliances are the biggest variables.',
+  },
+  {
+    q: 'How much does a small kitchen renovation cost?',
+    a: 'With the calculator, a small kitchen with 4 m of benchtop and 7 m² of floor comes to roughly $18,000 at budget level and $30,000 at mid-range before contingency, with porcelain benchtops and the same layout. Smaller kitchens save on cabinetry and benchtop, but plumbing, electrical and appliances cost much the same at any size.',
+  },
+  {
+    q: 'What is the most expensive part of a kitchen renovation?',
+    a: 'Cabinetry is usually the largest single item, at around 30–40% of the budget. Benchtops and appliances come next. Labour across all trades often makes up 40–50% of the total, and moving walls or services can add more than any single item.',
+  },
+  {
+    q: 'Can I still get an engineered stone benchtop?',
+    a: 'No. Australia banned the manufacture, supply, processing and installation of engineered stone from 1 July 2024 because of the silicosis risk to workers. Existing engineered stone benchtops do not have to be removed. Natural stone such as granite and marble, porcelain, sintered stone, laminate and timber are all still available.',
+  },
+  {
+    q: 'How much contingency should I allow for a kitchen?',
+    a: 'Allow 10–20% on top of your quotes. Published cost ranges usually leave contingency out, and older homes can hide problems such as old wiring, plumbing or asbestos that only show up during demolition.',
+  },
+  {
+    q: 'Do I need council approval to renovate a kitchen?',
+    a: 'A like-for-like kitchen replacement often does not need approval, but removing or altering a wall, especially a load-bearing one, usually does. Check with your council or a building certifier. Plumbing, gas and electrical work must be done by licensed trades in every state.',
+  },
+];
+
+const QUOTE_ROWS: { key: string; label: string; extra?: string }[] = [
+  { key: 'cab', label: 'Cabinetry' },
+  { key: 'bench', label: 'Benchtops', extra: 'bench' },
+  { key: 'splash', label: 'Splashback' },
+  { key: 'appl', label: 'Appliances', extra: 'appl' },
+  { key: 'plumb', label: 'Plumbing' },
+  { key: 'elec', label: 'Electrical' },
+  { key: 'demo', label: 'Demolition & waste' },
+  { key: 'floor', label: 'Flooring', extra: 'floor' },
+  { key: 'wall', label: 'Wall removal', extra: 'wall' },
+  { key: 'permit', label: 'Council / certifier fees', extra: 'permit' },
+];
+---
+<CalculatorLayout
+  slug="kitchen-renovation-cost-calculator"
+  title="Kitchen Renovation Cost Calculator Australia (2026)"
+  description="Free kitchen renovation cost calculator for Australia. Estimate by finish level, benchtop and size, see the breakdown, and swap in your own quotes."
+  h1="Kitchen Renovation Cost Calculator"
+  lede="Estimate what your kitchen renovation will cost in Australia, item by item. Choose the finish level, benchtop and scope, then replace any line with a real quote."
+  updated="2026-11-19"
+  quickAnswer="most Australian kitchen renovations cost about $12,000–$25,000 at budget level, $25,000–$45,000 for mid-range and $45,000–$80,000 for premium, before contingency. A typical mid-range kitchen with 6 m of porcelain benchtop and new appliances comes to around $39,000, or about $45,000 with a 15% contingency."
+  toc={toc}
+  faqs={faqs}
+  cta={{ title: 'Ready to get quotes?', sub: 'Compare at least three licensed kitchen renovators', href: '#before-you-start' }}
+>
+  <!-- ───────── Entradas ───────── -->
+  <div slot="inputs">
+    <div class="step">
+      <div class="step-head"><span class="n">1</span><h2 id="tier-h">Finish level</h2></div>
+      <fieldset class="choice-grid" aria-labelledby="tier-h">
+        <label class="choice">
+          <input type="radio" name="tier" value="budget" data-state />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="10" y="14" width="44" height="20" rx="2"></rect><path d="M10 20 h44 M32 20 v14"></path><path d="M26 26 h2 M36 26 h2" stroke-linecap="round"></path></svg>
+          <span class="t">Budget</span>
+          <span class="d">Flat-pack, laminate, same layout</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="tier" value="mid" data-state checked />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="16" width="52" height="18" rx="2"></rect><path d="M4 16 h56"></path><path d="M24 16 v18 M42 16 v18"></path><path d="M14 10 v-4 h6 v4" stroke-linecap="round"></path></svg>
+          <span class="t">Mid-range</span>
+          <span class="d">Custom cabinets, stone-look tops</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="tier" value="premium" data-state />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="6" width="56" height="10" rx="2"></rect><rect x="14" y="22" width="36" height="12" rx="2"></rect><path d="M12 22 h40"></path><path d="M22 6 v10 M42 6 v10"></path></svg>
+          <span class="t">Premium</span>
+          <span class="d">Designer cabinetry, island, top appliances</span>
+        </label>
+      </fieldset>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">2</span><h2>Kitchen size</h2></div>
+      <div class="fields">
+        <div><label for="run">Benchtop length</label><div class="field"><input id="run" type="number" inputmode="decimal" min="0" step="0.1" value="6" data-state /><span class="unit">m</span></div></div>
+        <div><label for="area">Floor area</label><div class="field"><input id="area" type="number" inputmode="decimal" min="0" step="0.5" value="10" data-state /><span class="unit">m²</span></div></div>
+      </div>
+      <p class="note" style="margin: 8px 0 0;">Add up all benchtop runs, including any island.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">3</span><h2>Finishes</h2></div>
+      <div class="opt-label" id="cabs-l">Cabinets</div>
+      <div class="seg" role="radiogroup" aria-labelledby="cabs-l">
+        <label><input type="radio" name="cabs" value="new" data-state checked />New</label>
+        <label><input type="radio" name="cabs" value="refresh" data-state />Respray or wrap</label>
+      </div>
+      <div class="opt-label" id="mat-l" style="margin-top: 14px;">Benchtop</div>
+      <div class="seg" role="radiogroup" aria-labelledby="mat-l">
+        <label><input type="radio" name="mat" value="laminate" data-state />Laminate</label>
+        <label><input type="radio" name="mat" value="timber" data-state />Timber</label>
+        <label><input type="radio" name="mat" value="granite" data-state />Granite</label>
+        <label><input type="radio" name="mat" value="porcelain" data-state checked />Porcelain / sintered</label>
+        <label><input type="radio" name="mat" value="marble" data-state />Marble</label>
+        <label><input type="radio" name="mat" value="keep" data-state />Keep existing</label>
+      </div>
+      <div class="options" style="margin-top: 14px;">
+        <div>
+          <div class="opt-label" id="splash-l">Splashback</div>
+          <div class="seg" role="radiogroup" aria-labelledby="splash-l">
+            <label><input type="radio" name="splash" value="tile" data-state checked />Tiles</label>
+            <label><input type="radio" name="splash" value="glass" data-state />Glass</label>
+          </div>
+        </div>
+        <div>
+          <div class="opt-label" id="appl-l">Appliances</div>
+          <div class="seg" role="radiogroup" aria-labelledby="appl-l">
+            <label><input type="radio" name="applmode" value="new" data-state checked />New</label>
+            <label><input type="radio" name="applmode" value="keep" data-state />Keep existing</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">4</span><h2>Scope</h2></div>
+      <div class="options" style="margin-bottom: 14px;">
+        <div>
+          <div class="opt-label" id="wall-l">Remove a wall?</div>
+          <div class="seg" role="radiogroup" aria-labelledby="wall-l">
+            <label><input type="radio" name="wallmode" value="none" data-state checked />No</label>
+            <label><input type="radio" name="wallmode" value="light" data-state />Non-load-bearing</label>
+            <label><input type="radio" name="wallmode" value="lb" data-state />Load-bearing</label>
+          </div>
+        </div>
+        <div>
+          <div class="opt-label" id="cont-l">Contingency</div>
+          <div class="seg" role="radiogroup" aria-labelledby="cont-l">
+            <label><input type="radio" name="cont" value="10" data-state />10%</label>
+            <label><input type="radio" name="cont" value="15" data-state checked />15%</label>
+            <label><input type="radio" name="cont" value="20" data-state />20%</label>
+          </div>
+        </div>
+      </div>
+      <div class="toggles">
+        <label class="toggle"><input type="checkbox" id="flooring" data-state checked /><span><span class="t">New flooring</span><span class="d">Across the kitchen floor area</span></span></label>
+        <label class="toggle"><input type="checkbox" id="permit" data-state /><span><span class="t">Council / certifier fees</span><span class="d">If your work needs approval</span></span></label>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">5</span><h2>Your quotes <span class="muted" style="font-weight: 400; font-size: 15px;">(optional)</span></h2></div>
+      <p class="note" style="margin: -6px 0 12px;">Got a real price? Type it in to replace our estimate for that line.</p>
+      <div class="quotes">
+        {QUOTE_ROWS.map((r) => (
+          <div class="quote-row" data-extra={r.extra} hidden={!!r.extra}>
+            <label for={`q-${r.key}`}>{r.label}</label>
+            <div class="field"><span class="unit" style="padding: 0 6px 0 0;">$</span><input id={`q-${r.key}`} type="number" inputmode="decimal" min="0" step="50" data-state /></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── Resultado ───────── -->
+  <div slot="result">
+    <div class="diagram">
+      <svg viewBox="0 0 380 170" role="img" aria-labelledby="dg-kit">
+        <title id="dg-kit">Plan of the kitchen showing the benchtop run and floor area</title>
+        <rect id="dg-room" x="110" y="10" width="150" height="150" fill="#e8eef5" stroke="#24456e" stroke-width="2"></rect>
+        <path id="dg-run" d="" fill="#c9d6e6" stroke="#24456e" stroke-width="1.5"></path>
+        <rect id="dg-island" x="0" y="0" width="0" height="0" fill="#c9d6e6" stroke="#24456e" stroke-width="1.5"></rect>
+        <text id="dg-len" x="10" y="70" fill="#9a3412" font-size="13">6.0 m</text>
+        <text id="dg-len2" x="10" y="88" fill="#9a3412" font-size="12">benchtop</text>
+        <text id="dg-area" x="10" y="120" fill="#24456e" font-size="13">10 m²</text>
+        <text id="dg-area2" x="10" y="138" fill="#24456e" font-size="12">floor</text>
+      </svg>
+    </div>
+
+    <div class="result-body" aria-live="polite">
+      <div class="big"><div class="k">Estimated total</div><div class="v" id="r-total">–</div></div>
+      <p class="range-note" id="r-range"></p>
+      <div class="stats">
+        <div class="stat stat-plan"><div class="k">Works &amp; fit-out</div><div class="v" id="r-sub" style="font-size: 24px;">–</div></div>
+        <div class="stat stat-accent"><div class="k" id="r-cont-k">Contingency</div><div class="v" id="r-cont" style="font-size: 24px;">–</div></div>
+      </div>
+
+      <ul class="breakdown" id="r-breakdown" aria-label="Cost breakdown"></ul>
+
+      <p class="working" id="r-working"></p>
+
+      <div class="result-actions">
+        <button type="button" class="btn" id="copy-link"><Icon name="link" size={18} />Copy link to result</button>
+        <button type="button" class="btn icon-btn" id="print" aria-label="Print result"><Icon name="print" size={18} /></button>
+      </div>
+      <p class="copy-status" id="copy-status" role="status"></p>
+    </div>
+  </div>
+
+  <!-- ───────── Artículo ───────── -->
+  <section id="cost-by-level">
+    <h2>How much does a kitchen renovation cost in Australia?</h2>
+    <p>
+      The finish level you choose sets most of the budget. These are typical totals for a full
+      kitchen renovation, before any contingency:
+    </p>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Finish level</th><th scope="col">Typical total</th><th scope="col">What it usually means</th></tr></thead>
+        <tbody>
+          <tr><td>Cosmetic refresh</td><td>$8,000–$20,000</td><td>Keep cabinets and layout, new doors or respray, benchtop and splashback</td></tr>
+          <tr><td>Budget</td><td>$12,000–$25,000</td><td>Flat-pack cabinets, laminate benchtops, same layout</td></tr>
+          <tr><td>Mid-range</td><td>$25,000–$45,000</td><td>Custom cabinetry, stone-look benchtops, mid-range appliances</td></tr>
+          <tr><td>Premium</td><td>$45,000–$80,000</td><td>Designer cabinetry, natural stone or sintered tops, premium appliances</td></tr>
+          <tr><td>Luxury</td><td>$70,000–$150,000</td><td>Fully custom, often a new layout and integrated appliances</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">
+      Ranges from whatsthedamage.com.au (Nov 2026). Three Birds Renovations gives similar brackets
+      ($15,000–$30,000 budget, $35,000–$65,000 mid-range, $65,000+ high-end), and Canstar cites
+      hipages at $15,000–$40,000 for most jobs. See <a href="#how-we-estimate">how we estimate</a>.
+    </p>
+  </section>
+
+  <section id="cost-breakdown">
+    <h2>Kitchen renovation cost breakdown</h2>
+    <p>Typical prices for the main parts of a kitchen renovation, from budget to premium:</p>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Item</th><th scope="col">Budget</th><th scope="col">Mid</th><th scope="col">Premium</th></tr></thead>
+        <tbody>
+          <tr><td>Custom cabinetry</td><td>$12,000</td><td>$19,000</td><td>$35,000</td></tr>
+          <tr><td>Cabinet respray or wrap</td><td>$2,000</td><td>$4,500</td><td>$10,000</td></tr>
+          <tr><td>Appliances</td><td>$3,000</td><td>$6,000</td><td>$10,000</td></tr>
+          <tr><td>Plumbing</td><td>$1,500</td><td>$3,000</td><td>$5,000</td></tr>
+          <tr><td>Electrical</td><td>$1,500</td><td>$2,500</td><td>$4,000</td></tr>
+          <tr><td>Demolition &amp; waste</td><td>$1,000</td><td>$2,000</td><td>$4,000</td></tr>
+          <tr><td>Tiled splashback</td><td>$400</td><td>$800</td><td>$2,500</td></tr>
+          <tr><td>Glass splashback</td><td>$800</td><td>$1,400</td><td>$1,800</td></tr>
+          <tr><td>Flooring (per m²)</td><td>$40</td><td>$70</td><td>$120</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Figures from whatsthedamage.com.au (Nov 2026), prices including GST.</p>
+    <p>
+      Cabinetry usually takes 30–40% of the budget and labour across all trades 40–50%, according
+      to Three Birds Renovations. That is why keeping the existing carcasses and changing only the
+      doors or finish is the biggest single saving.
+    </p>
+  </section>
+
+  <section id="benchtops">
+    <h2>How much do kitchen benchtops cost?</h2>
+    <p>Benchtops are priced per square metre. A standard bench is about 600 mm deep, so each metre of run is roughly 0.6–0.65 m².</p>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Material</th><th scope="col">Price per m²</th></tr></thead>
+        <tbody>
+          <tr><td>Laminate</td><td>$300–$560</td></tr>
+          <tr><td>Timber</td><td>$550–$1,200</td></tr>
+          <tr><td>Granite</td><td>$600–$1,400</td></tr>
+          <tr><td>Porcelain or sintered stone</td><td>$960–$1,550</td></tr>
+          <tr><td>Marble</td><td>$800–$2,500</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout" style="margin-top: 20px;">
+      <strong>Engineered stone is banned in Australia</strong>
+      Since 1 July 2024 the manufacture, supply, processing and installation of engineered stone
+      benchtops, panels and slabs is prohibited, because cutting it exposes workers to silica dust.
+      Existing engineered stone benchtops do not need to be removed. Natural stone, porcelain,
+      sintered stone, laminate and timber are the usual alternatives.
+    </div>
+  </section>
+
+  <section id="what-drives-cost">
+    <h2>What makes a kitchen renovation cost more?</h2>
+    <ul class="checklist">
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Cabinetry.</strong> Custom joinery, soft-close hardware and tall pantry units add up quickly, and the cost grows with every metre of run.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Benchtop material and size.</strong> Marble or sintered stone can cost three or four times as much per square metre as laminate, and an island adds a lot of benchtop.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Changing the layout.</strong> Moving the sink, cooktop or dishwasher means new plumbing, gas and power. Removing a non-load-bearing wall runs about $3,000–$8,000, and a load-bearing wall $8,000–$25,000.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Appliances.</strong> A basic oven, cooktop, rangehood and dishwasher package costs a fraction of integrated or premium brands.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>What's behind the walls.</strong> Old wiring, failing plumbing or asbestos in older homes can add $3,000–$10,000 once the old kitchen comes out.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Where you live.</strong> Trade rates differ between cities and regional areas. Local quotes are the only reliable number.</span></li>
+    </ul>
+  </section>
+
+  <section id="save-money">
+    <h2>Ways to save on a kitchen renovation</h2>
+    <div class="compare">
+      <div class="c1"><h3>Keep the layout</h3>Leaving the sink, cooktop and dishwasher where they are avoids most of the plumbing, gas and electrical changes.</div>
+      <div class="c2"><h3>Refresh, don't replace</h3>If the cabinet boxes are sound, new doors or a respray costs a fraction of new cabinetry.</div>
+      <div class="c3"><h3>Compare quotes</h3>Get at least three itemised quotes and enter them above to see where they differ.</div>
+    </div>
+  </section>
+
+  <section id="before-you-start">
+    <h2>Before you start</h2>
+    <ul class="checklist">
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Ask for itemised quotes so you can compare them line by line with this calculator.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Check each trade's licence on your state's register before you sign.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Confirm who supplies the appliances and benchtops, and whether the quote includes waste removal.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span>If your home was built before 1990, have suspected asbestos tested before demolition starts.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Ask your council or a building certifier whether your work needs approval, especially if a wall is coming out.</span></li>
+    </ul>
+    <div class="callout" style="margin-top: 24px;">
+      <strong>Walls, plumbing, gas and electrical need licensed professionals</strong>
+      Have a structural engineer or builder confirm whether a wall is load-bearing before anyone
+      touches it. Plumbing, gas and electrical work must be done by licensed trades in every
+      Australian state.
+    </div>
+  </section>
+
+  <section id="how-we-estimate">
+    <h2>How we estimate</h2>
+    <p>
+      The calculator adds up each item for your finish level, scales the parts that depend on size,
+      then adds your contingency. The published ranges shown with the result leave contingency out.
+    </p>
+    <ul class="checklist">
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Cabinetry and splashback:</strong> whatsthedamage.com.au's budget, mid and premium figures, which we treat as a 6 m benchtop run and scale to your length. The scaling is our assumption.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Benchtop:</strong> length × 0.65 m (600 mm bench plus overhang) × the low, typical or high price per m² for your material and level.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Appliances, plumbing, electrical and demolition:</strong> fixed figures by level from the breakdown above. <strong>Flooring:</strong> your floor area × the per-m² rate.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Wall removal:</strong> the low end, middle and high end of the published ranges for budget, mid and premium. <strong>Council fees:</strong> $500, $1,250 or $2,000, from Three Birds Renovations' $500–$2,000+ range.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Engineered stone ban:</strong> checked against Safe Work Australia's prohibition page (Asbestos and Silica Safety and Eradication Agency) in November 2026.</span></li>
+    </ul>
+    <p class="note" style="margin-top: 16px;">
+      Sources (accessed November 2026):
+      <a href="https://whatsthedamage.com.au/" rel="noopener">whatsthedamage.com.au</a> kitchen cost guides (Nov 2026),
+      <a href="https://www.threebirdsrenovations.com/" rel="noopener">Three Birds Renovations</a> (Jul 2026),
+      <a href="https://www.canstar.com.au/" rel="noopener">Canstar</a> (Jul 2026),
+      <a href="https://www.asbestossafety.gov.au/silicasafety/about-silica/working-silica/engineered-stone-prohibition" rel="noopener">Engineered stone prohibition</a>.
+      Prices include GST where the source says so. These are estimates for planning only.
+    </p>
+  </section>
+</CalculatorLayout>
+
+<script>
+  import { bindCalculator, num, fmt, setText, aud, type State } from '../lib/calc';
+
+  type Tier = 'budget' | 'mid' | 'premium';
+  const TI: Record<Tier, number> = { budget: 0, mid: 1, premium: 2 };
+
+  // [budget, mid, premium] — whatsthedamage.com.au (nov 2026), ver "How we estimate"
+  const CAB_NEW: [number, number, number] = [12000, 19000, 35000];
+  const CAB_REFRESH: [number, number, number] = [2000, 4500, 10000];
+  const APPLIANCES: [number, number, number] = [3000, 6000, 10000];
+  const PLUMB: [number, number, number] = [1500, 3000, 5000];
+  const ELEC: [number, number, number] = [1500, 2500, 4000];
+  const DEMO: [number, number, number] = [1000, 2000, 4000];
+  const SPLASH: Record<string, [number, number, number]> = {
+    tile: [400, 800, 2500],
+    glass: [800, 1400, 1800],
+  };
+  const FLOOR_M2: [number, number, number] = [40, 70, 120];
+  // Mesadas por m² [bajo, típico, alto] — whatsthedamage.com.au
+  const BENCH_M2: Record<string, [number, number, number]> = {
+    laminate: [300, 440, 560],
+    timber: [550, 750, 1200],
+    granite: [600, 1000, 1400],
+    porcelain: [960, 1250, 1550],
+    marble: [800, 1550, 2500],
+  };
+  // Quitar muro: rangos publicados $3k–$8k y $8k–$25k (punto medio = supuesto nuestro)
+  const WALL: Record<string, [number, number, number]> = {
+    light: [3000, 5500, 8000],
+    lb: [8000, 16500, 25000],
+  };
+  // Permisos: Three Birds $500–$2,000+
+  const PERMIT: [number, number, number] = [500, 1250, 2000];
+  const REF_RUN = 6; // m de mesada a los que asumimos que corresponden los precios de muebles
+  const BENCH_DEPTH = 0.65; // m (600 mm + vuelo)
+  const RANGES: Record<Tier, string> = {
+    budget: '$12,000–$25,000',
+    mid: '$25,000–$45,000',
+    premium: '$45,000–$80,000',
+  };
+  const LABELS: Record<string, string> = {
+    cab: 'Cabinetry', bench: 'Benchtops', splash: 'Splashback', appl: 'Appliances',
+    plumb: 'Plumbing', elec: 'Electrical', demo: 'Demolition & waste', floor: 'Flooring',
+    wall: 'Wall removal', permit: 'Council fees',
+  };
+  const TIER_NAME: Record<Tier, string> = { budget: 'Budget', mid: 'Mid-range', premium: 'Premium' };
+
+  function drawDiagram(run: number, area: number) {
+    const room = document.getElementById('dg-room');
+    const path = document.getElementById('dg-run');
+    const island = document.getElementById('dg-island');
+    if (!room || !path || !island || area <= 0) return;
+    const side = Math.sqrt(area); // habitación cuadrada equivalente
+    const scale = 150 / Math.max(side, 1);
+    const x = 140, y = 10, s = side * scale, d = 0.6 * scale;
+    room.setAttribute('x', String(x)); room.setAttribute('y', String(y));
+    room.setAttribute('width', String(s)); room.setAttribute('height', String(s));
+    // Tramo 1 a lo largo de la pared superior, tramo 2 por la derecha, el resto como isla
+    const r1 = Math.min(run, side);
+    const r2 = Math.min(Math.max(run - r1, 0), Math.max(side - 0.6, 0));
+    const r3 = Math.min(Math.max(run - r1 - r2, 0), side * 0.55);
+    let p = `M${x} ${y} h${(r1 * scale).toFixed(1)} v${d.toFixed(1)} h${(-r1 * scale).toFixed(1)} z`;
+    if (r2 > 0) {
+      p += ` M${(x + s - d).toFixed(1)} ${(y + d).toFixed(1)} h${d.toFixed(1)} v${(r2 * scale).toFixed(1)} h${(-d).toFixed(1)} z`;
+    }
+    path.setAttribute('d', p);
+    if (r3 >= 0.8) { // ignorar restos muy cortos
+      const iw = r3 * scale, ih = Math.min(0.9 * scale, s * 0.25);
+      island.setAttribute('x', String(x + (s - iw) / 2 - d / 2));
+      island.setAttribute('y', String(y + s * 0.55));
+      island.setAttribute('width', String(iw)); island.setAttribute('height', String(ih));
+    } else {
+      island.setAttribute('width', '0'); island.setAttribute('height', '0');
+    }
+    setText('dg-len', `${fmt(run, 1)} m`);
+    setText('dg-area', `${fmt(area, 1)} m²`);
+  }
+
+  function render(s: State) {
+    const tier = (['budget', 'mid', 'premium'].includes(s.tier) ? s.tier : 'mid') as Tier;
+    const i = TI[tier];
+    const run = num(s.run), area = num(s.area);
+    const runF = run / REF_RUN;
+    const mat = s.mat ?? 'porcelain';
+    const splash = s.splash === 'glass' ? 'glass' : 'tile';
+    const wallmode = s.wallmode ?? 'none';
+    const cont = num(s.cont || '15') / 100;
+    const benchM2 = run * BENCH_DEPTH;
+
+    const est: Record<string, number> = {};
+    est.cab = (s.cabs === 'refresh' ? CAB_REFRESH : CAB_NEW)[i] * runF;
+    if (mat !== 'keep' && BENCH_M2[mat]) est.bench = benchM2 * BENCH_M2[mat][i];
+    est.splash = SPLASH[splash][i] * runF;
+    if (s.applmode !== 'keep') est.appl = APPLIANCES[i];
+    est.plumb = PLUMB[i];
+    est.elec = ELEC[i];
+    est.demo = DEMO[i];
+    if (s.flooring !== '0') est.floor = area * FLOOR_M2[i];
+    if (WALL[wallmode]) est.wall = WALL[wallmode][i];
+    if (s.permit === '1') est.permit = PERMIT[i];
+
+    // Mostrar solo las filas de cotización que aplican
+    document.querySelectorAll<HTMLElement>('.quote-row[data-extra]').forEach((row) => {
+      row.hidden = est[row.dataset.extra!] === undefined;
+    });
+
+    const lines: { key: string; value: number; own: boolean }[] = [];
+    Object.entries(est).forEach(([k, v]) => {
+      const input = document.getElementById(`q-${k}`) as HTMLInputElement | null;
+      if (input) input.placeholder = Math.round(v).toLocaleString('en-AU');
+      const own = s[`q-${k}`] !== undefined && s[`q-${k}`] !== '';
+      lines.push({ key: k, value: own ? num(s[`q-${k}`]) : v, own });
+    });
+
+    const sub = lines.reduce((a, l) => a + l.value, 0);
+    const contingency = sub * cont;
+    const total = sub + contingency;
+    const ok = run > 0 && area > 0;
+
+    setText('r-total', ok ? aud(Math.round(total / 100) * 100) : '–');
+    setText('r-range', `Typical Australian range for a ${tier === 'mid' ? 'mid-range' : tier} kitchen, before contingency: ${RANGES[tier]}.`);
+    setText('r-sub', aud(sub));
+    setText('r-cont-k', `Contingency (${Math.round(cont * 100)}%)`);
+    setText('r-cont', aud(contingency));
+
+    const max = Math.max(...lines.map((l) => l.value), 1);
+    const list = document.getElementById('r-breakdown');
+    if (list) {
+      list.replaceChildren(...lines.sort((a, b) => b.value - a.value).map((l) => {
+        const li = document.createElement('li');
+        if (l.own) li.className = 'own';
+        const row = document.createElement('div');
+        row.className = 'row';
+        const name = document.createElement('span');
+        name.textContent = LABELS[l.key] + (l.own ? ' (your quote)' : '');
+        const val = document.createElement('strong');
+        val.textContent = aud(l.value);
+        row.append(name, val);
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        const fill = document.createElement('i');
+        fill.style.width = `${(l.value / max) * 100}%`;
+        bar.append(fill);
+        li.append(row, bar);
+        return li;
+      }));
+    }
+
+    const benchOwn = s['q-bench'] !== undefined && s['q-bench'] !== '';
+    const benchTxt = est.bench === undefined ? 'Benchtop kept'
+      : benchOwn ? 'Benchtop: your quote'
+      : `Benchtop: ${fmt(run, 1)} m × ${BENCH_DEPTH} m = ${fmt(benchM2, 2)} m² × $${BENCH_M2[mat][i].toLocaleString('en-AU')} = ${aud(est.bench)}`;
+    setText('r-working', ok
+      ? `${benchTxt} · items ${aud(sub)} + ${Math.round(cont * 100)}% contingency ${aud(contingency)} = ${aud(total)}`
+      : 'Enter the benchtop length and floor area to see the working.');
+
+    drawDiagram(run, area);
+
+    setText('mbar-k', `${TIER_NAME[tier]} · ${fmt(run, 1)} m benchtop`);
+    const v = document.getElementById('mbar-v');
+    if (v) v.innerHTML = `${aud(Math.round(total / 100) * 100)} <span>· incl. ${Math.round(cont * 100)}%</span>`;
+  }
+
+  const root = document.getElementById('calc');
+  if (root) bindCalculator(root, render);
+</script>

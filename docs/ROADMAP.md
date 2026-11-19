@@ -49,7 +49,7 @@ Prompt para Claude Code:
 
 - [x] Concrete calculator
 - [x] Bathroom renovation cost calculator (2.400/mes, CPC $2,37; variantes con KD 5–15)
-- [ ] Kitchen renovation cost calculator (1.900/mes, KD 19, SERP débil)
+- [x] Kitchen renovation cost calculator (1.900/mes, KD 19, SERP débil)
 - [x] Tile calculator (1.300/mes + "tile estimator calculator" 1.000/mes)
 - [x] Hot water system replacement cost (720/mes, CPC $4,12: la mejor para leads)
 - [x] Concrete steps calculator (1.000 + 480/mes, KD 5–21; solo matemática)
