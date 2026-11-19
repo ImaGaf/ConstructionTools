@@ -1,4 +1,4 @@
-# Site Sums (sitesums.com)
+# Site Sums (getsitesums.com)
 
 Sitio de calculadoras para construcción y renovación en Australia. Astro, HTML estático, Cloudflare Pages.
 

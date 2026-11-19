@@ -29,7 +29,7 @@ Publicar de forma constante pesa más que publicar mucho de golpe.
 
 Lo haces tú (no Claude Code):
 - [x] Elegir nombre: **Site Sums** (19 nov)
-- [ ] Comprar el dominio `sitesums.com` (si no está libre, avisar para cambiar `astro.config.mjs` y `robots.txt`)
+- [ ] Comprar el dominio `getsitesums.com` en Cloudflare (sitesums.com estaba tomado)
       (`.com.au` pide ABN; si no tienes, usa `.com`)
 - [ ] Cloudflare Pages: conectar el repo de GitHub
       (preset Astro, build `npm run build`, output `dist`) y luego el dominio

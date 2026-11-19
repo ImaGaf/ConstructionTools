@@ -3,7 +3,7 @@ import sitemap from '@astrojs/sitemap';
 import { CATEGORIES, TOOLS } from './src/site.config.ts';
 
 // Cambia esto por tu dominio real antes de publicar
-const SITE_URL = 'https://sitesums.com';
+const SITE_URL = 'https://getsitesums.com';
 
 // Categorías sin calculadoras listas salen con noindex: no van al sitemap.
 const emptyCategories = CATEGORIES

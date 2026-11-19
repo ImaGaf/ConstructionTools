@@ -1,4 +1,4 @@
-# CLAUDE.md — ConstructionTools (Site Sums, sitesums.com)
+# CLAUDE.md — ConstructionTools (Site Sums, getsitesums.com)
 
 Read this before doing any work in this repo. It holds the project goals and the
 decisions already made. The owner (Oswaldo) speaks Spanish: talk to him in Spanish,
