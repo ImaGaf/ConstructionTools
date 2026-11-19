@@ -25,7 +25,7 @@ export const SITE = {
 };
 
 export type IconName =
-  | 'slab' | 'tile' | 'bath' | 'kitchen' | 'hotwater' | 'gravel' | 'pipe'
+  | 'slab' | 'stairs' | 'tile' | 'bath' | 'kitchen' | 'hotwater' | 'gravel' | 'pipe'
   | 'search' | 'arrow' | 'check' | 'info' | 'link' | 'print' | 'menu' | 'shield' | 'ruler' | 'grid';
 
 export type Category = {
@@ -79,7 +79,16 @@ export const TOOLS: Tool[] = [
     icon: 'slab',
     ready: true,
     featured: true,
-    related: ['tile-calculator', 'gravel-calculator'],
+    related: ['concrete-steps-calculator', 'tile-calculator', 'gravel-calculator'],
+  },
+  {
+    slug: 'concrete-steps-calculator',
+    title: 'Concrete Steps Calculator',
+    blurb: 'Number of steps, riser and going, and the concrete to pour them.',
+    category: 'materials',
+    icon: 'stairs',
+    ready: true,
+    related: ['concrete-calculator', 'tile-calculator'],
   },
   {
     slug: 'bathroom-renovation-cost-calculator',

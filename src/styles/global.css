@@ -445,3 +445,15 @@ a.tool-feature:hover { border-color: var(--accent-on-dark); color: #fff; }
   .calc-result { position: static; }
   .card, .result-card { border-color: #999; }
 }
+
+/* Comprobaciones contra el código (p. ej. escaleras) */
+.checks { display: grid; gap: 6px; margin: 0 0 16px; padding: 0; list-style: none; }
+.checks li {
+  display: flex; justify-content: space-between; align-items: center; gap: 10px;
+  font-size: 14px; padding: 9px 12px; border-radius: 10px; background: var(--bg); color: var(--ink-3);
+}
+.checks li strong { font-variant-numeric: tabular-nums; color: var(--ink); }
+.checks .tag { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.checks .ok .tag { background: var(--plan-soft); color: var(--plan); }
+.checks .bad { background: var(--accent-soft); }
+.checks .bad .tag { background: var(--accent); color: #fff; }

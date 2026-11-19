@@ -1,0 +1,351 @@
+---
+import CalculatorLayout, { type Faq, type TocItem } from '../layouts/CalculatorLayout.astro';
+import Icon from '../components/Icon.astro';
+
+const toc: TocItem[] = [
+  { id: 'rise-and-going', label: 'Working out rise & going' },
+  { id: 'stair-rules', label: 'Australian stair rules' },
+  { id: 'concrete-volume', label: 'Concrete for the steps' },
+  { id: 'comfortable-steps', label: 'Comfortable step sizes' },
+  { id: 'before-you-pour', label: 'Before you pour' },
+];
+
+const faqs: Faq[] = [
+  {
+    q: 'How many steps do I need?',
+    a: 'Divide the total height you need to climb by the riser height you want, then round to a whole number. For a 600 mm rise with risers of about 175 mm, 600 ÷ 175 = 3.4. Three steps would make each riser 200 mm, which is too steep, so use four steps of 150 mm each.',
+  },
+  {
+    q: 'What is the maximum step height in Australia?',
+    a: 'For stairs in houses, the National Construction Code sets a riser height of 115–190 mm and a going of 240–355 mm, with twice the riser plus the going (2R + G) between 550 and 700 mm. All risers and goings in a flight must be consistent. Check the current edition with your building certifier, as other rules can apply.',
+  },
+  {
+    q: 'How much concrete do I need for steps?',
+    a: 'For solid steps poured against the ground, each tread sits on a block of concrete as tall as its height above the bottom. The calculator adds these blocks up: width × going × riser × (1 + 2 + … for each tread), plus any top landing. Four 150 mm risers with 280 mm goings and a 1.2 m width need about 0.3 m³, or roughly 36 bags of 20 kg premix with 10% waste.',
+  },
+  {
+    q: 'What is a comfortable step height and depth?',
+    a: 'Within the code limits, most people find risers of around 150–180 mm with goings of around 280–300 mm comfortable. Outdoor and garden steps are often made shallower and deeper than indoor stairs.',
+  },
+  {
+    q: 'What does 2R + G mean?',
+    a: 'It is the slope relationship used in the National Construction Code: twice the riser height plus the going. Keeping it between 550 and 700 mm matches the step to a natural walking stride, so the stairs are neither too steep nor awkwardly shallow.',
+  },
+];
+---
+<CalculatorLayout
+  slug="concrete-steps-calculator"
+  title="Concrete Steps Calculator – Risers, Goings & Concrete"
+  description="Free concrete steps calculator for Australia. Get the number of steps, riser and going, check them against NCC limits, and work out m³ and premix bags."
+  h1="Concrete Steps Calculator"
+  lede="Enter the height to climb and get the number of steps, the riser and going, a check against Australian stair limits, and the concrete to pour them."
+  updated="2026-11-18"
+  quickAnswer="divide the total rise by about 175 mm to get the number of steps, keep each riser between 115 and 190 mm and each going between 240 and 355 mm, and multiply up the solid volume for the concrete."
+  toc={toc}
+  faqs={faqs}
+  cta={{ title: 'Steps up to a house or deck?', sub: 'Get them quoted and checked by a licensed builder', href: '#before-you-pour' }}
+>
+  <!-- ───────── Entradas ───────── -->
+  <div slot="inputs">
+    <div class="step">
+      <div class="step-head"><span class="n">1</span><h2>Height and size</h2></div>
+      <div class="fields">
+        <div><label for="rise">Total rise</label><div class="field"><input id="rise" type="number" inputmode="decimal" min="0" step="10" value="600" data-state /><span class="unit">mm</span></div></div>
+        <div><label for="width">Step width</label><div class="field"><input id="width" type="number" inputmode="decimal" min="0" step="0.1" value="1.2" data-state /><span class="unit">m</span></div></div>
+      </div>
+      <p class="note" style="margin: 10px 0 0;">Total rise is the height from the lower ground to the top surface (door threshold, deck or landing).</p>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">2</span><h2>Step proportions</h2></div>
+      <div class="options">
+        <div>
+          <div class="opt-label" id="target-l">Target riser height</div>
+          <div class="seg" role="radiogroup" aria-labelledby="target-l">
+            <label><input type="radio" name="target" value="150" data-state />150 mm</label>
+            <label><input type="radio" name="target" value="165" data-state />165 mm</label>
+            <label><input type="radio" name="target" value="175" data-state checked />175 mm</label>
+            <label><input type="radio" name="target" value="185" data-state />185 mm</label>
+          </div>
+        </div>
+        <div style="flex: 0 1 160px;">
+          <label class="opt-label" for="going">Going (tread depth)</label>
+          <div class="field"><input id="going" type="number" inputmode="decimal" min="0" step="10" value="280" data-state /><span class="unit">mm</span></div>
+        </div>
+        <div style="flex: 0 1 160px;">
+          <label class="opt-label" for="landing">Top landing to pour</label>
+          <div class="field"><input id="landing" type="number" inputmode="decimal" min="0" step="0.1" value="0" data-state /><span class="unit">m deep</span></div>
+        </div>
+      </div>
+      <p class="note" style="margin: 10px 0 0;">Leave the landing at 0 if the steps finish at an existing slab, deck or doorway.</p>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">3</span><h2>Concrete options</h2></div>
+      <div class="options">
+        <div>
+          <div class="opt-label" id="waste-l">Extra for waste</div>
+          <div class="seg" role="radiogroup" aria-labelledby="waste-l">
+            <label><input type="radio" name="waste" value="0" data-state />None</label>
+            <label><input type="radio" name="waste" value="5" data-state />5%</label>
+            <label><input type="radio" name="waste" value="10" data-state checked />10%</label>
+            <label><input type="radio" name="waste" value="15" data-state />15%</label>
+          </div>
+        </div>
+        <div>
+          <div class="opt-label" id="bag-l">Premix bag size</div>
+          <div class="seg" role="radiogroup" aria-labelledby="bag-l">
+            <label><input type="radio" name="bag" value="20" data-state checked />20 kg</label>
+            <label><input type="radio" name="bag" value="30" data-state />30 kg</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── Resultado ───────── -->
+  <div slot="result">
+    <div class="diagram">
+      <svg viewBox="0 0 380 170" role="img" aria-labelledby="dg-steps">
+        <title id="dg-steps">Side view of the steps with your measurements</title>
+        <path d="M20 150 H360" stroke="#8c7b65" stroke-width="2"></path>
+        <path id="dg-top" d="" stroke="#8c7b65" stroke-width="2" stroke-dasharray="5 4"></path>
+        <path id="dg-body" d="" fill="#e8eef5" stroke="#24456e" stroke-width="2" stroke-linejoin="round"></path>
+        <text id="dg-h" x="350" y="90" fill="#9a3412" font-size="13" text-anchor="end">600 mm</text>
+        <text id="dg-run" x="190" y="166" fill="#9a3412" font-size="13" text-anchor="middle">0.84 m run</text>
+        <text id="dg-r" x="20" y="140" fill="#24456e" font-size="12">R 150</text>
+        <text id="dg-g" x="60" y="120" fill="#24456e" font-size="12">G 280</text>
+      </svg>
+    </div>
+
+    <div class="result-body" aria-live="polite">
+      <div class="big"><div class="k">Steps (risers)</div><div class="v" id="r-steps">–</div></div>
+      <div class="stats">
+        <div class="stat stat-accent"><div class="k">Riser height</div><div class="v" id="r-riser">–</div></div>
+        <div class="stat stat-plan"><div class="k">Going</div><div class="v" id="r-going">–</div></div>
+      </div>
+
+      <ul class="checks" aria-label="Check against NCC limits for houses">
+        <li id="c-r"><span>Riser 115–190 mm</span><span class="tag">–</span></li>
+        <li id="c-g"><span>Going 240–355 mm</span><span class="tag">–</span></li>
+        <li id="c-s"><span>2R + G = <strong id="r-2rg">–</strong> (550–700)</span><span class="tag">–</span></li>
+      </ul>
+
+      <div class="stats">
+        <div class="stat stat-plan"><div class="k">Concrete</div><div class="v" id="r-m3">–</div></div>
+        <div class="stat stat-accent"><div class="k" id="r-bag-label">20 kg bags</div><div class="v" id="r-bags">–</div></div>
+      </div>
+      <p class="hint" id="r-hint"></p>
+      <p class="working" id="r-working"></p>
+
+      <div class="result-actions">
+        <button type="button" class="btn" id="copy-link"><Icon name="link" size={18} />Copy link to result</button>
+        <button type="button" class="btn icon-btn" id="print" aria-label="Print result"><Icon name="print" size={18} /></button>
+      </div>
+      <p class="copy-status" id="copy-status" role="status"></p>
+    </div>
+  </div>
+
+  <!-- ───────── Artículo ───────── -->
+  <section id="rise-and-going">
+    <h2>How to work out the rise and going of steps</h2>
+    <div class="step-cards">
+      <div><b>STEP 1</b>Measure the total rise: lower ground to the top surface, in mm.</div>
+      <div><b>STEP 2</b>Divide by a target riser (about 175 mm) and round to a whole number of steps.</div>
+      <div><b>STEP 3</b>Divide the total rise by that number to get the exact riser for every step.</div>
+    </div>
+    <p>
+      For a 600 mm rise, 600 ÷ 175 = 3.4. Three steps would give 200 mm risers, which is above the
+      190 mm limit, so use four steps of 150 mm. If the steps finish at an existing landing or
+      doorway, there is one fewer tread than risers: four risers need three treads, so with a
+      280 mm going the steps run out 3 × 280 = 840 mm from the top.
+    </p>
+    <p>
+      Every riser in the flight should be the same height. A first or last step that is taller or
+      shorter than the rest is one of the most common causes of trips.
+    </p>
+  </section>
+
+  <section id="stair-rules">
+    <h2>What are the rules for steps in Australia?</h2>
+    <p>
+      For stairs in houses, the National Construction Code (ABCB Housing Provisions, Part 11.2)
+      sets these limits for straight flights:
+    </p>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Measurement</th><th scope="col">Minimum</th><th scope="col">Maximum</th></tr></thead>
+        <tbody>
+          <tr><td>Riser (R)</td><td>115 mm</td><td>190 mm</td></tr>
+          <tr><td>Going (G)</td><td>240 mm</td><td>355 mm</td></tr>
+          <tr><td>Slope relationship (2R + G)</td><td>550 mm</td><td>700 mm</td></tr>
+          <tr><td>Risers in one flight</td><td>2</td><td>18</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">
+      Risers and goings must also be consistent within a flight, and openings between treads
+      must not let a 125 mm sphere pass. Handrail and balustrade rules may also apply. Garden steps
+      that are not part of a building may be treated differently, so confirm with your council or
+      building certifier.
+    </p>
+  </section>
+
+  <section id="concrete-volume">
+    <h2>How much concrete do I need for steps?</h2>
+    <p>
+      Solid steps poured against the ground are a stack of blocks. Each tread sits on a block as
+      deep as the going and as tall as its height above the bottom, so the first tread is one riser
+      tall, the second is two risers tall, and so on.
+    </p>
+    <div class="step-cards">
+      <div><b>TREADS</b>Width × going × riser × (1 + 2 + … + number of treads).</div>
+      <div><b>LANDING</b>Width × landing depth × total rise, if you're pouring one.</div>
+      <div><b>WASTE</b>Add 5–10% for uneven ground and spillage.</div>
+    </div>
+    <p>
+      For four 150 mm risers, three 280 mm treads and a 1.2 m width:
+      1.2 × 0.28 × 0.15 × (1 + 2 + 3) = 0.30 m³. With 10% waste that is 0.33 m³, or about
+      36 bags of 20 kg premix. Steps cut into a slope use less, because the ground fills much of the
+      space under each tread; measure the actual formwork in that case.
+    </p>
+  </section>
+
+  <section id="comfortable-steps">
+    <h2>What size steps are comfortable?</h2>
+    <div class="compare">
+      <div class="c1"><h3>Steeper</h3>Risers near 185–190 mm and short goings save space but feel steep, especially going down.</div>
+      <div class="c2"><h3>Comfortable</h3>Risers around 150–180 mm with goings around 280–300 mm suit most people.</div>
+      <div class="c3"><h3>Garden steps</h3>Lower risers and deeper goings feel relaxed outdoors and on gentle slopes.</div>
+    </div>
+  </section>
+
+  <section id="before-you-pour">
+    <h2>Before you pour concrete steps</h2>
+    <ul class="checklist">
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Build the formwork with the riser boards set out exactly, and check each step with a level before pouring.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Give the treads a slight fall so water runs off, and use a broom or non-slip finish outdoors.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Steps against a house should not bridge the damp-proof course or cover weep holes.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Ask whether you need a handrail or balustrade, and whether the steps need approval.</span></li>
+    </ul>
+    <div class="callout" style="margin-top: 24px;">
+      <strong>Steps up to a doorway, deck or verandah?</strong>
+      These are part of the building and need to meet the National Construction Code. Have them
+      built or checked by a licensed builder or concreter.
+    </div>
+  </section>
+</CalculatorLayout>
+
+<script>
+  import { bindCalculator, num, fmt, setText, type State } from '../lib/calc';
+
+  const BAG_YIELD: Record<string, number> = { '20': 0.0095, '30': 0.014 };
+  const LIMITS = { rMin: 115, rMax: 190, gMin: 240, gMax: 355, sMin: 550, sMax: 700 };
+
+  /** Número de alzadas: el más cercano a la altura objetivo, ajustado para no pasar los límites. */
+  function riserCount(H: number, target: number) {
+    if (H <= 0) return 0;
+    let n = Math.max(1, Math.round(H / target));
+    while (H / n > LIMITS.rMax) n++;
+    while (n > 1 && H / n < LIMITS.rMin) n--;
+    return n;
+  }
+
+  function mark(id: string, ok: boolean, okText = 'Within limit', badText = 'Outside limit') {
+    const li = document.getElementById(id);
+    if (!li) return;
+    li.className = ok ? 'ok' : 'bad';
+    const tag = li.querySelector('.tag');
+    if (tag) tag.textContent = ok ? okText : badText;
+  }
+
+  function drawDiagram(n: number, R: number, G: number, L: number, H: number, run: number) {
+    const body = document.getElementById('dg-body');
+    const top = document.getElementById('dg-top');
+    if (!body || !top) return;
+    if (n === 0) { body.setAttribute('d', ''); return; }
+    const treads = n - 1;
+    const totalW = treads * G + (L > 0 ? L : G * 0.6); // mm, deja ver el nivel superior
+    const scale = Math.min(300 / totalW, 125 / H);
+    const x0 = 40, base = 150;
+    const sx = (mm: number) => x0 + mm * scale;
+    const sy = (mm: number) => base - mm * scale;
+    let d = `M${sx(0)} ${base}`;
+    for (let i = 1; i <= n; i++) {
+      d += ` V${sy(i * R).toFixed(1)}`;
+      if (i < n) d += ` H${sx(i * G).toFixed(1)}`;
+    }
+    const xTop = sx(treads * G + L);
+    d += ` H${xTop.toFixed(1)} V${base} Z`;
+    body.setAttribute('d', d);
+    top.setAttribute('d', `M${xTop.toFixed(1)} ${sy(H).toFixed(1)} H360`);
+
+    const h = document.getElementById('dg-h');
+    if (h) { h.textContent = `${Math.round(H)} mm`; h.setAttribute('y', String(sy(H) - 6)); }
+    setText('dg-run', `${fmt(run / 1000, 2)} m run`);
+    const r = document.getElementById('dg-r');
+    const g = document.getElementById('dg-g');
+    if (r) { r.textContent = `R ${Math.round(R)}`; r.setAttribute('x', '4'); r.setAttribute('y', String(sy(R / 2) + 4)); }
+    if (g) {
+      g.textContent = treads > 0 ? `G ${Math.round(G)}` : '';
+      g.setAttribute('x', String(sx(G / 2) - 16));
+      g.setAttribute('y', String(sy(R) - 6));
+    }
+  }
+
+  function render(s: State) {
+    const H = num(s.rise);
+    const W = num(s.width);
+    const G = num(s.going);
+    const L = num(s.landing) * 1000; // mm
+    const target = num(s.target) || 175;
+    const waste = num(s.waste) / 100;
+    const bagKg = s.bag === '30' ? '30' : '20';
+
+    const n = riserCount(H, target);
+    const R = n > 0 ? H / n : 0;
+    const treads = Math.max(0, n - 1);
+    const run = treads * G + L;
+    const twoRG = 2 * R + G;
+
+    // Volumen macizo: Σ (i·R) · G · W para cada huella + descanso superior
+    const treadVol = (W * (G / 1000) * (R / 1000) * treads * (treads + 1)) / 2;
+    const landingVol = W * (L / 1000) * (H / 1000);
+    const base = treadVol + landingVol;
+    const m3 = base * (1 + waste);
+    const bags = m3 > 0 ? Math.ceil(m3 / BAG_YIELD[bagKg]) : 0;
+
+    setText('r-steps', n > 0 ? String(n) : '–');
+    setText('r-riser', n > 0 ? `${fmt(R, 0)} mm` : '–');
+    setText('r-going', `${fmt(G, 0)} mm`);
+    setText('r-2rg', n > 0 ? `${fmt(twoRG, 0)} mm` : '–');
+    mark('c-r', n > 0 && R >= LIMITS.rMin && R <= LIMITS.rMax);
+    mark('c-g', G >= LIMITS.gMin && G <= LIMITS.gMax);
+    mark('c-s', n > 0 && twoRG >= LIMITS.sMin && twoRG <= LIMITS.sMax);
+
+    setText('r-m3', `${fmt(m3)} m³`);
+    setText('r-bags', bags.toLocaleString('en-AU'));
+    setText('r-bag-label', `${bagKg} kg premix bags`);
+
+    setText('r-working', n > 0
+      ? `${fmt(H, 0)} ÷ ${n} = ${fmt(R, 0)} mm risers · ${treads} treads × ${fmt(G, 0)} mm = ${fmt(run / 1000, 2)} m run · concrete ${fmt(W, 1)} × ${fmt(G / 1000, 2)} × ${fmt(R / 1000, 3)} × ${treads * (treads + 1) / 2}${L > 0 ? ` + landing ${fmt(landingVol, 2)}` : ''} = ${fmt(base)} m³ + ${Math.round(waste * 100)}%`
+      : 'Enter the total rise to see the working.');
+
+    const tooMany = n > 18;
+    setText('r-hint',
+      n === 0 ? 'Enter the total rise to plan your steps.'
+      : tooMany ? 'More than 18 risers: the NCC limits a flight to 18, so you will need a landing part-way.'
+      : n === 1 ? 'A single step is a trip hazard if it is not obvious. Make it clearly visible or consider two steps.'
+      : m3 < 0.3 ? 'Small pour: premix bags are usually the easiest option.'
+      : 'A larger pour: compare bags with a mini-mix or ready-mix delivery.');
+
+    drawDiagram(n, R, G, L, H, run);
+
+    setText('mbar-k', `${n} steps · ${fmt(R, 0)} mm rise · ${fmt(G, 0)} mm going`);
+    const v = document.getElementById('mbar-v');
+    if (v) v.innerHTML = `${fmt(m3)} m³ <span>· ${bags.toLocaleString('en-AU')} bags</span>`;
+  }
+
+  const root = document.getElementById('calc');
+  if (root) bindCalculator(root, render);
+</script>
