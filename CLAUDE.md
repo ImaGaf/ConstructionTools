@@ -51,7 +51,8 @@ Ezoic is ruled out (minimum raised to 250k monthly users in Feb 2026).
   calculator truly needs it.
 - Fonts are self-hosted through `@fontsource` (imported in `Base.astro`). Do not add
   Google Fonts `<link>` tags or other external CSS.
-- Hosting: Cloudflare Pages (build `npm run build`, output `dist`). `public/_headers`
+- Hosting: Cloudflare Workers with static assets (`wrangler.jsonc`, Worker `getsitesums`;
+  build `npm run build`, deploy `npx wrangler deploy`, output `dist`). `public/_headers`
   sets security and cache headers.
 - `@astrojs/sitemap` generates the sitemap. `trailingSlash: 'always'`.
 
