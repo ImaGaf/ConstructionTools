@@ -31,6 +31,7 @@ export type IconName =
 export type Category = {
   slug: string;
   name: string;
+  title: string; // <title> de la página de categoría
   short: string; // etiqueta corta para filtros
   intro: string; // texto original para la página de categoría (150–300 palabras ideal)
 };
@@ -39,6 +40,7 @@ export const CATEGORIES: Category[] = [
   {
     slug: 'materials',
     name: 'Materials',
+    title: 'Building Materials Calculators (Australia)',
     short: 'Materials',
     intro:
       'Work out how much concrete, tile, gravel and other materials to order before you head to the supplier. Each calculator uses metric units, shows its working, and adds a sensible allowance for waste so you are not caught short halfway through a job. Order a little over rather than under: a second delivery or a trip back to the hardware store usually costs more than the extra material.',
@@ -46,6 +48,7 @@ export const CATEGORIES: Category[] = [
   {
     slug: 'renovation-costs',
     name: 'Renovation costs',
+    title: 'Renovation Cost Calculators Australia',
     short: 'Costs',
     intro:
       'Estimate what a renovation is likely to cost in Australia before you ask for quotes. These tools break a project into its main parts so you can see where the money goes and which choices move the total the most. Use the estimates to set a realistic budget and to compare quotes, not as a replacement for them.',
@@ -53,6 +56,7 @@ export const CATEGORIES: Category[] = [
   {
     slug: 'plumbing-hot-water',
     name: 'Plumbing & hot water',
+    title: 'Plumbing & Hot Water Calculators (Australia)',
     short: 'Plumbing',
     intro:
       'Calculators and cost guides for plumbing and hot water in Australian homes, from sizing and replacing a hot water system to drainage falls. Plumbing and gas work in Australia must be done by a licensed plumber, so use these tools to understand your options and the numbers before you talk to one.',

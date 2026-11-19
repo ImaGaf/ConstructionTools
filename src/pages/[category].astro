@@ -46,7 +46,7 @@ const schema = [
   },
 ];
 ---
-<Base title={`${cat.name} Calculators`} description={description} schema={schema} section={cat.slug} noindex={ready.length === 0}>
+<Base title={`${cat.title}`} description={description} schema={schema} section={cat.slug} noindex={ready.length === 0}>
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb">
       <a href="/">Home</a><span aria-hidden="true">/</span><span aria-current="page">{cat.name}</span>
