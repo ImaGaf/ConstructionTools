@@ -11,7 +11,7 @@ and compare keywords within the same tool.
 | Keyword | Volume | KD | CPC | Status / notes |
 |---|---|---|---|---|
 | concrete calculator | 12,100 | 17 | 1.01 | **Built** (`/concrete-calculator/`). Top priority, low difficulty. |
-| bathroom renovation cost | 2,400 | 34 | 2.37 | Next to build. An advertiser already runs a "bathroom renovation calculator" ad. |
+| bathroom renovation cost | 2,400 | 34 | 2.37 | **Built** (`/bathroom-renovation-cost-calculator/`, 19 Nov). An advertiser already runs a "bathroom renovation calculator" ad. |
 | paint calculator | 2,400 | 31 | 0.18 | Skip for now: SERP owned by paint brands (Dulux, Taubmans, Bunnings), tiny CPC. |
 | kitchen renovation cost | 1,900 | 19 | 1.76 | Build. Reddit and Substack rank top 10 = weak SERP. |
 | tile calculator | 1,300 | 22 | 0.68 | **Built** (`/tile-calculator/`), with tile estimator / tiles per m² / how to calculate m² variants. |
@@ -84,7 +84,7 @@ backflow testing cost, as3500, heat pump vs solar hot water.
 1. concrete calculator — done (updated with the concrete cluster, 18 Nov)
 2. tile calculator — done (18 Nov)
 3. concrete steps calculator — done (18 Nov)
-4. bathroom renovation cost calculator — needs price sources
+4. bathroom renovation cost calculator — done (19 Nov), sources in the page
 5. concrete price per m³ / cost calculator — needs price sources
 6. concrete driveway cost (with exposed aggregate) — needs price sources
 7. kitchen renovation cost calculator — needs price sources

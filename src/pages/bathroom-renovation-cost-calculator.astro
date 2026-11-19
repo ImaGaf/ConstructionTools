@@ -1,0 +1,451 @@
+---
+import CalculatorLayout, { type Faq, type TocItem } from '../layouts/CalculatorLayout.astro';
+import Icon from '../components/Icon.astro';
+
+const toc: TocItem[] = [
+  { id: 'cost-by-level', label: 'Cost by finish level' },
+  { id: 'cost-breakdown', label: 'Cost breakdown' },
+  { id: 'what-drives-cost', label: 'What drives the cost' },
+  { id: 'save-money', label: 'Ways to save' },
+  { id: 'before-you-start', label: 'Before you start' },
+  { id: 'how-we-estimate', label: 'How we estimate' },
+];
+
+const faqs: Faq[] = [
+  {
+    q: 'How much does a bathroom renovation cost in Australia?',
+    a: 'Most bathroom renovations in Australia cost roughly $10,000 to $20,000 for a basic job, $20,000 to $35,000 for mid-range and $35,000 or more for premium finishes. Three Birds Renovations cites Housing Industry Association data putting the average at around $26,000. Your size, finishes and whether you move plumbing make the biggest difference.',
+  },
+  {
+    q: 'How much does a small bathroom renovation cost?',
+    a: 'Using the calculator, a small 2.4 × 1.8 m bathroom with full-height tiles comes to roughly $12,000 at a basic level and $22,000 at mid-range, including a builder and 15% contingency. Small bathrooms save on tiles and waterproofing, but the fixed costs of plumbing, fixtures and trades stay much the same.',
+  },
+  {
+    q: 'Can you renovate a bathroom for $10,000?',
+    a: 'Sometimes. Sources put basic renovations from about $8,000, and a cosmetic facelift at $5,000 to $10,000. That usually means keeping the layout, using budget fixtures and tiles, and tiling to half height. A full strip-out with new waterproofing will usually cost more.',
+  },
+  {
+    q: 'What is the most expensive part of a bathroom renovation?',
+    a: 'Labour is the biggest share, at around 40–60% of the total. By item, tiling (supply and laying) and plumbing are usually the largest lines, followed by the vanity and fixtures. Moving the toilet, shower or vanity adds plumbing work and is one of the quickest ways to increase the budget.',
+  },
+  {
+    q: 'How much contingency should I allow?',
+    a: 'Set aside 10–20% on top of your quotes. Older homes and full strip-outs can uncover hidden problems such as water damage, rotten framing or old pipes, so use the higher end for those.',
+  },
+  {
+    q: 'Do I need council approval to renovate a bathroom?',
+    a: 'It depends on your state and what you change. A like-for-like internal renovation often does not need approval, but structural changes and some plumbing work can. Check with your council or a building certifier. Waterproofing, plumbing and electrical work must be done by licensed trades in every state.',
+  },
+];
+
+const QUOTE_ROWS: { key: string; label: string; extra?: string }[] = [
+  { key: 'demo', label: 'Demolition & disposal' },
+  { key: 'plumb', label: 'Plumbing (rough-in & connections)' },
+  { key: 'move', label: 'Plumbing relocation', extra: 'move' },
+  { key: 'wp', label: 'Waterproofing' },
+  { key: 'tile', label: 'Tiles (supply & lay)' },
+  { key: 'vanity', label: 'Vanity, basin & tapware' },
+  { key: 'screen', label: 'Shower screen' },
+  { key: 'toilet', label: 'Toilet' },
+  { key: 'elec', label: 'Electrical (lights & exhaust fan)' },
+  { key: 'paint', label: 'Painting & finishing' },
+  { key: 'bath', label: 'Freestanding bath', extra: 'bath' },
+  { key: 'rail', label: 'Heated towel rail', extra: 'rail' },
+  { key: 'permit', label: 'Council / certifier fees', extra: 'permit' },
+];
+---
+<CalculatorLayout
+  slug="bathroom-renovation-cost-calculator"
+  title="Bathroom Renovation Cost Calculator Australia (2026)"
+  description="Free bathroom renovation cost calculator for Australia. Estimate by size, finish level and scope, see the breakdown, and swap in your own quotes."
+  h1="Bathroom Renovation Cost Calculator"
+  lede="Estimate what your bathroom renovation will cost in Australia, item by item. Change the size, finish level and scope, then replace any line with a real quote."
+  updated="2026-11-19"
+  quickAnswer="most Australian bathroom renovations cost about $10,000–$20,000 for a basic job, $20,000–$35,000 for mid-range and $35,000–$55,000 for premium. A typical 3.5 × 2.5 m mid-range bathroom comes to around $25,000 including contingency."
+  toc={toc}
+  faqs={faqs}
+  cta={{ title: 'Ready to get quotes?', sub: 'Compare at least three licensed renovators', href: '#before-you-start' }}
+>
+  <!-- ───────── Entradas ───────── -->
+  <div slot="inputs">
+    <div class="step">
+      <div class="step-head"><span class="n">1</span><h2 id="tier-h">Finish level</h2></div>
+      <fieldset class="choice-grid" aria-labelledby="tier-h">
+        <label class="choice">
+          <input type="radio" name="tier" value="basic" data-state />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M10 22 h44 v4 a8 8 0 0 1 -8 8 h-28 a8 8 0 0 1 -8 -8 z"></path><path d="M16 22 V10 a4 4 0 0 1 8 0"></path></svg>
+          <span class="t">Basic</span>
+          <span class="d">Budget fittings, same layout</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="tier" value="mid" data-state checked />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="16" width="22" height="18" rx="2"></rect><path d="M8 22 h22"></path><path d="M38 6 v28 M38 6 h18 v28"></path><path d="M44 12 c3 0 6 2 6 5"></path></svg>
+          <span class="t">Mid-range</span>
+          <span class="d">Quality fixtures, new tiles</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="tier" value="premium" data-state />
+          <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M6 20 c0 8 6 14 14 14 h24 c8 0 14 -6 14 -14 z"></path><path d="M16 34 l-2 4 M48 34 l2 4"></path><path d="M46 20 V8 a4 4 0 0 1 8 0"></path><path d="M26 10 l2 -4 2 4 M32 14 l2 -4 2 4" stroke-linecap="round"></path></svg>
+          <span class="t">Premium</span>
+          <span class="d">Designer finishes, full overhaul</span>
+        </label>
+      </fieldset>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">2</span><h2>Bathroom size</h2></div>
+      <div class="fields">
+        <div><label for="len">Length</label><div class="field"><input id="len" type="number" inputmode="decimal" min="0" step="0.1" value="3.5" data-state /><span class="unit">m</span></div></div>
+        <div><label for="wid">Width</label><div class="field"><input id="wid" type="number" inputmode="decimal" min="0" step="0.1" value="2.5" data-state /><span class="unit">m</span></div></div>
+      </div>
+      <div class="opt-label" id="walls-l" style="margin-top: 14px;">Wall tiles</div>
+      <div class="seg" role="radiogroup" aria-labelledby="walls-l">
+        <label><input type="radio" name="walls" value="full" data-state checked />Full height</label>
+        <label><input type="radio" name="walls" value="half" data-state />Half height</label>
+        <label><input type="radio" name="walls" value="shower" data-state />Shower only</label>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">3</span><h2>Scope</h2></div>
+      <div class="options" style="margin-bottom: 14px;">
+        <div>
+          <div class="opt-label" id="manage-l">Who runs the job?</div>
+          <div class="seg" role="radiogroup" aria-labelledby="manage-l">
+            <label><input type="radio" name="manage" value="builder" data-state checked />A renovator / builder</label>
+            <label><input type="radio" name="manage" value="self" data-state />I'll manage the trades</label>
+          </div>
+        </div>
+        <div>
+          <div class="opt-label" id="cont-l">Contingency</div>
+          <div class="seg" role="radiogroup" aria-labelledby="cont-l">
+            <label><input type="radio" name="cont" value="10" data-state />10%</label>
+            <label><input type="radio" name="cont" value="15" data-state checked />15%</label>
+            <label><input type="radio" name="cont" value="20" data-state />20%</label>
+          </div>
+        </div>
+      </div>
+      <div class="toggles">
+        <label class="toggle"><input type="checkbox" id="move" data-state /><span><span class="t">Change the layout</span><span class="d">Move the toilet, shower or vanity</span></span></label>
+        <label class="toggle"><input type="checkbox" id="bath" data-state /><span><span class="t">Freestanding bath</span><span class="d">Supplied and installed</span></span></label>
+        <label class="toggle"><input type="checkbox" id="rail" data-state /><span><span class="t">Heated towel rail</span><span class="d">Supplied and installed</span></span></label>
+        <label class="toggle"><input type="checkbox" id="permit" data-state /><span><span class="t">Council / certifier fees</span><span class="d">If your work needs approval</span></span></label>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">4</span><h2>Your quotes <span class="muted" style="font-weight: 400; font-size: 15px;">(optional)</span></h2></div>
+      <p class="note" style="margin: -6px 0 12px;">Got a real price? Type it in to replace our estimate for that line.</p>
+      <div class="quotes">
+        {QUOTE_ROWS.map((r) => (
+          <div class="quote-row" data-extra={r.extra} hidden={!!r.extra}>
+            <label for={`q-${r.key}`}>{r.label}</label>
+            <div class="field"><span class="unit" style="padding: 0 6px 0 0;">$</span><input id={`q-${r.key}`} type="number" inputmode="decimal" min="0" step="50" data-state /></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── Resultado ───────── -->
+  <div slot="result">
+    <div class="diagram">
+      <svg viewBox="0 0 380 160" role="img" aria-labelledby="dg-bath">
+        <title id="dg-bath">Floor plan of the bathroom with its size and tiled area</title>
+        <rect id="dg-room" x="60" y="15" width="260" height="110" fill="#e8eef5" stroke="#24456e" stroke-width="2"></rect>
+        <rect id="dg-shower" x="60" y="15" width="60" height="60" fill="#c9d6e6" stroke="#24456e" stroke-width="1.5" stroke-dasharray="4 3"></rect>
+        <path id="dg-door" d="" stroke="#f6f5f1" stroke-width="5"></path>
+        <text id="dg-l" x="190" y="146" fill="#9a3412" font-size="13" text-anchor="middle">3.5 m</text>
+        <text id="dg-w" x="50" y="74" fill="#9a3412" font-size="13" text-anchor="end">2.5 m</text>
+        <text id="dg-area" x="200" y="70" fill="#24456e" font-size="14" text-anchor="middle">8.75 m² floor</text>
+        <text id="dg-tiled" x="200" y="90" fill="#24456e" font-size="12" text-anchor="middle">36 m² tiled</text>
+      </svg>
+    </div>
+
+    <div class="result-body" aria-live="polite">
+      <div class="big"><div class="k">Estimated total</div><div class="v" id="r-total">–</div></div>
+      <p class="range-note" id="r-range"></p>
+      <div class="stats">
+        <div class="stat stat-plan"><div class="k">Works &amp; fixtures</div><div class="v" id="r-sub" style="font-size: 24px;">–</div></div>
+        <div class="stat stat-accent"><div class="k" id="r-cont-k">Contingency</div><div class="v" id="r-cont" style="font-size: 24px;">–</div></div>
+      </div>
+
+      <ul class="breakdown" id="r-breakdown" aria-label="Cost breakdown"></ul>
+
+      <p class="working" id="r-working"></p>
+
+      <div class="result-actions">
+        <button type="button" class="btn" id="copy-link"><Icon name="link" size={18} />Copy link to result</button>
+        <button type="button" class="btn icon-btn" id="print" aria-label="Print result"><Icon name="print" size={18} /></button>
+      </div>
+      <p class="copy-status" id="copy-status" role="status"></p>
+    </div>
+  </div>
+
+  <!-- ───────── Artículo ───────── -->
+  <section id="cost-by-level">
+    <h2>How much does a bathroom renovation cost in Australia?</h2>
+    <p>
+      Published Australian guides agree on the broad brackets, even if their exact numbers differ.
+      The calculator uses the middle of the recent ones:
+    </p>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Finish level</th><th scope="col">Typical total</th><th scope="col">What it usually means</th></tr></thead>
+        <tbody>
+          <tr><td>Basic</td><td>$10,000–$20,000</td><td>Same layout, budget fixtures and tiles, often half-height tiling</td></tr>
+          <tr><td>Mid-range</td><td>$20,000–$35,000</td><td>Full strip-out, new waterproofing, quality fixtures</td></tr>
+          <tr><td>Premium</td><td>$35,000–$55,000+</td><td>Designer finishes, custom vanity, often a new layout</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">
+      Ranges compiled from Canstar and Three Birds Renovations (citing hipages), Domain and
+      whatsthedamage.com.au. Housing Industry Association data puts the average at around $26,000.
+      See <a href="#how-we-estimate">how we estimate</a> for sources and dates.
+    </p>
+  </section>
+
+  <section id="cost-breakdown">
+    <h2>Bathroom renovation cost breakdown</h2>
+    <p>Typical installed prices for the main items in a full renovation:</p>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Item</th><th scope="col">Typical range</th></tr></thead>
+        <tbody>
+          <tr><td>Demolition &amp; disposal</td><td>$1,000–$3,000</td></tr>
+          <tr><td>Plumbing rough-in &amp; connections</td><td>$2,000–$5,000</td></tr>
+          <tr><td>Waterproofing</td><td>$700–$3,500</td></tr>
+          <tr><td>Tiles, supply &amp; lay (floor and walls)</td><td>$2,800–$7,500+</td></tr>
+          <tr><td>Vanity, basin &amp; tapware</td><td>$500–$6,000+</td></tr>
+          <tr><td>Shower screen (frameless)</td><td>$800–$2,500</td></tr>
+          <tr><td>Toilet (supply &amp; install)</td><td>$400–$1,200</td></tr>
+          <tr><td>Freestanding bath (installed)</td><td>$1,500–$5,000</td></tr>
+          <tr><td>Heated towel rail (installed)</td><td>$350–$1,200</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Tiles themselves range from around $12–$30 per m² for budget ranges to $30–$100 per m²
+      mid-range and $100–$300+ per m² for premium tiles, before laying. Labour usually makes up
+      40–60% of the total cost.
+    </p>
+  </section>
+
+  <section id="what-drives-cost">
+    <h2>What makes a bathroom renovation cost more?</h2>
+    <ul class="checklist">
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Moving the plumbing.</strong> Relocating the toilet, shower or vanity means new pipes and drains, and sometimes cutting into the slab.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Tiling height and tile choice.</strong> Full-height walls can double the tiled area, and large-format or premium tiles cost more to buy and to lay.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Fixtures and fittings.</strong> A custom vanity, stone bath or designer tapware can add thousands on their own.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Who manages the job.</strong> A renovation company or builder coordinates the trades and carries the risk, which adds a margin (about 13% in one published breakdown).</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>What's behind the walls.</strong> Water damage, old pipes or rotten framing found during demolition add cost, which is why a contingency matters.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Where you live.</strong> Trade rates vary between cities and regions. Local quotes are the only reliable number.</span></li>
+    </ul>
+  </section>
+
+  <section id="save-money">
+    <h2>Ways to save on a bathroom renovation</h2>
+    <div class="compare">
+      <div class="c1"><h3>Keep the layout</h3>Leaving the toilet, shower and vanity where they are avoids most of the extra plumbing cost.</div>
+      <div class="c2"><h3>Tile smarter</h3>Tile full height only in the shower and half height elsewhere, and choose standard-size tiles.</div>
+      <div class="c3"><h3>Compare quotes</h3>Get at least three itemised quotes and enter them above to see where they differ.</div>
+    </div>
+  </section>
+
+  <section id="before-you-start">
+    <h2>Before you start</h2>
+    <ul class="checklist">
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Ask for itemised quotes so you can compare them line by line with this calculator.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Check each trade's licence on your state's register before you sign.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Confirm who supplies the fixtures and tiles, and what the quote includes for waste removal.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span>Ask your council or a building certifier whether your work needs approval.</span></li>
+    </ul>
+    <div class="callout" style="margin-top: 24px;">
+      <strong>Waterproofing, plumbing and electrical need licensed trades</strong>
+      Wet-area waterproofing must meet AS 3740 and, like plumbing and electrical work, has to be
+      done by a licensed professional in every Australian state. Poor waterproofing is one of the
+      most common and expensive bathroom defects.
+    </div>
+  </section>
+
+  <section id="how-we-estimate">
+    <h2>How we estimate</h2>
+    <p>
+      The calculator adds up each item for your finish level, scales tiling and waterproofing to
+      your room, then adds the builder's margin (if a renovator runs the job) and your contingency.
+    </p>
+    <ul class="checklist">
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Tiled area:</strong> floor plus walls. Full height is 2.4 m, half height 1.2 m, less 1.6 m² for the door; "shower only" is two 0.9 × 2.1 m walls.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Tiles:</strong> $25, $60 or $150 per m² by level (mid-points of Domain's ranges), plus laying at $60, $80 or $110 per m². Laying rates are our estimate from published per-m² and hourly rates.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Waterproofing:</strong> whatsthedamage.com.au's low, typical and high figures, scaled to your floor area against a 3.5 × 2.5 m bathroom.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Other items:</strong> the low, typical and high figures from the breakdown above for basic, mid-range and premium. The layout-change allowance mirrors the plumbing rough-in range.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Builder's margin:</strong> 13%, from whatsthedamage.com.au's mid-range breakdown. <strong>Contingency:</strong> 10–20%, as recommended by Three Birds Renovations.</span></li>
+    </ul>
+    <p class="note" style="margin-top: 16px;">
+      Sources (accessed November 2026):
+      <a href="https://www.canstar.com.au/home-loans/bathroom-renovation-cost" rel="noopener">Canstar</a> (Jul 2026),
+      <a href="https://www.threebirdsrenovations.com/blog/how-much-does-a-bathroom-renovation-cost-2026" rel="noopener">Three Birds Renovations</a> (Jan 2026),
+      <a href="https://www.domain.com.au/advice/bathroom-renovation-costs" rel="noopener">Domain</a> (Sep 2025),
+      <a href="https://whatsthedamage.com.au/homeowner-hub/bathroom-reno-budget-breakdown/" rel="noopener">whatsthedamage.com.au</a> (Nov 2026),
+      <a href="https://www.oneflare.com.au/costs/bathroom-renovation" rel="noopener">Oneflare</a>.
+      Prices include GST where the source says so. These are estimates for planning only.
+    </p>
+  </section>
+</CalculatorLayout>
+
+<script>
+  import { bindCalculator, num, fmt, setText, aud, type State } from '../lib/calc';
+
+  type Tier = 'basic' | 'mid' | 'premium';
+  const TI: Record<Tier, number> = { basic: 0, mid: 1, premium: 2 };
+
+  // [básico, medio, premium] — fuentes y supuestos en la sección "How we estimate"
+  const FIXED: Record<string, [number, number, number]> = {
+    demo: [1000, 1800, 3000],
+    plumb: [2000, 3000, 5000],
+    vanity: [1000, 3000, 6000],
+    screen: [800, 1500, 2500],
+    toilet: [400, 700, 1200],
+    elec: [1200, 2100, 3500],
+    paint: [600, 1000, 1800],
+  };
+  const EXTRAS: Record<string, [number, number, number]> = {
+    move: [2000, 3000, 5000],
+    bath: [1500, 2800, 5000],
+    rail: [350, 650, 1200],
+    permit: [500, 750, 1000],
+  };
+  const WATERPROOF: [number, number, number] = [700, 1400, 3500];
+  const TILE_SUPPLY: [number, number, number] = [25, 60, 150];
+  const TILE_LAY: [number, number, number] = [60, 80, 110];
+  const BUILDER_MARGIN = 0.13;
+  const REF_FLOOR = 3.5 * 2.5;
+  const RANGES: Record<Tier, string> = {
+    basic: '$10,000–$20,000',
+    mid: '$20,000–$35,000',
+    premium: '$35,000–$55,000',
+  };
+  const LABELS: Record<string, string> = {
+    demo: 'Demolition', plumb: 'Plumbing', move: 'Plumbing relocation', wp: 'Waterproofing',
+    tile: 'Tiles (supply & lay)', vanity: 'Vanity & tapware', screen: 'Shower screen', toilet: 'Toilet',
+    elec: 'Electrical', paint: 'Painting', bath: 'Freestanding bath', rail: 'Heated towel rail',
+    permit: 'Council fees', margin: "Builder's margin",
+  };
+
+  function tiledArea(L: number, W: number, walls: string) {
+    const floor = L * W;
+    let wall = 0;
+    if (walls === 'shower') wall = 2 * 0.9 * 2.1;
+    else wall = Math.max(0, 2 * (L + W) * (walls === 'half' ? 1.2 : 2.4) - 1.6);
+    return { floor, wall, total: floor + wall };
+  }
+
+  function drawDiagram(L: number, W: number, floor: number, tiled: number) {
+    const room = document.getElementById('dg-room');
+    const shower = document.getElementById('dg-shower');
+    const door = document.getElementById('dg-door');
+    if (!room || !shower || !door || L <= 0 || W <= 0) return;
+    const scale = Math.min(260 / L, 110 / W);
+    const w = L * scale, h = W * scale;
+    const x = (380 - w) / 2 + 10, y = 15 + (110 - h) / 2;
+    room.setAttribute('x', String(x)); room.setAttribute('y', String(y));
+    room.setAttribute('width', String(w)); room.setAttribute('height', String(h));
+    const s = Math.min(0.9 * scale, w * 0.45, h * 0.8);
+    shower.setAttribute('x', String(x)); shower.setAttribute('y', String(y));
+    shower.setAttribute('width', String(s)); shower.setAttribute('height', String(s));
+    const dw = Math.min(0.8 * scale, w * 0.35);
+    door.setAttribute('d', `M${(x + w - dw - 8).toFixed(1)} ${(y + h).toFixed(1)} h${dw.toFixed(1)}`);
+    const l = document.getElementById('dg-l');
+    const wl = document.getElementById('dg-w');
+    if (l) { l.textContent = `${fmt(L, 1)} m`; l.setAttribute('x', String(x + w / 2)); l.setAttribute('y', String(Math.min(y + h + 18, 156))); }
+    if (wl) { wl.textContent = `${fmt(W, 1)} m`; wl.setAttribute('x', String(x - 8)); wl.setAttribute('y', String(y + h / 2 + 4)); }
+    const a = document.getElementById('dg-area');
+    const t = document.getElementById('dg-tiled');
+    if (a) { a.textContent = `${fmt(floor, 2)} m² floor`; a.setAttribute('x', String(x + w / 2 + s / 2)); a.setAttribute('y', String(y + h / 2)); }
+    if (t) {
+      t.textContent = `${fmt(tiled, 0)} m² tiled`;
+      t.setAttribute('x', String(x + w / 2 + s / 2)); t.setAttribute('y', String(y + h / 2 + 18));
+    }
+  }
+
+  function render(s: State) {
+    const tier = (['basic', 'mid', 'premium'].includes(s.tier) ? s.tier : 'mid') as Tier;
+    const i = TI[tier];
+    const L = num(s.len), W = num(s.wid);
+    const walls = s.walls ?? 'full';
+    const builder = (s.manage ?? 'builder') === 'builder';
+    const cont = num(s.cont || '15') / 100;
+    const { floor, total: tiled } = tiledArea(L, W, walls);
+
+    // Estimaciones por partida
+    const est: Record<string, number> = {};
+    Object.entries(FIXED).forEach(([k, v]) => (est[k] = v[i]));
+    est.wp = WATERPROOF[i] * Math.max(0.7, floor / REF_FLOOR);
+    est.tile = tiled * (TILE_SUPPLY[i] + TILE_LAY[i]);
+    Object.entries(EXTRAS).forEach(([k, v]) => { if (s[k] === '1') est[k] = v[i]; });
+
+    // Mostrar/ocultar filas de extras y poner la estimación como placeholder
+    document.querySelectorAll<HTMLElement>('.quote-row[data-extra]').forEach((row) => {
+      row.hidden = s[row.dataset.extra!] !== '1';
+    });
+
+    const lines: { key: string; value: number; own: boolean }[] = [];
+    Object.entries(est).forEach(([k, v]) => {
+      const input = document.getElementById(`q-${k}`) as HTMLInputElement | null;
+      if (input) input.placeholder = Math.round(v).toLocaleString('en-AU');
+      const own = s[`q-${k}`] !== undefined && s[`q-${k}`] !== '';
+      lines.push({ key: k, value: own ? num(s[`q-${k}`]) : v, own });
+    });
+
+    const sub = lines.reduce((a, l) => a + l.value, 0);
+    const margin = builder ? sub * BUILDER_MARGIN : 0;
+    const contingency = (sub + margin) * cont;
+    const totalCost = sub + margin + contingency;
+
+    setText('r-total', L > 0 && W > 0 ? aud(Math.round(totalCost / 100) * 100) : '–');
+    setText('r-range', `Typical Australian range for a ${tier === 'mid' ? 'mid-range' : tier} renovation: ${RANGES[tier]}.`);
+    setText('r-sub', aud(sub + margin));
+    setText('r-cont-k', `Contingency (${Math.round(cont * 100)}%)`);
+    setText('r-cont', aud(contingency));
+
+    // Desglose con barras, de mayor a menor
+    if (builder) lines.push({ key: 'margin', value: margin, own: false });
+    const max = Math.max(...lines.map((l) => l.value), 1);
+    const list = document.getElementById('r-breakdown');
+    if (list) {
+      list.replaceChildren(...lines.sort((a, b) => b.value - a.value).map((l) => {
+        const li = document.createElement('li');
+        if (l.own) li.className = 'own';
+        const row = document.createElement('div');
+        row.className = 'row';
+        const name = document.createElement('span');
+        name.textContent = LABELS[l.key] + (l.own ? ' (your quote)' : '');
+        const val = document.createElement('strong');
+        val.textContent = aud(l.value);
+        row.append(name, val);
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        const fill = document.createElement('i');
+        fill.style.width = `${(l.value / max) * 100}%`;
+        bar.append(fill);
+        li.append(row, bar);
+        return li;
+      }));
+    }
+
+    const tileOwn = s['q-tile'] !== undefined && s['q-tile'] !== '';
+    setText('r-working', L > 0 && W > 0
+      ? `${tileOwn ? 'Tiles: your quote' : `Tiles: ${fmt(tiled, 1)} m² × ($${TILE_SUPPLY[i]} + $${TILE_LAY[i]}) = ${aud(est.tile)}`} · items ${aud(sub)}${builder ? ` + 13% builder ${aud(margin)}` : ''} + ${Math.round(cont * 100)}% contingency ${aud(contingency)} = ${aud(totalCost)}`
+      : 'Enter the bathroom size to see the working.');
+
+    drawDiagram(L, W, floor, tiled);
+
+    setText('mbar-k', `${tier === 'mid' ? 'Mid-range' : tier === 'basic' ? 'Basic' : 'Premium'} · ${fmt(L, 1)} × ${fmt(W, 1)} m`);
+    const v = document.getElementById('mbar-v');
+    if (v) v.innerHTML = `${aud(Math.round(totalCost / 100) * 100)} <span>· incl. ${Math.round(cont * 100)}%</span>`;
+  }
+
+  const root = document.getElementById('calc');
+  if (root) bindCalculator(root, render);
+</script>

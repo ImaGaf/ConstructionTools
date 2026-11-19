@@ -13,7 +13,7 @@ Publicar de forma constante pesa más que publicar mucho de golpe.
 - [x] Astro estático + sitemap + robots.txt
 - [x] Plantilla `CalculatorLayout` (migas de pan, autor, fecha, FAQ, relacionadas, schema)
 - [x] Calculadora de concreto (12.100 búsquedas/mes, KD 17)
-- [x] Páginas About, Contact, Privacy Policy, Terms, 404
+- [x] Páginas Privacy Policy, Terms, 404 (About y Contact quitadas a pedido el 19 nov; volver a evaluarlas antes de pedir AdSense)
 - [x] Favicon, imagen para redes (OG), cabeceras de Cloudflare
 - [x] AdSense, GA4 y Cloudflare Analytics preparados (apagados)
 - [x] Resultados compartibles por enlace
@@ -34,8 +34,7 @@ Lo haces tú (no Claude Code):
       (preset Astro, build `npm run build`, output `dist`) y luego el dominio
 - [ ] Google Search Console: verificar dominio y enviar `sitemap-index.xml`
 - [ ] GA4 o Cloudflare Web Analytics: crear y copiar el ID
-- [ ] Email de contacto real (puede ser Gmail o reenvío de Cloudflare Email Routing)
-- [ ] Revisar el texto de About y que todo sea exacto
+- [ ] Email real para la Privacy Policy (puede ser Gmail o reenvío de Cloudflare Email Routing)
 
 Prompt para Claude Code:
 > Lee CLAUDE.md. El sitio se va a llamar [NOMBRE] y el dominio es [DOMINIO].
@@ -49,7 +48,7 @@ Prompt para Claude Code:
 **Meta:** 5 calculadoras con las palabras clave ya medidas.
 
 - [x] Concrete calculator
-- [ ] Bathroom renovation cost calculator (2.400/mes, CPC $2,37; variantes con KD 5–15)
+- [x] Bathroom renovation cost calculator (2.400/mes, CPC $2,37; variantes con KD 5–15)
 - [ ] Kitchen renovation cost calculator (1.900/mes, KD 19, SERP débil)
 - [x] Tile calculator (1.300/mes + "tile estimator calculator" 1.000/mes)
 - [ ] Hot water system replacement cost (720/mes, CPC $4,12: la mejor para leads)

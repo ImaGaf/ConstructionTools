@@ -12,7 +12,6 @@ export const SITE = {
     name: 'Oswaldo Tipán',
     initials: 'OT',
     role: 'Software engineering student with residential hydraulic design experience',
-    url: '/about/',
   },
 
   // Cuando AdSense te apruebe, pon aquí tu ID (ca-pub-XXXXXXXXXXXXXXXX).
@@ -96,7 +95,7 @@ export const TOOLS: Tool[] = [
     blurb: 'Budget by size, finish level and what you keep.',
     category: 'renovation-costs',
     icon: 'bath',
-    ready: false,
+    ready: true,
     related: ['kitchen-renovation-cost-calculator', 'tile-calculator'],
   },
   {

@@ -3,6 +3,7 @@
 // Convención: cada control que forma parte del estado lleva `data-state`.
 //   - <input type="number" id="s-l" data-state>         → clave = id
 //   - <input type="radio" name="shape" value="slab" data-state> → clave = name
+//   - <input type="checkbox" id="bath" data-state>           → clave = id, valor '1' o '0'
 // `bindCalculator` lee la URL al cargar, llama a `render(state)` en cada cambio
 // y guarda el estado en la URL para que el resultado se pueda compartir.
 
@@ -18,6 +19,8 @@ export function readState(root: HTMLElement): State {
   controls(root).forEach((el) => {
     if (el instanceof HTMLInputElement && el.type === 'radio') {
       if (el.checked) out[el.name] = el.value;
+    } else if (el instanceof HTMLInputElement && el.type === 'checkbox') {
+      out[el.id] = el.checked ? '1' : '0';
     } else if (el.value !== '') {
       out[el.id] = el.value;
     }
@@ -31,6 +34,9 @@ function applyState(root: HTMLElement, params: URLSearchParams) {
     if (el instanceof HTMLInputElement && el.type === 'radio') {
       const v = params.get(el.name);
       if (v !== null) el.checked = el.value === v;
+    } else if (el instanceof HTMLInputElement && el.type === 'checkbox') {
+      const v = params.get(el.id);
+      if (v !== null) el.checked = v === '1';
     } else {
       const v = params.get(el.id);
       if (v !== null) el.value = v;
@@ -94,3 +100,7 @@ export const setText = (id: string, text: string) => {
   const el = document.getElementById(id);
   if (el) el.textContent = text;
 };
+
+/** Formato de moneda AUD sin decimales. */
+export const aud = (n: number) =>
+  n.toLocaleString('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: 0 });

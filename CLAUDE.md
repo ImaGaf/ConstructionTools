@@ -63,7 +63,8 @@ Ezoic is ruled out (minimum raised to 250k monthly users in Feb 2026).
 
 ## Repo layout
 
-- `src/site.config.ts` — site name, author, contact, AdSense / GA4 / Cloudflare
+- `src/site.config.ts` — site name, author, contact email (used only in the privacy
+  policy), AdSense / GA4 / Cloudflare
   analytics IDs, `CATEGORIES` (slug, name, intro text) and `TOOLS` (slug, title,
   blurb, category, icon, `ready`, `featured`, `related`). The home page, category
   pages, header menu, 404 page and "Related calculators" are all generated from these.
@@ -141,6 +142,20 @@ them, never hard-code new colours.
 - Text contrast at least 4.5:1; touch targets at least 44 px.
 - Calculator first, result always visible (sticky panel on desktop, bottom bar on
   mobile), content below in visual blocks rather than walls of text.
+
+## Pages not wanted for now
+
+Oswaldo removed the About and Contact pages (19 Nov 2026). Do not recreate them or
+link to them unless he asks. The author byline shows his name without a link.
+
+## Cost pages
+
+Cost calculators (see `bathroom-renovation-cost-calculator.astro`) follow extra rules:
+- Every price constant lives at the top of the page script with a comment, and the
+  page has a "How we estimate" section listing sources, dates and any assumptions.
+- Show a total plus the published range for that level, never a single "exact" price.
+- Let users replace any line with their own quote (`q-<item>` fields).
+- Calibrate the model so typical inputs land inside the published ranges.
 
 ## Content rules
 

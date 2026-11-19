@@ -132,7 +132,7 @@ h3 { font-size: 1.15rem; margin: 0 0 6px; font-weight: 600; }
 .crumbs a:hover { color: var(--accent); }
 .crumbs [aria-current] { color: var(--ink); font-weight: 500; }
 .byline { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); margin: 0 0 30px; }
-.byline a { color: var(--ink); font-weight: 500; }
+.byline a, .byline strong { color: var(--ink); font-weight: 500; }
 .avatar {
   width: 30px; height: 30px; border-radius: 50%; background: var(--plan); color: #fff;
   display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex: none;
@@ -457,3 +457,32 @@ a.tool-feature:hover { border-color: var(--accent-on-dark); color: #fff; }
 .checks .ok .tag { background: var(--plan-soft); color: var(--plan); }
 .checks .bad { background: var(--accent-soft); }
 .checks .bad .tag { background: var(--accent); color: #fff; }
+
+/* Casillas de extras */
+.toggles { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+.toggle {
+  display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-radius: var(--radius-sm);
+  border: 1px solid var(--line); background: var(--surface); cursor: pointer;
+}
+.toggle:hover { border-color: var(--accent); }
+.toggle:has(input:checked) { border-color: var(--accent); background: var(--accent-tint); }
+.toggle input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--accent); flex: none; }
+.toggle .t { display: block; font-weight: 600; font-size: 15px; }
+.toggle .d { display: block; font-size: 13px; color: var(--muted); line-height: 1.4; }
+
+/* Partidas editables */
+.quotes { display: grid; gap: 8px; }
+.quote-row { display: grid; grid-template-columns: minmax(0, 1fr) 150px; gap: 10px; align-items: center; }
+.quote-row label { font-size: 14px; font-weight: 500; margin: 0; }
+.quote-row .field input { font-size: 16px; padding: 9px 0; }
+.quote-row[hidden] { display: none; }
+
+/* Desglose en el resultado */
+.breakdown { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 8px; }
+.breakdown li { font-size: 13px; }
+.breakdown .row { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 3px; color: var(--ink-3); }
+.breakdown .row strong { color: var(--ink); font-variant-numeric: tabular-nums; }
+.breakdown .bar { height: 6px; border-radius: 4px; background: var(--plan-soft); overflow: hidden; }
+.breakdown .bar i { display: block; height: 100%; background: var(--plan); border-radius: 4px; transition: width .25s; }
+.breakdown .own .bar i { background: var(--accent); }
+.range-note { font-size: 13px; color: var(--muted); margin: -4px 0 14px; }

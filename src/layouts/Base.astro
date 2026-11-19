@@ -87,7 +87,6 @@ const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
           {CATEGORIES.map((c) => (
             <a href={`/${c.slug}/`} aria-current={section === c.slug ? 'page' : undefined}>{c.name}</a>
           ))}
-          <a href="/about/">About</a>
         </nav>
         <div class="header-actions">
           <a class="btn icon-btn" href="/#calculators" aria-label="Find a calculator"><Icon name="search" size={20} /></a>
@@ -95,8 +94,6 @@ const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
             <summary class="btn icon-btn" aria-label="Menu"><Icon name="menu" size={20} /></summary>
             <nav class="panel" aria-label="Mobile">
               {CATEGORIES.map((c) => <a href={`/${c.slug}/`}>{c.name}</a>)}
-              <a href="/about/">About</a>
-              <a href="/contact/">Contact</a>
             </nav>
           </details>
         </div>
@@ -120,8 +117,6 @@ const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
           </div>
           <div>
             <strong>Site</strong>
-            <a href="/about/">About</a>
-            <a href="/contact/">Contact</a>
             <a href="/privacy-policy/">Privacy Policy</a>
             <a href="/terms/">Terms</a>
           </div>
