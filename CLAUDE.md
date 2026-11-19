@@ -46,9 +46,11 @@ Ezoic is ruled out (minimum raised to 250k monthly users in Feb 2026).
 - **Astro 5, fully static output.** Every page must ship complete HTML so Google and
   the AdSense reviewer see the content without running JavaScript. Do not switch to
   client-side rendering, a SPA, or Lovable.
-- Calculator logic is plain TypeScript in a `<script>` tag on the page, using the
-  helpers in `src/lib/calc.ts`. Only add a framework island (React) if a calculator
-  truly needs it.
+- Calculator logic is plain TypeScript in a `<script>` tag on the page, using
+  `bindCalculator` from `src/lib/calc.ts`. Only add a framework island (React) if a
+  calculator truly needs it.
+- Fonts are self-hosted through `@fontsource` (imported in `Base.astro`). Do not add
+  Google Fonts `<link>` tags or other external CSS.
 - Hosting: Cloudflare Pages (build `npm run build`, output `dist`). `public/_headers`
   sets security and cache headers.
 - `@astrojs/sitemap` generates the sitemap. `trailingSlash: 'always'`.
@@ -62,16 +64,26 @@ Ezoic is ruled out (minimum raised to 250k monthly users in Feb 2026).
 ## Repo layout
 
 - `src/site.config.ts` — site name, author, contact, AdSense / GA4 / Cloudflare
-  analytics IDs, and the `TOOLS` list (slug, title, category, `ready`, `related`).
-  The home page, 404 page and "Related calculators" are all generated from `TOOLS`.
+  analytics IDs, `CATEGORIES` (slug, name, intro text) and `TOOLS` (slug, title,
+  blurb, category, icon, `ready`, `featured`, `related`). The home page, category
+  pages, header menu, 404 page and "Related calculators" are all generated from these.
+- `src/pages/[category].astro` — one hub page per category, with CollectionPage
+  schema. A category with no `ready` tools is `noindex` and left out of the sitemap
+  (`astro.config.mjs`) so Google never sees empty pages.
 - `src/layouts/Base.astro` — head: title, description, canonical, Open Graph,
   favicon, JSON-LD, ad and analytics scripts; header and footer.
-- `src/layouts/CalculatorLayout.astro` — wraps every calculator: breadcrumbs, H1,
-  lede, author + "Updated" date, FAQ section, related calculators, disclaimer, and
-  the WebApplication + BreadcrumbList + FAQPage schema. Pages only supply the
-  calculator and the article content.
-- `src/lib/calc.ts` — shared helpers: accessible tabs, reading inputs, syncing the
-  state to the URL (shareable results) and the "copy link" button.
+- `src/layouts/CalculatorLayout.astro` — wraps every calculator: breadcrumbs (with
+  category), H1, lede, author + date, the two-column calculator (inputs card +
+  sticky result panel + CTA), ad slot, table of contents, quick answer, FAQ (as
+  `<details>`, always in the HTML), related calculators, disclaimer, the mobile
+  result bar (`#mbar-k`, `#mbar-v`) and all schema. Pages fill `slot="inputs"`,
+  `slot="result"` and the article sections.
+- `src/lib/calc.ts` — `bindCalculator(root, render)`: every control with
+  `data-state` (inputs by `id`, radios by `name`) is read, restored from the URL,
+  synced back to the URL (shareable results) and passed to `render`. Also wires
+  `#copy-link`, `#copy-status` and `#print`. Helpers: `num`, `fmt`, `setText`.
+- `src/components/Icon.astro` — inline stroke icons by name (add new ones there).
+- `src/components/ToolCard.astro` — the calculator card used on home, categories, 404.
 - `src/components/AdSlot.astro` — manual ad slot; renders nothing until AdSense is on.
 - `src/styles/global.css` — single stylesheet with light/dark tokens.
 - `src/pages/concrete-calculator.astro` — **the reference template** for every new
@@ -92,18 +104,43 @@ Ezoic is ruled out (minimum raised to 250k monthly users in Feb 2026).
    - Sensible Australian defaults so a result shows on load.
    - Results inside an `aria-live` `.results` block.
    - A `.working` line that shows the formula with the user's numbers.
-   - Use `initTabs`, `readInputs`, `syncUrl` and `copyLink` from `src/lib/calc.ts`,
-     and read initial values from the URL like the concrete page does.
-   - Must work at 390 px wide.
+   - Inputs go in `slot="inputs"` as numbered `.step` blocks (`.step-head`).
+     Choices are native radios: `.choice-grid` cards for the main option (with a
+     small plan-blue SVG), `.seg` segmented controls for small options. Numbers use
+     `.field` with the unit inside (`<span class="unit">`). Every control gets
+     `data-state`.
+   - Results go in `slot="result"`: a `.diagram` that updates with the user's
+     numbers where it makes sense, `.big` for the main number, `.stats` tiles,
+     `.working` with the formula, and the copy/print buttons. Update `#mbar-k` and
+     `#mbar-v` for the mobile bar.
+   - Call `bindCalculator(document.getElementById('calc'), render)`.
+   - Must work at 390 px wide with no horizontal scroll.
 5. `<AdSlot />` straight after the calculator, never inside it.
-6. Article content below: how the calculation works (formula), at least one
-   practical table, tips, and when to call a professional. Genuinely useful,
-   roughly 600–1,200 words, no padding.
+6. Article content as `<section id="...">` blocks in the default slot, listed in the
+   `toc` prop, plus a one-sentence `quickAnswer`. Use the visual blocks:
+   `.step-cards` for the formula, `.table-card` tables, `.compare` cards,
+   `.checklist`, `.callout`. Genuinely useful, roughly 600–1,200 words, no padding.
+   H2s should match the questions people search (check Semrush variants).
 7. A `.cta` block. On cost pages it points to getting quotes from a licensed tradie.
 8. FAQs: build them from the "Questions" keywords in Semrush. 4–6 is enough.
 9. Check: `npm run check`, `npm run build`, then verify the maths by hand with two
    or three inputs and look at the page in the browser on a phone-sized window.
 10. Update `docs/keyword-research.md` (status "Built") and tick it in `docs/ROADMAP.md`.
+
+## Design rules ("Site plan")
+
+The approved design lives in the Claude Design canvas "BuildCalc AU — Diseño del
+sitio". Colours, type and components are tokens in `src/styles/global.css`; reuse
+them, never hard-code new colours.
+- Warm off-white ground (`--bg`), white cards, carbon ink (`--ink`).
+- One accent: safety orange `--accent` for buttons, links, selection and the CTA.
+- Plan blue `--plan` for diagrams, icons and secondary result tiles.
+- Space Grotesk for headings and big numbers, Inter for text, JetBrains Mono for
+  the formula line.
+- Rounded cards (16–22 px), soft borders, no gradients, no emoji, no stock photos.
+- Text contrast at least 4.5:1; touch targets at least 44 px.
+- Calculator first, result always visible (sticky panel on desktop, bottom bar on
+  mobile), content below in visual blocks rather than walls of text.
 
 ## Content rules
 

@@ -1,54 +1,46 @@
 // Utilidades compartidas por todas las calculadoras.
+//
+// Convención: cada control que forma parte del estado lleva `data-state`.
+//   - <input type="number" id="s-l" data-state>         → clave = id
+//   - <input type="radio" name="shape" value="slab" data-state> → clave = name
+// `bindCalculator` lee la URL al cargar, llama a `render(state)` en cada cambio
+// y guarda el estado en la URL para que el resultado se pueda compartir.
 
-/**
- * Pestañas accesibles: clic y flechas izquierda/derecha.
- * Espera botones [role=tab][data-shape] y paneles [data-panel] dentro de `root`.
- * Llama a onChange con la pestaña inicial y en cada cambio.
- */
-export function initTabs(root: HTMLElement, initial: string, onChange: (value: string) => void) {
-  const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[role="tab"][data-shape]'));
-  const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-panel]'));
-  if (!tabs.length) return;
+export type State = Record<string, string>;
 
-  const select = (value: string, focus = false) => {
-    const tab = tabs.find((t) => t.dataset.shape === value) ?? tabs[0];
-    tabs.forEach((t) => {
-      const on = t === tab;
-      t.setAttribute('aria-selected', String(on));
-      t.tabIndex = on ? 0 : -1;
-    });
-    panels.forEach((p) => (p.hidden = p.dataset.panel !== tab.dataset.shape));
-    if (focus) tab.focus();
-    onChange(tab.dataset.shape!);
-  };
-
-  tabs.forEach((tab, i) => {
-    tab.addEventListener('click', () => select(tab.dataset.shape!));
-    tab.addEventListener('keydown', (e) => {
-      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-      e.preventDefault();
-      const next = (i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
-      select(tabs[next].dataset.shape!, true);
-    });
-  });
-
-  select(initial);
+function controls(root: HTMLElement) {
+  return Array.from(root.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-state]'));
 }
 
-/** Lee los valores de una lista de inputs/selects por id. */
-export function readInputs(ids: string[]): Record<string, string> {
-  const out: Record<string, string> = {};
-  ids.forEach((id) => {
-    const el = document.getElementById(id) as HTMLInputElement | HTMLSelectElement | null;
-    if (el && el.value !== '') out[id] = el.value;
+/** Lee el estado actual de todos los controles con data-state. */
+export function readState(root: HTMLElement): State {
+  const out: State = {};
+  controls(root).forEach((el) => {
+    if (el instanceof HTMLInputElement && el.type === 'radio') {
+      if (el.checked) out[el.name] = el.value;
+    } else if (el.value !== '') {
+      out[el.id] = el.value;
+    }
   });
   return out;
 }
 
-/** Guarda el estado en la URL (sin recargar) para que el resultado se pueda compartir. */
-export function syncUrl(state: Record<string, string>) {
-  const params = new URLSearchParams(state);
-  const url = `${location.pathname}?${params.toString()}`;
+/** Aplica valores (por ejemplo, de la URL) a los controles. */
+function applyState(root: HTMLElement, params: URLSearchParams) {
+  controls(root).forEach((el) => {
+    if (el instanceof HTMLInputElement && el.type === 'radio') {
+      const v = params.get(el.name);
+      if (v !== null) el.checked = el.value === v;
+    } else {
+      const v = params.get(el.id);
+      if (v !== null) el.value = v;
+    }
+  });
+}
+
+/** Guarda el estado en la URL sin recargar la página. */
+export function syncUrl(state: State) {
+  const url = `${location.pathname}?${new URLSearchParams(state).toString()}`;
   try {
     history.replaceState(null, '', url);
   } catch {
@@ -56,13 +48,49 @@ export function syncUrl(state: Record<string, string>) {
   }
 }
 
+/**
+ * Conecta una calculadora: estado inicial desde la URL, render en cada cambio,
+ * URL compartible y botones de copiar enlace / imprimir si existen
+ * (#copy-link, #copy-status, #print).
+ */
+export function bindCalculator(root: HTMLElement, render: (s: State) => void) {
+  applyState(root, new URLSearchParams(location.search));
+  const run = () => {
+    const s = readState(root);
+    render(s);
+    syncUrl(s);
+  };
+  root.addEventListener('input', run);
+  root.addEventListener('change', run);
+  run();
+
+  document.getElementById('copy-link')?.addEventListener('click', () => {
+    const status = document.getElementById('copy-status');
+    copyLink(status);
+  });
+  document.getElementById('print')?.addEventListener('click', () => window.print());
+}
+
 /** Copia la URL actual y muestra un mensaje corto. */
-export async function copyLink(status: HTMLElement) {
+export async function copyLink(status: HTMLElement | null) {
   try {
     await navigator.clipboard.writeText(location.href);
-    status.textContent = 'Link copied.';
+    if (status) status.textContent = 'Link copied. Paste it anywhere to share this result.';
   } catch {
-    status.textContent = 'Copy the address from your browser bar to share.';
+    if (status) status.textContent = 'Copy the address from your browser bar to share.';
   }
-  setTimeout(() => (status.textContent = ''), 3000);
+  if (status) setTimeout(() => (status.textContent = ''), 3500);
 }
+
+/** Número positivo desde un string (vacío o inválido = 0). */
+export const num = (v: string | undefined) => Math.max(0, parseFloat(v ?? '') || 0);
+
+/** Formato australiano con decimales fijos. */
+export const fmt = (n: number, d = 2) =>
+  n.toLocaleString('en-AU', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+/** Escribe texto en un elemento por id, si existe. */
+export const setText = (id: string, text: string) => {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text;
+};

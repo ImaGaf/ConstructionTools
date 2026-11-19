@@ -1,9 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
-import { SITE, TOOLS } from '../site.config';
+import Icon from '../components/Icon.astro';
+import ToolCard from '../components/ToolCard.astro';
+import { SITE, TOOLS, CATEGORIES } from '../site.config';
 
-const categories = [...new Set(TOOLS.map((t) => t.category))];
 const home = new URL('/', Astro.site).href;
+// Listas para buscar: primero las disponibles, luego las próximas.
+const ordered = [...TOOLS].sort((a, b) => Number(b.ready) - Number(a.ready) || Number(!!b.featured) - Number(!!a.featured));
 const schema = [
   {
     '@context': 'https://schema.org',
@@ -25,41 +28,139 @@ const schema = [
 ---
 <Base title={`${SITE.name} – Free Building & Renovation Calculators`} description={SITE.description} schema={schema}>
   <section class="hero">
-    <h1>Building & renovation calculators for Australia</h1>
-    <p class="lede">
-      Quick, free tools to work out materials and costs before you buy or get quotes. Metric
-      units, Australian dollars, and references to Australian standards.
-    </p>
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="hero-badge"><Icon name="check" size={14} stroke={2.6} />Free · Metric · Made for Australia</span>
+        <h1>Plan the job.<br />Order the right amount.</h1>
+        <p class="lede">
+          Calculators for concrete, tiles, renovation costs and hot water, with the working shown so
+          you can check every number before you buy or get quotes.
+        </p>
+        <form class="search" role="search" action="/#calculators" id="search-form">
+          <label for="q" class="sr-only">Search calculators</label>
+          <span class="ic"><Icon name="search" size={20} /></span>
+          <input id="q" name="q" type="search" placeholder="What are you working on? e.g. concrete slab" autocomplete="off" />
+          <button class="btn btn-primary" type="submit">Find</button>
+        </form>
+        <div class="popular">
+          <span>Popular:</span>
+          <a class="chip" href="/concrete-calculator/?shape=slab">Concrete slab</a>
+          <a class="chip" href="/concrete-calculator/?shape=post">Post holes</a>
+          <a class="chip" href="/concrete-calculator/?shape=footing">Strip footing</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <a class="preview-card" href="/concrete-calculator/" aria-label="Open the concrete calculator">
+          <div class="preview-head"><span>Concrete slab</span><span class="pill pill-plan">Example</span></div>
+          <div class="preview-body">
+            <svg viewBox="0 0 396 170" width="100%" role="img" aria-label="Slab 4 metres by 3 metres, 100 millimetres thick">
+              <path d="M70 70 L226 30 L346 70 L190 110 Z" fill="#e8eef5" stroke="#24456e" stroke-width="2" stroke-linejoin="round"></path>
+              <path d="M70 70 L70 86 L190 126 L190 110 Z" fill="#c9d6e6" stroke="#24456e" stroke-width="2" stroke-linejoin="round"></path>
+              <path d="M190 110 L190 126 L346 86 L346 70 Z" fill="#d8e2ee" stroke="#24456e" stroke-width="2" stroke-linejoin="round"></path>
+              <path d="M62 98 L178 136" stroke="#c2410c" stroke-width="1.5" stroke-dasharray="4 4"></path>
+              <text x="96" y="140" fill="#9a3412" font-size="14" font-weight="600">4.0 m</text>
+              <path d="M202 136 L354 96" stroke="#c2410c" stroke-width="1.5" stroke-dasharray="4 4"></path>
+              <text x="286" y="138" fill="#9a3412" font-size="14" font-weight="600">3.0 m</text>
+              <text x="12" y="84" fill="#24456e" font-size="13" font-weight="600">100 mm</text>
+            </svg>
+          </div>
+          <div class="preview-stats">
+            <div class="big" style="margin: 0; padding: 14px 16px;"><div class="k">Concrete needed</div><div class="v" style="font-size: 30px;">1.32 m³</div></div>
+            <div class="stat stat-accent"><div class="k">20 kg bags</div><div class="v" style="font-size: 30px;">139</div></div>
+          </div>
+        </a>
+      </div>
+    </div>
   </section>
 
-  <div id="calculators">
-    {categories.map((cat) => (
-      <section class="cat">
-        <h2>{cat}</h2>
-        <ul class="tool-list">
-          {TOOLS.filter((t) => t.category === cat).map((t) => (
-            <li>
-              {t.ready ? (
-                <a href={`/${t.slug}/`}><div class="card"><strong>{t.title}</strong><br /><span class="note">{t.blurb}</span></div></a>
-              ) : (
-                <div class="card"><strong>{t.title}</strong><span class="soon">Coming soon</span><br /><span class="note">{t.blurb}</span></div>
-              )}
-            </li>
-          ))}
-        </ul>
-      </section>
-    ))}
+  <section class="trust" aria-label="Why use these calculators">
+    <div class="wrap">
+      <span><Icon name="ruler" size={18} />Working shown on every result</span>
+      <span><Icon name="grid" size={18} />Metric units &amp; AUD</span>
+      <span><Icon name="shield" size={18} />References to Australian standards</span>
+      <span><Icon name="link" size={18} />Share any result with a link</span>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <section class="section" id="calculators" aria-labelledby="calc-h">
+      <div class="section-head">
+        <div>
+          <h2 id="calc-h">Calculators</h2>
+          <p>Pick a job. Every tool works on your phone at the hardware store.</p>
+        </div>
+        <div class="seg" role="group" aria-label="Filter by category">
+          <button type="button" aria-pressed="true" data-filter="all">All</button>
+          {CATEGORIES.map((c) => <button type="button" aria-pressed="false" data-filter={c.slug}>{c.short}</button>)}
+        </div>
+      </div>
+      <ul class="tools-grid" id="tools">
+        {ordered.map((t) => (
+          <li data-cat={t.category} data-text={`${t.title} ${t.blurb}`.toLowerCase()} class={t.featured ? 'feature-li' : undefined}>
+            <ToolCard tool={t} feature={t.featured} />
+          </li>
+        ))}
+      </ul>
+      <p class="tools-empty" id="tools-empty" hidden>
+        No calculator matches that yet. <a href="/contact/">Tell us what you need</a>.
+      </p>
+    </section>
+
+    <section class="section" aria-labelledby="how-h">
+      <h2 id="how-h" style="font-size: clamp(1.7rem, 3.5vw, 2.25rem); letter-spacing: -0.03em; margin-bottom: 28px;">How it works</h2>
+      <div class="steps3">
+        <div class="card"><div class="num">01</div><h3>Enter your measurements</h3><p>Metres and millimetres, the way they're written on your plans. Sensible defaults get you started.</p></div>
+        <div class="card"><div class="num">02</div><h3>See the result and the maths</h3><p>Quantities update as you type, with the formula written out so you can check it.</p></div>
+        <div class="card"><div class="num">03</div><h3>Order or get quotes</h3><p>Take the numbers to your supplier, or share the link with your tradie.</p></div>
+      </div>
+    </section>
+
+    <section class="band" aria-labelledby="suggest-h">
+      <div style="flex: 1 1 420px; min-width: 0;">
+        <h2 id="suggest-h">Missing a calculator?</h2>
+        <p>Tell us what you're working on and we'll consider building it next.</p>
+      </div>
+      <a class="btn" href="/contact/">Suggest a calculator</a>
+    </section>
   </div>
 
-  <h2>How our calculators work</h2>
-  <p>
-    Every calculator shows the formula behind its result, so you can check the maths yourself.
-    Defaults are set to common Australian sizes and practices, and you can change every input
-    to match your job.
-  </p>
-  <p>
-    Results are a planning guide. Use them to order materials with confidence and to compare
-    quotes, and always confirm structural, plumbing, gas and electrical work with a licensed
-    tradesperson.
-  </p>
+  <script>
+    const list = document.getElementById('tools');
+    const items = Array.from(list?.querySelectorAll<HTMLLIElement>('li') ?? []);
+    const empty = document.getElementById('tools-empty');
+    const input = document.getElementById('q') as HTMLInputElement | null;
+    const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+    let cat = 'all';
+
+    function apply() {
+      const q = (input?.value ?? '').trim().toLowerCase();
+      const words = q.split(/\s+/).filter(Boolean);
+      let shown = 0;
+      items.forEach((li) => {
+        const okCat = cat === 'all' || li.dataset.cat === cat;
+        const okText = words.every((w) => li.dataset.text?.includes(w));
+        li.hidden = !(okCat && okText);
+        if (!li.hidden) shown++;
+        // la tarjeta destacada ocupa una sola columna cuando se filtra
+        if (li.classList.contains('feature-li')) li.classList.toggle('narrow', cat !== 'all' || !!q);
+      });
+      if (empty) empty.hidden = shown > 0;
+    }
+
+    buttons.forEach((b) => b.addEventListener('click', () => {
+      cat = b.dataset.filter ?? 'all';
+      buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      apply();
+    }));
+    input?.addEventListener('input', apply);
+    document.getElementById('search-form')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      apply();
+      document.getElementById('calculators')?.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    const q0 = new URLSearchParams(location.search).get('q');
+    if (q0 && input) { input.value = q0; apply(); }
+  </script>
 </Base>

@@ -10,6 +10,7 @@ export const SITE = {
   // Persona detrás del sitio (E-E-A-T). Completa antes de publicar.
   author: {
     name: 'Oswaldo Tipán',
+    initials: 'OT',
     role: 'Software engineering student with residential hydraulic design experience',
     url: '/about/',
   },
@@ -23,12 +24,49 @@ export const SITE = {
   cloudflareAnalyticsToken: '', // token de Cloudflare Web Analytics
 };
 
+export type IconName =
+  | 'slab' | 'tile' | 'bath' | 'kitchen' | 'hotwater' | 'gravel' | 'pipe'
+  | 'search' | 'arrow' | 'check' | 'info' | 'link' | 'print' | 'menu' | 'shield' | 'ruler' | 'grid';
+
+export type Category = {
+  slug: string;
+  name: string;
+  short: string; // etiqueta corta para filtros
+  intro: string; // texto original para la página de categoría (150–300 palabras ideal)
+};
+
+export const CATEGORIES: Category[] = [
+  {
+    slug: 'materials',
+    name: 'Materials',
+    short: 'Materials',
+    intro:
+      'Work out how much concrete, tile, gravel and other materials to order before you head to the supplier. Each calculator uses metric units, shows its working, and adds a sensible allowance for waste so you are not caught short halfway through a job. Order a little over rather than under: a second delivery or a trip back to the hardware store usually costs more than the extra material.',
+  },
+  {
+    slug: 'renovation-costs',
+    name: 'Renovation costs',
+    short: 'Costs',
+    intro:
+      'Estimate what a renovation is likely to cost in Australia before you ask for quotes. These tools break a project into its main parts so you can see where the money goes and which choices move the total the most. Use the estimates to set a realistic budget and to compare quotes, not as a replacement for them.',
+  },
+  {
+    slug: 'plumbing-hot-water',
+    name: 'Plumbing & hot water',
+    short: 'Plumbing',
+    intro:
+      'Calculators and cost guides for plumbing and hot water in Australian homes, from sizing and replacing a hot water system to drainage falls. Plumbing and gas work in Australia must be done by a licensed plumber, so use these tools to understand your options and the numbers before you talk to one.',
+  },
+];
+
 export type Tool = {
   slug: string;
   title: string; // nombre corto para enlaces y migas de pan
   blurb: string;
-  category: 'Materials' | 'Renovation costs' | 'Plumbing & hot water';
+  category: string; // slug de CATEGORIES
+  icon: IconName;
   ready: boolean;
+  featured?: boolean;
   related?: string[]; // slugs de otras herramientas
 };
 
@@ -37,42 +75,59 @@ export const TOOLS: Tool[] = [
     slug: 'concrete-calculator',
     title: 'Concrete Calculator',
     blurb: 'Cubic metres and premix bags for slabs, footings and post holes.',
-    category: 'Materials',
+    category: 'materials',
+    icon: 'slab',
     ready: true,
-    related: ['tile-calculator', 'bathroom-renovation-cost-calculator'],
+    featured: true,
+    related: ['tile-calculator', 'gravel-calculator'],
   },
   {
     slug: 'bathroom-renovation-cost-calculator',
-    title: 'Bathroom Renovation Cost Calculator',
-    blurb: 'Estimate the cost of a bathroom renovation in Australia.',
-    category: 'Renovation costs',
+    title: 'Bathroom Renovation Cost',
+    blurb: 'Budget by size, finish level and what you keep.',
+    category: 'renovation-costs',
+    icon: 'bath',
     ready: false,
     related: ['kitchen-renovation-cost-calculator', 'tile-calculator'],
   },
   {
-    slug: 'kitchen-renovation-cost-calculator',
-    title: 'Kitchen Renovation Cost Calculator',
-    blurb: 'Budget your kitchen renovation by size and finish level.',
-    category: 'Renovation costs',
-    ready: false,
-    related: ['bathroom-renovation-cost-calculator', 'tile-calculator'],
-  },
-  {
     slug: 'tile-calculator',
     title: 'Tile Calculator',
-    blurb: 'How many tiles and boxes you need, including waste.',
-    category: 'Materials',
+    blurb: 'Tiles and boxes for floors and walls, with waste.',
+    category: 'materials',
+    icon: 'tile',
     ready: false,
     related: ['bathroom-renovation-cost-calculator', 'concrete-calculator'],
   },
   {
+    slug: 'kitchen-renovation-cost-calculator',
+    title: 'Kitchen Renovation Cost',
+    blurb: 'Estimate by kitchen size and finish level.',
+    category: 'renovation-costs',
+    icon: 'kitchen',
+    ready: false,
+    related: ['bathroom-renovation-cost-calculator', 'tile-calculator'],
+  },
+  {
     slug: 'hot-water-system-replacement-cost',
-    title: 'Hot Water System Replacement Cost',
-    blurb: 'Compare electric, gas, heat pump and solar replacement costs.',
-    category: 'Plumbing & hot water',
+    title: 'Hot Water Replacement Cost',
+    blurb: 'Compare electric, gas, heat pump and solar.',
+    category: 'plumbing-hot-water',
+    icon: 'hotwater',
     ready: false,
     related: ['bathroom-renovation-cost-calculator'],
+  },
+  {
+    slug: 'gravel-calculator',
+    title: 'Gravel, Soil & Sand',
+    blurb: 'Cubic metres and tonnes for landscaping.',
+    category: 'materials',
+    icon: 'gravel',
+    ready: false,
+    related: ['concrete-calculator'],
   },
 ];
 
 export const getTool = (slug: string) => TOOLS.find((t) => t.slug === slug);
+export const getCategory = (slug: string) => CATEGORIES.find((c) => c.slug === slug);
+export const toolsIn = (cat: string) => TOOLS.filter((t) => t.category === cat);

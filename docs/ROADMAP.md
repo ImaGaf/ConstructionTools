@@ -17,6 +17,9 @@ Publicar de forma constante pesa más que publicar mucho de golpe.
 - [x] Favicon, imagen para redes (OG), cabeceras de Cloudflare
 - [x] AdSense, GA4 y Cloudflare Analytics preparados (apagados)
 - [x] Resultados compartibles por enlace
+- [x] Diseño "Site plan" aplicado (portada, calculadora, móvil, categorías)
+- [x] Páginas de categoría con noindex automático si están vacías
+- [x] Fuentes servidas desde el propio sitio
 
 ---
 
@@ -86,7 +89,7 @@ Páginas candidatas (decidir con los datos):
 - [ ] Hot water system size calculator
 
 Mejoras del sitio en esta fase:
-- [ ] Páginas de categoría (Materials, Renovation costs, Plumbing) con texto introductorio
+- [x] Páginas de categoría (Materials, Renovation costs, Plumbing) con texto introductorio
 - [ ] Enlaces internos entre calculadoras relacionadas dentro del texto
 - [ ] Revisar Search Console cada semana: qué páginas reciben impresiones
 

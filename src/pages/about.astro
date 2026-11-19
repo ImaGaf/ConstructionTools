@@ -14,40 +14,45 @@ const schema = {
 };
 ---
 <Base title="About" description={`About ${SITE.name}: who builds the calculators and how they work.`} schema={schema}>
-  <h1>About {SITE.name}</h1>
-  <p class="lede">
-    Free calculators for Australian homeowners, DIYers and tradies planning building,
-    renovation and plumbing work.
-  </p>
-
-  <h2>Who is behind it</h2>
-  <!-- REVISAR: confirma que todo esto es exacto antes de publicar. Puedes añadir una foto y tu LinkedIn. -->
-  <p>
-    {SITE.name} is built by {SITE.author.name}, a software engineering student who also works on
-    residential hydraulic and sanitary design, modelling water supply and drainage systems for
-    houses in Revit. He works day to day with Australian trade businesses, including plumbing
-    and hydraulics companies, on their websites and systems.
-  </p>
-  <p>
-    That combination is the reason for this site: the maths behind a slab, a tiling job or a hot
-    water system is straightforward, but it's often buried in forums or sales pages. These tools
-    put it in one place, with the working shown.
-  </p>
-
-  <h2>How the calculators work</h2>
-  <ul>
-    <li>Every result shows the formula used, so you can check it.</li>
-    <li>Defaults reflect common Australian sizes and practices, and every input can be changed.</li>
-    <li>Your inputs are processed in your browser and are not stored.</li>
-    <li>Pages are reviewed and updated; each one shows the date it was last updated.</li>
-  </ul>
-
-  <h2>Accuracy and safety</h2>
-  <p>
-    Results are estimates to help you plan and compare quotes. They are not a substitute for
-    advice from a licensed tradesperson or engineer, and structural, plumbing, gas and electrical
-    work in Australia must be done by licensed professionals.
-  </p>
-
-  <p>Spotted an error or want a new calculator? <a href="/contact/">Get in touch</a>.</p>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span aria-current="page">About {SITE.name}</span></nav>
+    <div class="prose">
+      <h1>About {SITE.name}</h1>
+      <p class="lede">
+        Free calculators for Australian homeowners, DIYers and tradies planning building,
+        renovation and plumbing work.
+      </p>
+    
+      <h2>Who is behind it</h2>
+      <!-- REVISAR: confirma que todo esto es exacto antes de publicar. Puedes añadir una foto y tu LinkedIn. -->
+      <p>
+        {SITE.name} is built by {SITE.author.name}, a software engineering student who also works on
+        residential hydraulic and sanitary design, modelling water supply and drainage systems for
+        houses in Revit. He works day to day with Australian trade businesses, including plumbing
+        and hydraulics companies, on their websites and systems.
+      </p>
+      <p>
+        That combination is the reason for this site: the maths behind a slab, a tiling job or a hot
+        water system is straightforward, but it's often buried in forums or sales pages. These tools
+        put it in one place, with the working shown.
+      </p>
+    
+      <h2>How the calculators work</h2>
+      <ul>
+        <li>Every result shows the formula used, so you can check it.</li>
+        <li>Defaults reflect common Australian sizes and practices, and every input can be changed.</li>
+        <li>Your inputs are processed in your browser and are not stored.</li>
+        <li>Pages are reviewed and updated; each one shows the date it was last updated.</li>
+      </ul>
+    
+      <h2>Accuracy and safety</h2>
+      <p>
+        Results are estimates to help you plan and compare quotes. They are not a substitute for
+        advice from a licensed tradesperson or engineer, and structural, plumbing, gas and electrical
+        work in Australia must be done by licensed professionals.
+      </p>
+    
+      <p>Spotted an error or want a new calculator? <a href="/contact/">Get in touch</a>.</p>
+    </div>
+  </div>
 </Base>

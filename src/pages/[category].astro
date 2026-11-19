@@ -1,0 +1,61 @@
+---
+// Página de categoría (hub). Agrupa calculadoras del mismo tema para SEO y
+// enlaces internos. Mientras no tenga ninguna calculadora lista, sale con
+// noindex para no publicar páginas "vacías" en Google.
+import Base from '../layouts/Base.astro';
+import ToolCard from '../components/ToolCard.astro';
+import { CATEGORIES, toolsIn, type Category } from '../site.config';
+
+export function getStaticPaths() {
+  return CATEGORIES.map((c) => ({ params: { category: c.slug }, props: { cat: c } }));
+}
+
+interface Props { cat: Category }
+const { cat } = Astro.props;
+const tools = [...toolsIn(cat.slug)].sort((a, b) => Number(b.ready) - Number(a.ready));
+const ready = tools.filter((t) => t.ready);
+const pageUrl = new URL(`/${cat.slug}/`, Astro.site).href;
+const home = new URL('/', Astro.site).href;
+const description = `${cat.name} calculators for Australian homes and trade jobs. Free, metric, with the working shown.`;
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: `${cat.name} calculators`,
+    url: pageUrl,
+    description,
+    inLanguage: 'en-AU',
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: ready.map((t, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: t.title,
+        url: new URL(`/${t.slug}/`, Astro.site).href,
+      })),
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: home },
+      { '@type': 'ListItem', position: 2, name: cat.name, item: pageUrl },
+    ],
+  },
+];
+---
+<Base title={`${cat.name} Calculators`} description={description} schema={schema} section={cat.slug} noindex={ready.length === 0}>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a><span aria-hidden="true">/</span><span aria-current="page">{cat.name}</span>
+    </nav>
+    <h1>{cat.name} calculators</h1>
+    <p class="lede">{cat.intro}</p>
+
+    <ul class="tools-grid" style="margin: 32px 0 72px;">
+      {tools.map((t) => <li><ToolCard tool={t} /></li>)}
+    </ul>
+  </div>
+</Base>

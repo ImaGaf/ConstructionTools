@@ -1,6 +1,12 @@
 ---
+import '@fontsource-variable/inter';
+import '@fontsource/space-grotesk/500.css';
+import '@fontsource/space-grotesk/600.css';
+import '@fontsource/space-grotesk/700.css';
+import '@fontsource/jetbrains-mono/500.css';
 import '../styles/global.css';
-import { SITE } from '../site.config';
+import Icon from '../components/Icon.astro';
+import { SITE, CATEGORIES } from '../site.config';
 
 interface Props {
   title: string;
@@ -8,8 +14,9 @@ interface Props {
   schema?: object | object[];
   ogImage?: string; // ruta en /public, por defecto /og-default.png
   noindex?: boolean;
+  section?: string; // slug de categoría activa en el menú
 }
-const { title, description, schema, ogImage = '/og-default.png', noindex = false } = Astro.props;
+const { title, description, schema, ogImage = '/og-default.png', noindex = false, section } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImageUrl = new URL(ogImage, Astro.site).href;
 const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
@@ -26,7 +33,7 @@ const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="theme-color" content="#c2571a" />
+    <meta name="theme-color" content="#ffffff" />
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={SITE.locale} />
@@ -70,30 +77,57 @@ const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
   </head>
   <body>
     <a class="skip" href="#content">Skip to content</a>
-    <header class="site">
+    <header class="site-header">
       <div class="wrap">
-        <a class="logo" href="/" aria-label={`${SITE.name} home`}>Build<span>Calc</span> AU</a>
-        <nav class="site" aria-label="Main">
-          <a href="/#calculators">Calculators</a>
+        <a class="logo" href="/" aria-label={`${SITE.name} home`}>
+          <svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#c2410c"></rect><path d="M14 46V26l18-12 18 12v20" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"></path><path d="M24 46V34h16v12" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"></path></svg>
+          <span class="logo-word">BuildCalc <span>AU</span></span>
+        </a>
+        <nav class="nav-main" aria-label="Main">
+          {CATEGORIES.map((c) => (
+            <a href={`/${c.slug}/`} aria-current={section === c.slug ? 'page' : undefined}>{c.name}</a>
+          ))}
           <a href="/about/">About</a>
         </nav>
+        <div class="header-actions">
+          <a class="btn icon-btn" href="/#calculators" aria-label="Find a calculator"><Icon name="search" size={20} /></a>
+          <details class="menu-mobile">
+            <summary class="btn icon-btn" aria-label="Menu"><Icon name="menu" size={20} /></summary>
+            <nav class="panel" aria-label="Mobile">
+              {CATEGORIES.map((c) => <a href={`/${c.slug}/`}>{c.name}</a>)}
+              <a href="/about/">About</a>
+              <a href="/contact/">Contact</a>
+            </nav>
+          </details>
+        </div>
       </div>
     </header>
+
     <main id="content">
-      <div class="wrap">
-        <slot />
-      </div>
+      <slot />
     </main>
-    <footer class="site">
+
+    <footer class="site-footer">
       <div class="wrap">
-        <p>
-          <a href="/about/">About</a>
-          <a href="/contact/">Contact</a>
-          <a href="/privacy-policy/">Privacy Policy</a>
-          <a href="/terms/">Terms</a>
-        </p>
-        <p>© {new Date().getFullYear()} {SITE.name}. Estimates are a guide only; always confirm with a licensed tradesperson.</p>
+        <div>
+          <span class="logo-word">BuildCalc <span>AU</span></span>
+          <p>Estimates are a guide only. Always confirm structural, plumbing, gas and electrical work with a licensed tradesperson.</p>
+        </div>
+        <div class="footer-cols">
+          <div>
+            <strong>Calculators</strong>
+            {CATEGORIES.map((c) => <a href={`/${c.slug}/`}>{c.name}</a>)}
+          </div>
+          <div>
+            <strong>Site</strong>
+            <a href="/about/">About</a>
+            <a href="/contact/">Contact</a>
+            <a href="/privacy-policy/">Privacy Policy</a>
+            <a href="/terms/">Terms</a>
+          </div>
+        </div>
       </div>
+      <div class="footer-base"><div class="wrap">© {new Date().getFullYear()} {SITE.name}</div></div>
     </footer>
   </body>
 </html>

@@ -1,30 +1,53 @@
 ---
-// Plantilla para todas las calculadoras. Se encarga de migas de pan, autor y
-// fecha, FAQ, calculadoras relacionadas y todo el schema (WebApplication,
-// FAQPage, BreadcrumbList). La página solo aporta la calculadora y el contenido.
+// Plantilla para todas las calculadoras (diseño "Site plan").
+// La página aporta tres cosas:
+//   slot="inputs"  → los pasos con los campos (va dentro de la tarjeta izquierda)
+//   slot="result"  → diagrama + resultados (va dentro del panel derecho)
+//   slot por defecto → las secciones del artículo (<section id="...">), en el orden de `toc`
+// La plantilla pone migas de pan, autor y fecha, respuesta rápida, índice, FAQ en
+// <details> (siempre en el HTML para Google), calculadoras relacionadas, la barra
+// fija de móvil y todo el schema (WebApplication, BreadcrumbList, FAQPage).
 import Base from './Base.astro';
-import { SITE, TOOLS, getTool } from '../site.config';
+import AdSlot from '../components/AdSlot.astro';
+import Icon from '../components/Icon.astro';
+import { SITE, TOOLS, getTool, getCategory } from '../site.config';
 
 export interface Faq { q: string; a: string }
+export interface TocItem { id: string; label: string }
 interface Props {
   slug: string;
-  title: string; // <title>, con la palabra clave principal
+  title: string; // <title>, palabra clave principal primero, < 60 caracteres
   description: string; // meta description, < 155 caracteres
   h1: string;
   lede: string;
   updated: string; // fecha ISO, ej. '2026-11-18'
+  quickAnswer: string; // 1–2 frases que responden la pregunta principal
+  toc: TocItem[]; // secciones del artículo (sin FAQ ni relacionadas)
   faqs: Faq[];
+  cta?: { title: string; sub: string; href: string };
 }
-const { slug, title, description, h1, lede, updated, faqs } = Astro.props;
+const { slug, title, description, h1, lede, updated, quickAnswer, toc, faqs, cta } = Astro.props;
 const tool = getTool(slug);
+const category = tool ? getCategory(tool.category) : undefined;
 const pageUrl = new URL(`/${slug}/`, Astro.site).href;
 const homeUrl = new URL('/', Astro.site).href;
 const related = (tool?.related ?? [])
   .map((s) => TOOLS.find((t) => t.slug === s))
-  .filter((t) => t && t.ready);
+  .filter((t): t is NonNullable<typeof t> => !!t && t.ready);
 const updatedLabel = new Date(updated + 'T00:00:00').toLocaleDateString('en-AU', {
-  day: 'numeric', month: 'long', year: 'numeric',
+  day: 'numeric', month: 'short', year: 'numeric',
 });
+const fullToc: TocItem[] = [
+  ...toc,
+  ...(faqs.length ? [{ id: 'faq', label: 'FAQ' }] : []),
+  ...(related.length ? [{ id: 'related', label: 'Related calculators' }] : []),
+];
+
+const crumbs = [
+  { name: 'Home', item: homeUrl },
+  ...(category ? [{ name: category.name, item: new URL(`/${category.slug}/`, Astro.site).href }] : []),
+  { name: tool?.title ?? h1, item: pageUrl },
+];
 
 const schema = [
   {
@@ -44,10 +67,7 @@ const schema = [
   {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: homeUrl },
-      { '@type': 'ListItem', position: 2, name: tool?.title ?? h1, item: pageUrl },
-    ],
+    itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: c.item })),
   },
   faqs.length && {
     '@context': 'https://schema.org',
@@ -60,43 +80,131 @@ const schema = [
   },
 ].filter(Boolean) as object[];
 ---
-<Base title={title} description={description} schema={schema}>
-  <nav class="crumbs" aria-label="Breadcrumb">
-    <a href="/">Home</a> <span aria-hidden="true">›</span> <span aria-current="page">{tool?.title ?? h1}</span>
-  </nav>
-  <h1>{h1}</h1>
-  <p class="lede">{lede}</p>
-  <p class="byline">
-    By <a href={SITE.author.url}>{SITE.author.name}</a> · Updated <time datetime={updated}>{updatedLabel}</time>
-  </p>
+<Base title={title} description={description} schema={schema} section={category?.slug}>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      {category && (<><span aria-hidden="true">/</span><a href={`/${category.slug}/`}>{category.name}</a></>)}
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{tool?.title ?? h1}</span>
+    </nav>
 
-  <slot />
+    <h1>{h1}</h1>
+    <p class="lede">{lede}</p>
+    <p class="byline">
+      <span class="avatar" aria-hidden="true">{SITE.author.initials}</span>
+      <span>By <a href={SITE.author.url}>{SITE.author.name}</a> · Updated <time datetime={updated}>{updatedLabel}</time></span>
+    </p>
 
-  {faqs.length > 0 && (
-    <section aria-labelledby="faq">
-      <h2 id="faq">Frequently asked questions</h2>
-      {faqs.map((f) => (
-        <details>
-          <summary>{f.q}</summary>
-          <p>{f.a}</p>
-        </details>
-      ))}
-    </section>
-  )}
+    <div class="calc-grid">
+      <section class="card calc-inputs" id="calc" aria-label="Calculator inputs">
+        <slot name="inputs" />
+        <noscript><p class="note">Turn on JavaScript to use the calculator, or use the formulas below.</p></noscript>
+      </section>
 
-  {related.length > 0 && (
-    <section aria-labelledby="related">
-      <h2 id="related">Related calculators</h2>
-      <ul class="tool-list">
-        {related.map((t) => (
-          <li><a href={`/${t!.slug}/`}><div class="card"><strong>{t!.title}</strong><br /><span class="note">{t!.blurb}</span></div></a></li>
-        ))}
-      </ul>
-    </section>
-  )}
+      <aside class="calc-result" id="result" aria-label="Result">
+        <div class="result-card">
+          <slot name="result" />
+        </div>
+        {cta && (
+          <a class="cta-card" href={cta.href}>
+            <span><strong>{cta.title}</strong><small>{cta.sub}</small></span>
+            <Icon name="arrow" size={20} stroke={2.4} />
+          </a>
+        )}
+      </aside>
+    </div>
 
-  <p class="note disclaimer">
-    Results are estimates to help you plan and compare quotes. They are not a substitute for
-    advice from a licensed tradesperson or engineer.
-  </p>
+    <AdSlot />
+
+    <div class="content-grid">
+      <nav class="toc" aria-label="On this page">
+        <div class="label">On this page</div>
+        <ol>
+          {fullToc.map((t) => <li><a href={`#${t.id}`}>{t.label}</a></li>)}
+        </ol>
+      </nav>
+
+      <article class="article">
+        <div class="quick">
+          <Icon name="info" size={24} />
+          <div><strong>Quick answer:</strong> {quickAnswer}</div>
+        </div>
+
+        <slot />
+
+        {faqs.length > 0 && (
+          <section id="faq" aria-labelledby="faq-h">
+            <h2 id="faq-h">Frequently asked questions</h2>
+            <div class="faq">
+              {faqs.map((f, i) => (
+                <details open={i === 0}>
+                  <summary>{f.q}</summary>
+                  <p>{f.a}</p>
+                </details>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {related.length > 0 && (
+          <section id="related" aria-labelledby="related-h">
+            <h2 id="related-h">Related calculators</h2>
+            <ul class="related">
+              {related.map((t) => (
+                <li>
+                  <a href={`/${t.slug}/`}>
+                    <span class="icon-tile"><Icon name={t.icon} size={22} /></span>
+                    <span><strong>{t.title}</strong><small>{t.blurb}</small></span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <p class="disclaimer">
+          Results are estimates to help you plan and compare quotes. They are not a substitute for
+          advice from a licensed tradesperson or engineer.
+        </p>
+      </article>
+    </div>
+  </div>
+
+  <div class="mbar" id="mbar" aria-hidden="true">
+    <div>
+      <div class="k" id="mbar-k"></div>
+      <div class="v" id="mbar-v"></div>
+    </div>
+    <a class="btn" href="#result" tabindex="-1">Details</a>
+  </div>
+
+  <script>
+    // Barra móvil: visible solo cuando el panel de resultado no está en pantalla.
+    const bar = document.getElementById('mbar');
+    const result = document.getElementById('result');
+    const calc = document.getElementById('calc');
+    if (bar && result && calc && 'IntersectionObserver' in window) {
+      let resultVisible = true;
+      let calcVisible = true;
+      const update = () => bar.classList.toggle('show', calcVisible && !resultVisible);
+      new IntersectionObserver(([e]) => { resultVisible = e.isIntersecting; update(); }).observe(result);
+      new IntersectionObserver(([e]) => { calcVisible = e.isIntersecting; update(); }).observe(calc);
+    }
+
+    // Índice: marca la sección que se está leyendo.
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.toc a'));
+    const targets = links
+      .map((a) => document.getElementById(a.hash.slice(1)))
+      .filter((el): el is HTMLElement => !!el);
+    if (targets.length && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          links.forEach((a) => a.classList.toggle('active', a.hash === `#${e.target.id}`));
+        });
+      }, { rootMargin: '0px 0px -70% 0px' });
+      targets.forEach((t) => io.observe(t));
+    }
+  </script>
 </Base>
