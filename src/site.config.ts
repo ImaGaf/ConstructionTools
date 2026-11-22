@@ -160,11 +160,11 @@ export const TOOLS: Tool[] = [
   {
     slug: 'gravel-calculator',
     title: 'Gravel, Soil & Sand',
-    blurb: 'Cubic metres and tonnes for landscaping.',
+    blurb: 'Cubic metres and tonnes of gravel, road base, sand, soil or mulch.',
     category: 'materials',
     icon: 'gravel',
-    ready: false,
-    related: ['concrete-calculator'],
+    ready: true,
+    related: ['concrete-calculator', 'concrete-driveway-cost'],
   },
 ];
 
@@ -187,6 +187,7 @@ export const PHOTOS: Record<string, { by: string; alt: string }> = {
   'concrete-driveway-cost': { by: 'Salvo Media', alt: 'Modern house with a wide concrete driveway' },
   'hot-water-system-replacement-cost': { by: 'Sergio Martins', alt: 'Hot water tank and heat pump unit on an exterior wall' },
   'pipe-fall-calculator': { by: 'Rose Galloway Green', alt: 'Water pipe laid in an open trench' },
+  'gravel-calculator': { by: 'Zoshua Colah', alt: 'Close-up of a pile of light grey crushed gravel' },
 };
 export const photo = (key: string) => (PHOTOS[key] ? { key, ...PHOTOS[key] } : undefined);
 

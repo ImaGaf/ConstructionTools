@@ -80,7 +80,7 @@ Investigación (Semrush gratis, 10 búsquedas al día):
 Páginas candidatas (decidir con los datos):
 - [ ] Retaining wall cost / calculator
 - [ ] Decking calculator
-- [ ] Gravel, soil, sand y mulch calculator (puede ser una sola herramienta con pestañas)
+- [x] Gravel, soil, sand y mulch calculator (`/gravel-calculator/`, 22 Nov: una herramienta con selector de material)
 - [ ] Fence calculator
 - [ ] Plasterboard calculator
 - [ ] Paver / brick calculator

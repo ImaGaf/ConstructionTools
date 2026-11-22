@@ -72,9 +72,9 @@ concreters, concrete sleeper/retaining walls, cement mixer, concrete pavers, Bun
 
 ## Still to check (10 free Semrush searches per day)
 
-retaining wall cost, decking calculator, gravel calculator, plumber call out fee,
+retaining wall cost, decking calculator, gravel calculator (**Built** `/gravel-calculator/`, 22 Nov, volume not measured yet; covers soil, sand, mulch, road base), plumber call out fee,
 blocked drain cost, heat pump hot water rebate,
-fence calculator, soil calculator, sand calculator, plasterboard calculator,
+fence calculator, soil calculator, sand calculator (both served by the gravel calculator for now), plasterboard calculator,
 brick calculator, stair calculator, roof pitch calculator, septic tank size,
 pipe size calculator, water pressure calculator, pipe fall calculator (**Built** `/pipe-fall-calculator/`, volume not measured yet: also check "pipe gradient calculator", "drain fall calculator"),
 backflow testing cost, as3500, heat pump vs solar hot water.

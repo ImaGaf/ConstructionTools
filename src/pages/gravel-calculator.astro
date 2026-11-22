@@ -1,0 +1,337 @@
+---
+import CalculatorLayout, { type Faq, type TocItem } from '../layouts/CalculatorLayout.astro';
+import Icon from '../components/Icon.astro';
+import DiagramDefs from '../components/DiagramDefs.astro';
+
+const toc: TocItem[] = [
+  { id: 'how-to-calculate', label: 'How to calculate' },
+  { id: 'tonnes-per-m3', label: 'Tonnes per m³' },
+  { id: 'how-deep', label: 'How deep to spread it' },
+  { id: 'buying', label: 'Buying by m³ or tonne' },
+  { id: 'gravel-driveway', label: 'Gravel driveways' },
+  { id: 'how-we-calculate', label: 'How we calculate' },
+];
+
+const faqs: Faq[] = [
+  {
+    q: 'How many tonnes are in a cubic metre of gravel?',
+    a: 'About 1.5 tonnes. One Brisbane supplier lists 10 mm and 20 mm blue metal at 1.5 t/m³, and another guide gives 1.45 t/m³ for blue metal and 1.55 t/m³ for loose river gravel. The exact figure depends on the stone and how wet it is, so check the conversion your supplier uses.',
+  },
+  {
+    q: 'How much does a cubic metre of soil weigh?',
+    a: 'Roughly 1 to 1.5 tonnes. Light garden mixes can be about 1 t/m³, while ordinary soil is around 1.5 t/m³. Firmly packed soil can approach 2 t/m³, and loose, dry soil can be closer to 1.25 t/m³.',
+  },
+  {
+    q: 'How much mulch do I need for 10 m²?',
+    a: 'At 75 mm deep, 10 m² needs 10 × 0.075 = 0.75 m³ of mulch. With a 10% allowance that is about 0.83 m³, so order 1 m³. Mulch is light, around 0.4 t/m³, so it is sold by volume rather than weight.',
+  },
+  {
+    q: 'How much road base do I need for a driveway?',
+    a: 'Multiply the area by the compacted depth your landscaper specifies. A 10 m × 3 m driveway at 100 mm deep is 3 m³; with a 10% allowance that is 3.3 m³, so order 3.5 m³, about 5.6 tonnes at 1.6 t/m³. Road base compacts, so confirm the allowance with your supplier.',
+  },
+  {
+    q: 'How do I convert tonnes to cubic metres?',
+    a: 'Divide the tonnes by the material’s density. For example, 3 tonnes of road base at 1.6 t/m³ is 3 ÷ 1.6 = 1.9 m³. To go from cubic metres to tonnes, multiply instead.',
+  },
+];
+
+// Materiales: densidad por defecto (t/m³) y trama del diagrama
+const MATERIALS = [
+  { key: 'gravel', t: 'Gravel', d: 'Blue metal, crushed rock', svg: '<circle cx="18" cy="26" r="5"/><circle cx="32" cy="22" r="6"/><circle cx="46" cy="27" r="5"/><path d="M8 34h48"/>' },
+  { key: 'pebbles', t: 'Pebbles', d: 'Decorative stones', svg: '<ellipse cx="18" cy="26" rx="7" ry="5"/><ellipse cx="34" cy="24" rx="8" ry="6"/><ellipse cx="49" cy="27" rx="6" ry="4"/><path d="M8 34h48"/>' },
+  { key: 'roadbase', t: 'Road base', d: 'Road base, crusher dust', svg: '<path d="M8 34h48M8 28h48"/><path d="M14 28l3-4 3 4M30 28l2-3 3 3M44 28l3-4 3 4"/>' },
+  { key: 'sand', t: 'Sand', d: 'Paving, brickies, washed', svg: '<path d="M8 34h48"/><path d="M10 34c8-12 36-12 44 0"/><path d="M24 27h1M32 25h1M40 28h1"/>' },
+  { key: 'soil', t: 'Soil', d: 'Garden soil, turf underlay', svg: '<path d="M8 34h48"/><path d="M10 34c6-10 38-10 44 0"/><path d="M32 24v-10M32 18c-4-4-8-3-9 0M32 16c4-4 8-3 9 0"/>' },
+  { key: 'mulch', t: 'Mulch', d: 'Bark, woodchip', svg: '<path d="M8 34h48"/><path d="M12 30l8-3M24 32l9 1M36 29l8-2M46 32l7-1M18 26l6 2M40 25l6 1"/>' },
+];
+---
+<CalculatorLayout
+  slug="gravel-calculator"
+  title="Gravel Calculator: m³ and Tonnes (Soil, Sand, Mulch)"
+  description="Free gravel calculator for Australia. Work out cubic metres and tonnes of gravel, road base, sand, soil or mulch, and the cost of your order."
+  h1="Gravel Calculator"
+  lede="Work out how many cubic metres and tonnes of gravel, road base, sand, soil or mulch to order for a path, driveway, garden bed or lawn base."
+  updated="2026-11-22"
+  quickAnswer="multiply the area by the depth to get cubic metres, add about 10% for spreading and settling, and multiply by the density for tonnes. A 10 m² path 50 mm deep needs 0.5 m³ of gravel, plus 10% is 0.55 m³, about 0.8 tonnes at 1.5 t/m³."
+  toc={toc}
+  faqs={faqs}
+  cta={{ title: 'Need it spread for you?', sub: 'Get quotes from local landscapers', href: '#buying' }}
+>
+  <div slot="inputs">
+    <div class="step">
+      <div class="step-head"><span class="n">1</span><h2 id="mat-h">Material</h2></div>
+      <fieldset class="choice-grid" aria-labelledby="mat-h">
+        {MATERIALS.map((m, i) => (
+          <label class="choice">
+            <input type="radio" name="mat" value={m.key} data-state checked={i === 0} />
+            <svg width="64" height="40" viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={m.svg}></svg>
+            <span class="t">{m.t}</span>
+            <span class="d">{m.d}</span>
+          </label>
+        ))}
+      </fieldset>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">2</span><h2>Area</h2></div>
+      <div class="opt-label" id="shape-l">Shape</div>
+      <div class="seg" role="radiogroup" aria-labelledby="shape-l" style="margin-bottom: 14px;">
+        <label><input type="radio" name="shape" value="rect" data-state checked />Rectangle</label>
+        <label><input type="radio" name="shape" value="circle" data-state />Circle</label>
+        <label><input type="radio" name="shape" value="area" data-state />I know the area</label>
+      </div>
+      <div class="fields">
+        <div data-shapes="rect"><label for="len">Length</label><div class="field"><input id="len" type="number" inputmode="decimal" min="0" step="0.1" value="5" data-state /><span class="unit">m</span></div></div>
+        <div data-shapes="rect"><label for="wid">Width</label><div class="field"><input id="wid" type="number" inputmode="decimal" min="0" step="0.1" value="2" data-state /><span class="unit">m</span></div></div>
+        <div data-shapes="circle" hidden><label for="dia">Diameter</label><div class="field"><input id="dia" type="number" inputmode="decimal" min="0" step="0.1" value="3" data-state /><span class="unit">m</span></div></div>
+        <div data-shapes="area" hidden><label for="area">Area</label><div class="field"><input id="area" type="number" inputmode="decimal" min="0" step="0.5" value="10" data-state /><span class="unit">m²</span></div></div>
+        <div><label for="depth">Depth</label><div class="field"><input id="depth" type="number" inputmode="decimal" min="0" step="5" value="50" data-state /><span class="unit">mm</span></div></div>
+      </div>
+      <p class="note" id="depth-hint" style="margin: 8px 0 0;"></p>
+    </div>
+
+    <div class="step">
+      <div class="step-head"><span class="n">3</span><h2>Order details</h2></div>
+      <div class="options">
+        <div>
+          <div class="opt-label" id="extra-l">Extra for spreading and settling</div>
+          <div class="seg" role="radiogroup" aria-labelledby="extra-l">
+            <label><input type="radio" name="extra" value="0" data-state />None</label>
+            <label><input type="radio" name="extra" value="10" data-state checked />10%</label>
+            <label><input type="radio" name="extra" value="20" data-state />20%</label>
+          </div>
+        </div>
+        <div class="grow">
+          <label for="dens" class="opt-label">Density <span class="muted" style="font-weight: 400;">(optional)</span></label>
+          <div class="field"><input id="dens" type="number" inputmode="decimal" min="0" step="0.05" data-state /><span class="unit">t/m³</span></div>
+        </div>
+      </div>
+      <div class="fields" style="margin-top: 16px;">
+        <div><label for="price">Your supplier's price <span class="muted" style="font-weight: 400;">(optional)</span></label><div class="field"><span class="unit" style="padding: 0 6px 0 0;">$</span><input id="price" type="number" inputmode="decimal" min="0" step="1" data-state /></div></div>
+        <div><label for="delivery">Delivery fee <span class="muted" style="font-weight: 400;">(optional)</span></label><div class="field"><span class="unit" style="padding: 0 6px 0 0;">$</span><input id="delivery" type="number" inputmode="decimal" min="0" step="5" data-state /></div></div>
+      </div>
+      <div class="opt-label" id="per-l" style="margin-top: 14px;">Price is per</div>
+      <div class="seg" role="radiogroup" aria-labelledby="per-l">
+        <label><input type="radio" name="per" value="m3" data-state checked />m³</label>
+        <label><input type="radio" name="per" value="t" data-state />tonne</label>
+      </div>
+    </div>
+  </div>
+
+  <div slot="result">
+    <div class="diagram">
+      <DiagramDefs />
+      <svg viewBox="0 0 380 170" role="img" aria-labelledby="dg-gravel">
+        <title id="dg-gravel">Cross-section of the layer showing its depth and size (vertical scale exaggerated)</title>
+        <g id="g-gravel"></g>
+      </svg>
+    </div>
+    <div class="result-body" aria-live="polite">
+      <div class="big"><div class="k" id="r-k">Order</div><div class="v" id="r-order">–</div></div>
+      <p class="range-note" id="r-note"></p>
+      <div class="stats">
+        <div class="stat stat-plan"><div class="k">Weight</div><div class="v" id="r-t" style="font-size: 24px;">–</div></div>
+        <div class="stat stat-plan"><div class="k">Area</div><div class="v" id="r-area" style="font-size: 24px;">–</div></div>
+        <div class="stat"><div class="k">Volume needed</div><div class="v" id="r-vol" style="font-size: 24px;">–</div></div>
+        <div class="stat stat-accent" id="cost-tile"><div class="k">Material cost</div><div class="v" id="r-cost" style="font-size: 24px;">–</div></div>
+      </div>
+      <p class="working" id="r-working"></p>
+      <div class="result-actions">
+        <button type="button" class="btn" id="copy-link"><Icon name="link" size={18} />Copy link to result</button>
+        <button type="button" class="btn icon-btn" id="print" aria-label="Print result"><Icon name="print" size={18} /></button>
+      </div>
+      <p class="copy-status" id="copy-status" role="status"></p>
+    </div>
+  </div>
+
+  <section id="how-to-calculate">
+    <h2>How to calculate how much gravel you need</h2>
+    <div class="step-cards">
+      <div><b>STEP 1</b>Area in m²: length × width, or π × radius² for a circle.</div>
+      <div><b>STEP 2</b>Volume in m³: area × depth in metres (50 mm = 0.05 m).</div>
+      <div><b>STEP 3</b>Add an allowance, usually about 10%, for uneven ground and settling.</div>
+      <div><b>STEP 4</b>Tonnes: m³ × the material's density in t/m³.</div>
+    </div>
+    <p>
+      For a 5 m × 2 m path 50 mm deep: 5 × 2 = 10 m², × 0.05 = 0.5 m³, plus 10% = 0.55 m³.
+      Suppliers often sell in half cubic metres, so you would order 1 m³, which weighs about
+      1.5 tonnes of blue metal. To size a concrete slab instead, use the
+      <a href="/concrete-calculator/">concrete calculator</a>.
+    </p>
+  </section>
+
+  <section id="tonnes-per-m3">
+    <h2>How many tonnes in a cubic metre?</h2>
+    <p>Each material has a different weight per cubic metre. These are the figures the calculator uses unless you enter your supplier's:</p>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Material</th><th scope="col">Tonnes per m³</th><th scope="col">Source</th></tr></thead>
+        <tbody>
+          <tr><td>Gravel, blue metal (10–20 mm)</td><td>1.5</td><td>Nuway list (1.5); whatsthedamage 1.45–1.55</td></tr>
+          <tr><td>Decorative pebbles</td><td>1.5</td><td>Nuway list</td></tr>
+          <tr><td>Road base, crusher dust</td><td>1.6</td><td>Nuway list (1.6); whatsthedamage 1.75</td></tr>
+          <tr><td>Sand (brickies, washed)</td><td>1.5</td><td>Nuway list</td></tr>
+          <tr><td>Soil, turf underlay</td><td>1.4</td><td>Australian Native Landscapes via whatsthedamage; garden mixes can be 1.0</td></tr>
+          <tr><td>Mulch, woodchip</td><td>0.4</td><td>Australian Native Landscapes via whatsthedamage</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Moisture and how tightly the material is packed change the weight. Yellow Pages notes that soil is about 1.5 t/m³, closer to 2 t/m³ when firmly packed and about 1.25 t/m³ when loose. If your supplier gives a different figure, enter it in the calculator.</p>
+  </section>
+
+  <section id="how-deep">
+    <h2>How deep should gravel, soil or mulch be?</h2>
+    <p>The right depth depends on what the layer has to do. Published guidance exists for two common jobs:</p>
+    <ul class="checklist">
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Mulch: 70–100 mm.</strong> The Australian Government's YourHome guide recommends spreading mulch 7 to 10 cm deep, and Water Corporation suggests 5 to 10 cm.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Soil under new turf: 100–150 mm.</strong> Lilydale Instant Lawn recommends 100 mm of well-worked soil, and Lawn Solutions Australia 100 to 150 mm.</span></li>
+    </ul>
+    <p style="margin-top: 16px;">
+      For gravel paths, driveways and sand under pavers, the depth depends on the soil underneath,
+      the traffic and the product. Ask your supplier or landscaper for the depth they recommend,
+      then use it here.
+    </p>
+  </section>
+
+  <section id="buying">
+    <h2>Buying gravel and soil by the cubic metre or tonne</h2>
+    <p>
+      Landscape yards usually price by the cubic metre, often in half-cubic-metre steps, while
+      quarries and some suppliers sell by the tonne. The calculator handles both: choose
+      <em>m³</em> or <em>tonne</em> next to your price.
+    </p>
+    <p>Example prices from one Brisbane landscape supplier (Nuway Forestdale, March 2026), per m³ before delivery:</p>
+    <div class="table-card">
+      <table>
+        <thead><tr><th scope="col">Product</th><th scope="col">Price per m³</th></tr></thead>
+        <tbody>
+          <tr><td>Road base</td><td>$100.90</td></tr>
+          <tr><td>Crusher dust</td><td>$106.90</td></tr>
+          <tr><td>20 mm blue metal</td><td>$119.90</td></tr>
+          <tr><td>10 mm blue metal</td><td>$121.90</td></tr>
+          <tr><td>Brickies loam</td><td>$126.90</td></tr>
+          <tr><td>Pit wash sand</td><td>$135.90</td></tr>
+          <tr><td>Garden soils</td><td>$86.90–$134.90</td></tr>
+          <tr><td>Bark mulch</td><td>$93.90–$137.90</td></tr>
+          <tr><td>River pebbles (20–40 mm)</td><td>$186.90</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Prices vary by city, product and delivery distance. Use them as a guide and enter your own supplier's price for an accurate total.</p>
+  </section>
+
+  <section id="gravel-driveway">
+    <h2>How much gravel for a driveway?</h2>
+    <p>
+      A gravel driveway is usually built in layers: a compacted base course of road base, topped
+      with a thinner layer of gravel. Work out each layer separately with this calculator, using
+      the depths your landscaper specifies for your soil and the vehicles that will use it.
+      Considering concrete instead? Compare it with the
+      <a href="/concrete-driveway-cost/">concrete driveway cost calculator</a>.
+    </p>
+    <div class="callout">
+      <strong>Check before you dig</strong>
+      Lodge a free Before You Dig Australia enquiry before excavating, and check with your council
+      whether a driveway crossover or kerb work needs a permit.
+    </div>
+  </section>
+
+  <section id="how-we-calculate">
+    <h2>How we calculate</h2>
+    <ul class="checklist">
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Volume:</strong> area (m²) × depth (mm ÷ 1,000) × (1 + allowance).</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Order:</strong> the volume rounded up to the next half cubic metre.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Weight:</strong> order volume × density, using the table above or your own figure.</span></li>
+      <li><Icon name="check" size={20} stroke={2.2} /><span><strong>Cost:</strong> order volume × price per m³, or weight × price per tonne, plus delivery.</span></li>
+    </ul>
+    <p class="note" style="margin-top: 16px;">
+      Sources (accessed November 2026):
+      <a href="https://nuway.com.au/wp-content/uploads/2026/03/retail-price-list-forestdale.pdf" rel="noopener">Nuway Forestdale retail price list</a> (1 March 2026),
+      <a href="https://whatsthedamage.com.au/landscaping-calculator/" rel="noopener">whatsthedamage.com.au landscaping calculator</a>,
+      <a href="https://www.yellowpages.com.au/articles/landscape-supplies/what-is-the-difference-between-tonnes-and-cubic-metres" rel="noopener">Yellow Pages: tonnes and cubic metres</a>.
+      Estimates are a guide only.
+    </p>
+  </section>
+</CalculatorLayout>
+
+<script>
+  import { bindCalculator, num, fmt, setText, aud, type State } from '../lib/calc';
+  import { canvas, dim, el, label } from '../lib/diagrams';
+
+  // Densidad por defecto (t/m³), ver tabla "Tonnes per m³"
+  const DENSITY: Record<string, number> = { gravel: 1.5, pebbles: 1.5, roadbase: 1.6, sand: 1.5, soil: 1.4, mulch: 0.4 };
+  const NAME: Record<string, string> = { gravel: 'gravel', pebbles: 'pebbles', roadbase: 'road base', sand: 'sand', soil: 'soil', mulch: 'mulch' };
+  const FILL: Record<string, string> = { gravel: 'url(#pat-gravel)', pebbles: 'url(#pat-aggregate)', roadbase: 'url(#pat-roadbase)', sand: 'url(#pat-sand)', soil: 'url(#pat-soil)', mulch: 'url(#pat-mulch)' };
+  const HINT: Record<string, string> = {
+    mulch: 'Typical mulch depth: 70–100 mm.',
+    soil: 'Soil under new turf: 100–150 mm.',
+  };
+
+  function draw(mat: string, depth: number, span: string, sub: string) {
+    const add = canvas('g-gravel');
+    if (!add) return;
+    const gy = 70, x1 = 60, x2 = 320;
+    const h = Math.max(10, Math.min(52, depth * 0.35)); // escala vertical exagerada
+    add(el('rect', { x: 8, y: gy, width: 364, height: 100, fill: 'url(#pat-earth)' }));
+    add(el('rect', { x: 8, y: gy - 5, width: x1 - 8, height: 5, fill: 'url(#pat-grass)' }));
+    add(el('rect', { x: x2, y: gy - 5, width: 372 - x2, height: 5, fill: 'url(#pat-grass)' }));
+    add(el('rect', { x: x1, y: gy, width: x2 - x1, height: h, fill: FILL[mat] ?? FILL.gravel, class: 'dg-line', 'stroke-width': 1.2 }));
+    add(el('path', { d: `M8 ${gy} H${x1} M${x2} ${gy} H372`, stroke: '#6f8f5a', 'stroke-width': 1.5 }));
+    dim(add, x1, gy + h, x2, gy + h, span, 16);
+    dim(add, x2, gy + h, x2, gy, `${Math.round(depth)} mm`, 14);
+    label(add, 12, 16, 'SECTION', 'dg-label', 'start');
+    label(add, 368, 16, `${NAME[mat] ?? 'gravel'} · ${sub}`, 'dg-note', 'end');
+  }
+
+  function render(s: State) {
+    const mat = DENSITY[s.mat] ? s.mat : 'gravel';
+    const shape = ['rect', 'circle', 'area'].includes(s.shape) ? s.shape : 'rect';
+    document.querySelectorAll<HTMLElement>('[data-shapes]').forEach((e) => (e.hidden = e.dataset.shapes !== shape));
+
+    let area = 0, areaTxt = '', span = '';
+    if (shape === 'rect') {
+      const L = num(s.len), W = num(s.wid);
+      area = L * W; areaTxt = `${fmt(L, 1)} × ${fmt(W, 1)} m = ${fmt(area, 2)} m²`; span = `${fmt(L, 1)} m × ${fmt(W, 1)} m`;
+    } else if (shape === 'circle') {
+      const d = num(s.dia);
+      area = Math.PI * (d / 2) ** 2; areaTxt = `π × ${fmt(d / 2, 2)}² = ${fmt(area, 2)} m²`; span = `⌀ ${fmt(d, 1)} m`;
+    } else {
+      area = num(s.area); areaTxt = `${fmt(area, 2)} m²`; span = `${fmt(area, 1)} m²`;
+    }
+    const depth = num(s.depth);
+    const extra = num(s.extra || '10') / 100;
+    const ownDens = s.dens !== undefined && s.dens !== '' && num(s.dens) > 0;
+    const dens = ownDens ? num(s.dens) : DENSITY[mat];
+    const need = area * (depth / 1000);
+    const vol = need * (1 + extra);
+    const order = Math.ceil(vol * 2 - 1e-9) / 2;
+    const tonnes = order * dens;
+    const ok = area > 0 && depth > 0;
+
+    const price = num(s.price), delivery = num(s.delivery);
+    const hasPrice = s.price !== undefined && s.price !== '' && price > 0;
+    const cost = hasPrice ? (s.per === 't' ? tonnes * price : order * price) + delivery : 0;
+
+    setText('r-k', `Order of ${NAME[mat]}`);
+    setText('r-order', ok ? `${fmt(order, 1)} m³` : '–');
+    setText('r-note', ok ? `You need ${fmt(vol, 2)} m³ including ${Math.round(extra * 100)}%, rounded up to the next half cubic metre.` : '');
+    setText('r-t', ok ? `${fmt(tonnes, 1)} t` : '–');
+    setText('r-area', ok ? `${fmt(area, 1)} m²` : '–');
+    setText('r-vol', ok ? `${fmt(vol, 2)} m³` : '–');
+    setText('r-cost', ok && hasPrice ? aud(cost) : 'Add a price');
+    setText('depth-hint', HINT[mat] ?? '');
+
+    setText('r-working', ok
+      ? `${areaTxt} × ${fmt(depth / 1000, 3)} m = ${fmt(need, 3)} m³ × ${fmt(1 + extra, 2)} = ${fmt(vol, 2)} m³ → order ${fmt(order, 1)} m³ × ${fmt(dens, 2)} t/m³${ownDens ? ' (your figure)' : ''} = ${fmt(tonnes, 2)} t${hasPrice ? ` · cost ${s.per === 't' ? `${fmt(tonnes, 2)} t` : `${fmt(order, 1)} m³`} × $${fmt(price, 2)}${delivery ? ` + $${fmt(delivery, 0)} delivery` : ''} = ${aud(cost)}` : ''}`
+      : 'Enter the area and depth to see the working.');
+
+    draw(mat, depth, span, `${fmt(vol, 2)} m³`);
+
+    setText('mbar-k', `${NAME[mat]} · ${fmt(area, 1)} m² at ${Math.round(depth)} mm`);
+    const v = document.getElementById('mbar-v');
+    if (v) v.innerHTML = ok ? `${fmt(order, 1)} m³ <span>· ${fmt(tonnes, 1)} t</span>` : '–';
+  }
+
+  const root = document.getElementById('calc');
+  if (root) bindCalculator(root, render);
+</script>
