@@ -48,10 +48,10 @@ export const CATEGORIES: Category[] = [
   {
     slug: 'renovation-costs',
     name: 'Renovation costs',
-    title: 'Renovation Cost Calculators Australia',
+    title: 'Renovation Cost Calculators & Estimators (Australia)',
     short: 'Costs',
     intro:
-      'Estimate what a renovation is likely to cost in Australia before you ask for quotes. These tools break a project into its main parts so you can see where the money goes and which choices move the total the most. Use the estimates to set a realistic budget and to compare quotes, not as a replacement for them.',
+      'Estimate what a home renovation is likely to cost in Australia before you ask for quotes. These renovation calculators break a project into its main parts so you can see where the money goes and which choices move the total the most. Use the estimates to set a realistic budget and to compare quotes, not as a replacement for them.',
   },
   {
     slug: 'plumbing-hot-water',

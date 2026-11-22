@@ -17,7 +17,7 @@ const tools = [...toolsIn(cat.slug)].sort((a, b) => Number(b.ready) - Number(a.r
 const ready = tools.filter((t) => t.ready);
 const pageUrl = new URL(`/${cat.slug}/`, Astro.site).href;
 const home = new URL('/', Astro.site).href;
-const description = `${cat.name} calculators for Australian homes and trade jobs. Free, metric, with the working shown.`;
+const description = `Free ${cat.title.replace(/\s*\(?Australia\)?$/, '').toLowerCase()} for Australian homes and trade jobs. Metric, with the working shown.`;
 
 const schema = [
   {
