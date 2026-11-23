@@ -70,7 +70,8 @@ const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${SITE.ga4Id}`}></script>
         <script is:inline define:vars={{ id: SITE.ga4Id }}>
           window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
+          // define:vars envuelve este script en una función: gtag debe quedar global
+          window.gtag = function(){dataLayer.push(arguments);};
           gtag('js', new Date());
           gtag('config', id);
         </script>
