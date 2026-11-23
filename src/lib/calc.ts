@@ -9,6 +9,16 @@
 
 export type State = Record<string, string>;
 
+/**
+ * Envía un evento a GA4 si está activo (no hace nada si no lo está).
+ * Nunca enviar los valores que escribe el usuario: la política de privacidad
+ * dice que los datos de la calculadora no salen del navegador.
+ */
+export function track(name: string, params: Record<string, string | number> = {}) {
+  const g = (window as any).gtag;
+  if (typeof g === 'function') g('event', name, { calculator: location.pathname.replace(/\//g, ''), ...params });
+}
+
 function controls(root: HTMLElement) {
   return Array.from(root.querySelectorAll<HTMLInputElement | HTMLSelectElement>('[data-state]'));
 }
@@ -69,12 +79,26 @@ export function bindCalculator(root: HTMLElement, render: (s: State) => void) {
   root.addEventListener('input', run);
   root.addEventListener('change', run);
   run();
+  // Un solo evento por visita cuando el usuario toca la calculadora por primera vez
+  let used = false;
+  const markUsed = () => {
+    if (used) return;
+    used = true;
+    track('calculator_use');
+  };
+  root.addEventListener('input', markUsed);
+  root.addEventListener('change', markUsed);
+
 
   document.getElementById('copy-link')?.addEventListener('click', () => {
     const status = document.getElementById('copy-status');
     copyLink(status);
+    track('copy_link');
   });
-  document.getElementById('print')?.addEventListener('click', () => window.print());
+  document.getElementById('print')?.addEventListener('click', () => {
+    track('print_result');
+    window.print();
+  });
 }
 
 /** Copia la URL actual y muestra un mensaje corto. */

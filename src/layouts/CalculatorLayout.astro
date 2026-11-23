@@ -122,7 +122,7 @@ const schema = [
           <p class="status" id="export-status" role="status"></p>
         </div>
         {cta && (
-          <a class="cta-card" href={cta.href}>
+          <a class="cta-card" id="cta-quotes" href={cta.href}>
             <span><strong>{cta.title}</strong><small>{cta.sub}</small></span>
             <Icon name="arrow" size={20} stroke={2.4} />
           </a>
@@ -210,7 +210,10 @@ const schema = [
 
   <script>
     import { setupExport } from '../lib/export';
+    import { track } from '../lib/calc';
     setupExport();
+    // Interés en cotizar: sirve para medir el valor de los leads más adelante
+    document.getElementById('cta-quotes')?.addEventListener('click', () => track('quote_cta_click'));
 
     // Barra móvil: visible solo cuando el panel de resultado no está en pantalla.
     const bar = document.getElementById('mbar');

@@ -13,7 +13,12 @@ const updated = '18 November 2026';
       <h2>Calculator inputs</h2>
       <p>The numbers you type into our calculators are processed in your browser and are not sent to or stored on our servers.</p>
       <h2>Analytics</h2>
-      <p>We use Cloudflare Web Analytics to understand how visitors use the site, such as which pages are viewed and how fast they load. It does not use cookies and does not track you across other websites. If we add other analytics tools, such as Google Analytics, they may use cookies to collect anonymous information like pages visited and approximate location, and we will update this page.</p>
+      <p>We use Cloudflare Web Analytics to understand how visitors use the site, such as which pages are viewed and how fast they load. It does not use cookies and does not track you across other websites.</p>
+      {SITE.ga4Id ? (
+        <p>We also use Google Analytics 4, which uses cookies to collect information such as the pages you visit, how long you stay, your device and browser type, your approximate location (city level) and site actions such as using a calculator or downloading a result. The numbers you type into a calculator are never sent. Google processes this data under its own <a href="https://policies.google.com/privacy" rel="nofollow">privacy policy</a>; you can opt out with the <a href="https://tools.google.com/dlpage/gaoptout" rel="nofollow">Google Analytics opt-out browser add-on</a>.</p>
+      ) : (
+        <p>If we add other analytics tools, such as Google Analytics, they may use cookies to collect anonymous information like pages visited and approximate location, and we will update this page.</p>
+      )}
       <h2>Advertising</h2>
       <p>We may show ads served by third parties, including Google. Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to this site and/or other sites on the internet.</p>
       <p>You can opt out of personalised advertising by visiting <a href="https://www.google.com/settings/ads" rel="nofollow">Google Ads Settings</a>, or opt out of some third-party vendors' use of cookies at <a href="https://www.aboutads.info/choices/" rel="nofollow">aboutads.info</a>.</p>

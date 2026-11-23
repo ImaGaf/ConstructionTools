@@ -5,6 +5,8 @@
 // (.big, .stat, .checks, .breakdown, avisos, .working) dentro de #result.
 // Las librerías (jsPDF, write-excel-file) se cargan solo al hacer clic.
 
+import { track } from './calc';
+
 type Row = { label: string; value: string };
 interface Report {
   title: string;
@@ -319,6 +321,7 @@ export function setupExport() {
     try {
       const report = collect();
       if (kind === 'pdf') await exportPdf(report); else await exportXlsx(report);
+      track(kind === 'pdf' ? 'export_pdf' : 'export_excel');
       if (status) status.textContent = 'Downloaded. Check your downloads folder.';
     } catch (e) {
       console.error(e);
