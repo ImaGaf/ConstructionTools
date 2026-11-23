@@ -80,7 +80,8 @@ Ezoic is ruled out (minimum raised to 250k monthly users in Feb 2026).
   `<details>`, always in the HTML), related calculators, disclaimer, the mobile
   result bar (`#mbar-k`, `#mbar-v`) and all schema. Pages fill `slot="inputs"`,
   `slot="result"` and the article sections.
-- `src/lib/calc.ts` — `bindCalculator(root, render)`: every control with
+- `src/lib/calc.ts` — `track(name)` sends GA4 events (live since 22 Nov 2026, `ga4Id` G-MXQGSH8YF1;
+  never send user inputs). `bindCalculator(root, render)`: every control with
   `data-state` (inputs by `id`, radios by `name`) is read, restored from the URL,
   synced back to the URL (shareable results) and passed to `render`. Also wires
   `#copy-link`, `#copy-status` and `#print`. Helpers: `num`, `fmt`, `setText`.
