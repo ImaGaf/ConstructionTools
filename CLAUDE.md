@@ -157,7 +157,8 @@ hard-code new colours.
   registered in `PHOTOS` (site.config.ts) with photographer and alt text, rendered
   with `<Photo name=... />` inside a `.ph` container. Each calculator's title band
   uses the photo named after its slug: add one when you add a calculator (crop
-  1600×1000 and 800×533, WebP q≈70, under ~250 KB). Credits are listed on /about/.
+  1600×1000 and 800×533, WebP q≈70, under ~250 KB). The Unsplash License needs no
+  credit, so none is shown on the site (Oswaldo's choice, 22 Nov 2026); keep `by` in PHOTOS as a record.
 - Parallax is CSS-only (`animation-timeline: view()`), off for
   `prefers-reduced-motion`. Never animate the calculator itself.
 - Text contrast at least 4.5:1; touch targets at least 44 px.
