@@ -20,9 +20,11 @@ export const SITE = {
   adsenseClient: '',
 
   // Analítica opcional. Deja vacío lo que no uses.
-  // Google Tag Manager: GA4 y los eventos se configuran dentro del contenedor.
-  gtmId: 'GTM-59PV9XBQ',
-  ga4Id: '', // G-XXXXXXXXXX (solo si se usa GA4 directo sin GTM)
+  // GA4 directo (gtag.js): vistas de página + eventos de calculadora sin configurar nada más.
+  ga4Id: 'G-MXQGSH8YF1',
+  // Google Tag Manager: solo si algún día se gestiona todo desde GTM (entonces vaciar ga4Id
+  // y configurar GA4 dentro del contenedor). Contenedor creado: GTM-59PV9XBQ.
+  gtmId: '',
   cloudflareAnalyticsToken: '', // token de Cloudflare Web Analytics
 };
 
