@@ -15,8 +15,13 @@ export type State = Record<string, string>;
  * dice que los datos de la calculadora no salen del navegador.
  */
 export function track(name: string, params: Record<string, string | number> = {}) {
-  const g = (window as any).gtag;
-  if (typeof g === 'function') g('event', name, { calculator: location.pathname.replace(/\//g, ''), ...params });
+  const data = { calculator: location.pathname.replace(/\//g, ''), ...params };
+  const w = window as any;
+  if (typeof w.gtag === 'function') {
+    w.gtag('event', name, data); // GA4 directo
+  } else if (Array.isArray(w.dataLayer)) {
+    w.dataLayer.push({ event: name, ...data }); // Google Tag Manager
+  }
 }
 
 function controls(root: HTMLElement) {

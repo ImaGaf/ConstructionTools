@@ -20,7 +20,9 @@ export const SITE = {
   adsenseClient: '',
 
   // Analítica opcional. Deja vacío lo que no uses.
-  ga4Id: '', // G-XXXXXXXXXX
+  // Google Tag Manager: GA4 y los eventos se configuran dentro del contenedor.
+  gtmId: 'GTM-59PV9XBQ',
+  ga4Id: '', // G-XXXXXXXXXX (solo si se usa GA4 directo sin GTM)
   cloudflareAnalyticsToken: '', // token de Cloudflare Web Analytics
 };
 
